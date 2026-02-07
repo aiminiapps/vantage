@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,41 +14,43 @@ const geistMono = Geist_Mono({
 
 // SEO Configuration
 const siteConfig = {
-  name: "Alfredo AI",
-  title: "Alfredo AI - AI-Powered Crypto Portfolio Analysis | BSC Blockchain",
-  description: "Analyze your crypto portfolio with AI-powered insights. Get real-time portfolio analytics, risk assessment, and earn AFRD tokens by completing simple tasks on BNB Smart Chain.",
-  url: "https://www.alfredo.world", 
-  ogImage: "https://www.alfredo.world/og-image.png",
+  name: "VANTAGE",
+  title: "VANTAGE — The Ultimate Intelligence Layer for Crypto Markets",
+  description:
+    "VANTAGE is a next-generation crypto intelligence platform delivering strategic market insights, alpha discovery, and real-time execution tools for traders and institutions.",
+  url: "https://vantage-ai.xyz",
+  ogImage: "https://vantage-ai.xyz/og.png",
   keywords: [
-    "crypto portfolio analysis",
+    "VANTAGE AI",
+    "crypto intelligence platform",
     "AI crypto analytics",
-    "blockchain portfolio tracker",
-    "BSC tokens",
-    "AFRD token",
-    "crypto rewards",
-    "portfolio AI",
-    "DeFi analytics",
-    "crypto task rewards",
-    "BNB Smart Chain",
+    "market alpha signals",
     "Web3 analytics",
-    "crypto insights",
-    "portfolio optimization",
-    "blockchain rewards"
+    "crypto trading intelligence",
+    "DeFi insights",
+    "real-time crypto signals",
+    "blockchain analytics",
+    "AI trading tools",
+    "market execution tools",
+    "crypto opportunity detection"
   ],
-  creator: "Alfredo AI Team",
-  publisher: "Alfredo",
+  creator: "VANTAGE Team",
+  publisher: "VANTAGE",
   category: "Cryptocurrency & Blockchain",
-  twitterHandle: "@Alfredo_AI",
-  locale: "en_US"
+  twitterHandle: "@AI_VANT",
+  locale: "en_US",
+  twitterUrl: "https://x.com/AI_VANT",
+  docsUrl: "https://vantage-ai.gitbook.io/vantage-ai-docs/"
 };
 
 export const metadata = {
-  // Basic Metadata
   metadataBase: new URL(siteConfig.url),
+
   title: {
     default: siteConfig.title,
-    template: `%s | ${siteConfig.name}`
+    template: `%s | ${siteConfig.name}`,
   },
+
   description: siteConfig.description,
   keywords: siteConfig.keywords,
   authors: [{ name: siteConfig.creator }],
@@ -56,58 +58,36 @@ export const metadata = {
   publisher: siteConfig.publisher,
   category: siteConfig.category,
 
-  // Alternate Links
   alternates: {
     canonical: siteConfig.url,
     languages: {
-      'en-US': siteConfig.url,
-      'en': siteConfig.url
-    }
-  },
-
-  // Robots
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "en-US": siteConfig.url,
+      en: siteConfig.url,
     },
   },
 
-  // Icons
-  icons: {
-    icon: [
-      { url: '/icon.png', sizes: 'any' },
-      { url: '/icon.png', type: 'image/svg+xml' },
-      { url: '/icon.png', sizes: '16x16', type: 'image/png' },
-      { url: '/icon.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
-    ],
-    shortcut: '/icon.png',
-    apple: [
-      { url: '/icon.png' },
-      { url: '/icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    other: [
-      {
-        rel: 'apple-touch-icon-precomposed',
-        url: '/icon.png',
-      },
-    ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 
-  // Manifest
-  manifest: '/manifest.json',
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 
-  // Open Graph
+  manifest: "/manifest.json",
+
   openGraph: {
-    type: 'website',
+    type: "website",
     locale: siteConfig.locale,
     url: siteConfig.url,
     title: siteConfig.title,
@@ -118,22 +98,13 @@ export const metadata = {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: `${siteConfig.name} - AI-Powered Crypto Portfolio Analysis`,
-        type: 'image/jpeg',
+        alt: "VANTAGE — Crypto Intelligence Platform",
       },
-      {
-        url: `${siteConfig.url}/og-image-square.jpg`,
-        width: 1200,
-        height: 1200,
-        alt: `${siteConfig.name} Square Logo`,
-        type: 'image/jpeg',
-      }
     ],
   },
 
-  // Twitter
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: siteConfig.title,
     description: siteConfig.description,
     site: siteConfig.twitterHandle,
@@ -141,37 +112,34 @@ export const metadata = {
     images: [siteConfig.ogImage],
   },
 
-  // Apple Web App
   appleWebApp: {
     capable: true,
     title: siteConfig.name,
-    statusBarStyle: 'black-translucent',
+    statusBarStyle: "black-translucent",
   },
 
-  // Format Detection
   formatDetection: {
     telephone: false,
     email: false,
     address: false,
   },
 
-  // Other
   other: {
-    'application-name': siteConfig.name,
-    'mobile-web-app-capable': 'yes',
-    'theme-color': '#FF8C00',
-    'color-scheme': 'dark light',
+    "application-name": siteConfig.name,
+    "mobile-web-app-capable": "yes",
+    "theme-color": "#1E6FA8",
+    "color-scheme": "dark light",
   },
 };
 
 export const viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FF8C00' },
-    { media: '(prefers-color-scheme: dark)', color: '#0D0A07' }
+    { media: "(prefers-color-scheme: light)", color: "#1E6FA8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B1F2E" },
   ],
 };
 
@@ -179,45 +147,47 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Additional SEO Tags */}
-        <meta name="format-detection" content="telephone=no, email=no, address=no" />
+        <meta
+          name="format-detection"
+          content="telephone=no, email=no, address=no"
+        />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        
-        {/* Preconnect to important domains */}
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        
-        {/* Additional Schema.org markup */}
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+
+        {/* WebApplication Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              "name": siteConfig.name,
-              "description": siteConfig.description,
-              "url": siteConfig.url,
-              "applicationCategory": "FinanceApplication",
-              "operatingSystem": "Any",
-              "offers": {
+              name: siteConfig.name,
+              description: siteConfig.description,
+              url: siteConfig.url,
+              applicationCategory: "FinanceApplication",
+              operatingSystem: "Any",
+              offers: {
                 "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
+                price: "0",
+                priceCurrency: "USD",
               },
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "ratingCount": "1250"
-              },
-              "author": {
+              author: {
                 "@type": "Organization",
-                "name": siteConfig.creator,
-                "url": siteConfig.url
-              }
-            })
+                name: siteConfig.creator,
+                url: siteConfig.url,
+              },
+            }),
           }}
         />
 
@@ -228,28 +198,25 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": siteConfig.name,
-              "url": siteConfig.url,
-              "logo": `${siteConfig.url}/logo.png`,
-              "sameAs": [
-                `https://twitter.com/${siteConfig.twitterHandle.replace('@', '')}`,
-                `https://t.me/alfredo_community`,
+              name: siteConfig.name,
+              url: siteConfig.url,
+              logo: `${siteConfig.url}/icon.png`,
+              sameAs: [
+                siteConfig.twitterUrl,
+                siteConfig.docsUrl
               ],
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "contactType": "Customer Support",
-                "email": "official@alfredo.world"
-              }
-            })
+            }),
           }}
         />
       </head>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
         {children}
       </body>
+
       <GoogleAnalytics gaId="G-47896JSPV5" />
     </html>
   );
