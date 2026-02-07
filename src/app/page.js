@@ -1,5 +1,6 @@
 import AboutSection from "@/components/AboutSection";
 import CommunitySection from "@/components/CommunitySection";
+import CounterDemoPage from "@/components/counter";
 import DashboardShowcase from "@/components/DashboardShowcase";
 import FeaturesSection from "@/components/FeaturesSection";
 import Footer from "@/components/Footer";
@@ -12,7 +13,8 @@ import TokenomicsSection from "@/components/TokenomicsSection";
 export default function Home() {
   return (
     <div className="w-full h-screen">
-      <Navbar/>
+      <CounterDemoPage/>
+      {/* <Navbar/>
       <Hero/>
       <AboutSection/>
       <DashboardShowcase/>
@@ -21,7 +23,7 @@ export default function Home() {
       <TokenomicsSection/>
       <RoadmapSection/>
       <CommunitySection/>
-      <Footer/>
+      <Footer/> */}
     </div>
   );
 }
