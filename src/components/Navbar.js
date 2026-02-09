@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { RiTwitterXLine } from "react-icons/ri";
-import { LiaTelegram } from "react-icons/lia";
+import { RiBnbLine } from "react-icons/ri";
 
 // New Theme Palette
 const theme = {
@@ -119,8 +119,8 @@ export default function Navbar() {
                 {/* Social Icons */}
                 <div className="hidden md:flex items-center gap-2 border-r border-[#2A3138] pr-4 mr-1">
                   {[
-                    { icon: LiaTelegram, href: "https://t.me/AI_UR_Alfredo", color: "#0088cc" },
-                    { icon: RiTwitterXLine, href: "https://x.com/AI_UR_Alfredo", color: "#1DA1F2" }
+                    { icon: RiBnbLine, href: "https://bscscan.com/token/0x6699ac45E9a93E3CA6850A07800e6508Bb25103e", color: "#0088cc" },
+                    { icon: RiTwitterXLine, href: "https://x.com/AI_VANT", color: "#1DA1F2" }
                   ].map((social, idx) => (
                     <motion.a
                       key={idx}
