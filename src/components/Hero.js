@@ -6,7 +6,7 @@ import { FaEthereum, FaChevronDown } from 'react-icons/fa';
 import { SiSolana, SiBinance, SiPolygon } from 'react-icons/si';
 import { TbHexagonLetterA, TbHexagonLetterB } from 'react-icons/tb';
 import { HiSparkles } from 'react-icons/hi';
-import Silk from './ui/Silk';
+import LightPillar from './ui/Silk';
 
 export default function Hero() {
   const router = useRouter();
@@ -48,13 +48,20 @@ export default function Hero() {
     <div className="relative min-h-screen bg-[#0D0A07] overflow-hidden">
       {/* Animated Background Glow */}
       <div className="absolute inset-0 overflow-hidden opacity-70">
-      <Silk
-        speed={5}
-        scale={1}
-        color="#FF6A00"
-        noiseIntensity={1.5}
-        rotation={0}
-    />
+      <LightPillar
+    topColor="#5227FF"
+    bottomColor="#FF9FFC"
+    intensity={1}
+    rotationSpeed={0.3}
+    glowAmount={0.002}
+    pillarWidth={3}
+    pillarHeight={0.4}
+    noiseIntensity={0.5}
+    pillarRotation={25}
+    interactive={false}
+    mixBlendMode="screen"
+    quality="high"
+/>
       </div>
       {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-100px)] px-4 md:px-6 pt-10">
@@ -65,17 +72,7 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="text-center mb-12 md:mb-16"
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A120C] border border-[#2A1E14] mb-6"
-          >
-            <HiSparkles className="text-[#FFB347] text-xl animate-pulse" />
-            <span className="text-sm font-semibold lowercase first-letter:uppercase text-gray-300">AI POWERED INTELLIGENCE</span>
-          </motion.div>
-
-          <h1 className="text-2xl heading md:text-6xl lg:text-7xl text-white mb-6 leading-tight">
+          <h1 className="text-2xl heading md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
           The Way to{' '}
             <span className="bg-gradient-to-r from-[#FF6A00] via-[#FF8C00] to-[#FFB347] bg-clip-text text-transparent">
             Understand
@@ -89,7 +86,7 @@ export default function Hero() {
           </p>
         </motion.div>
 
-        {/* Input Section */}
+        {/* Input Section */}  
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
