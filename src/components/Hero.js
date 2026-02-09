@@ -77,12 +77,12 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-12 md:mb-16 sm:mt-0 mt-28"
         >
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
             See the Market From
             <br />
-            <span className="text-white">a Higher Perspective</span>
+            <span className="text-white">A Higher Perspective</span>
           </h1>
 
           <p className="text-base md:text-xl text-[#9CA3AF] max-w-2xl mx-auto leading-relaxed">
