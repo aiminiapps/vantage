@@ -6,6 +6,7 @@ import { FaEthereum, FaChevronDown } from 'react-icons/fa';
 import { SiSolana, SiBinance, SiPolygon } from 'react-icons/si';
 import { TbHexagonLetterA, TbHexagonLetterB } from 'react-icons/tb';
 import { HiSparkles } from 'react-icons/hi';
+import { IoWalletOutline } from "react-icons/io5";
 import LightPillar from './ui/Silk';
 
 export default function Hero() {
@@ -45,26 +46,32 @@ export default function Hero() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0D0A07] overflow-hidden">
-      {/* Animated Background Glow */}
-      <div className="absolute inset-0 overflow-hidden opacity-70">
-      <LightPillar
-    topColor="#5227FF"
-    bottomColor="#FF9FFC"
-    intensity={1}
-    rotationSpeed={0.3}
-    glowAmount={0.002}
-    pillarWidth={3}
-    pillarHeight={0.4}
-    noiseIntensity={0.5}
-    pillarRotation={25}
-    interactive={false}
-    mixBlendMode="screen"
-    quality="high"
-/>
+    // THEME: Primary Background #111315
+    <div className="relative min-h-screen bg-[#111315] overflow-hidden selection:bg-[#5227FF] selection:text-white">
+      
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden opacity-60 pointer-events-none">
+        <LightPillar
+            topColor="#5227FF"
+            bottomColor="#a855f7"
+            intensity={0.8}
+            rotationSpeed={0.3}
+            glowAmount={0.002}
+            pillarWidth={3}
+            pillarHeight={0.4}
+            noiseIntensity={0.5}
+            pillarRotation={25}
+            interactive={false}
+            mixBlendMode="screen"
+            quality="high"
+        />
+        {/* Subtle Grid overlay for 'Technical/Graphite' feel */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#2A3138_1px,transparent_1px),linear-gradient(to_bottom,#2A3138_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
       </div>
+
       {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-100px)] px-4 md:px-6 pt-10">
+        
         {/* Hero Text */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -72,83 +79,88 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="text-center mb-12 md:mb-16"
         >
-          <h1 className="text-2xl heading md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-          The Way to{' '}
-            <span className="bg-gradient-to-r from-[#FF6A00] via-[#FF8C00] to-[#FFB347] bg-clip-text text-transparent">
-            Understand
-            </span> 
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
+            See the Market From
             <br />
-            <span className="text-white">Your Crypto Portfolio!</span>
+            <span className="text-white">a Higher Perspective</span>
           </h1>
 
-          <p className="text-base text-balance md:text-xl text-gray-200 max-w-2xl mx-auto">
-          Alfredo analyzes your wallet and reveals your investment DNA powered by AI.
+          <p className="text-base md:text-xl text-[#9CA3AF] max-w-2xl mx-auto leading-relaxed">
+           VANTAGE analyzes on-chain activity and market signals to deliver strategic intelligence, actionable insights, and real alpha powered by advanced AI.
           </p>
         </motion.div>
 
-        {/* Input Section */}  
+        {/* Main Card Section */}  
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
           className="w-full max-w-3xl"
         >
+          {/* THEME: CardsElevated SurfaceSlate Deep #1C2126 */}
+          {/* THEME: BorderSoft Steel #2A3138 */}
+          <div className="relative bg-[#1C2126] rounded-3xl border border-[#2A3138] p-4 md:p-5 shadow-[0_0_50px_-12px_rgba(82,39,255,0.15)]">
             
-          <div className="relative bg-[#1A120C]/80 backdrop-blur-xl rounded-3xl border border-[#2A1E14] p-3 shadow-2xl shadow-[#FF8C00]/20">
-            <div className="flex flex-col md:flex-row gap-3">
+            <div className="flex flex-col md:flex-row gap-4">
+              
               {/* Wallet Input */}
-              <div className="flex-1 relative">
+              <div className="flex-1 relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] group-focus-within:text-[#5227FF] transition-colors">
+                    <IoWalletOutline className="text-xl" />
+                </div>
+                {/* THEME: Secondary SurfaceCarbon #161A1D */}
                 <input
                   type="text"
                   value={walletAddress}
                   onChange={(e) => setWalletAddress(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleAnalyze()}
-                  placeholder="Put your wallet address here..."
-                  className="w-full px-6 py-4 bg-[#0D0A07] border-2 border-[#2A1E14] rounded-2xl text-white placeholder-[#C9C3BD]/50 focus:border-[#FF8C00] focus:outline-none focus:ring-4 focus:ring-[#FF8C00]/20 transition-all text-base"
+                  placeholder="Paste wallet address..."
+                  className="w-full pl-12 pr-6 py-4 bg-[#161A1D] border border-[#2A3138] rounded-xl text-white placeholder-[#586069] focus:border-[#5227FF] focus:outline-none focus:ring-1 focus:ring-[#5227FF] transition-all text-base"
                 />
               </div>
 
               {/* Network Dropdown */}
-              <div className="relative md:w-48">
+              <div className="relative md:w-48 z-20">
                 <motion.button
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-full px-4 py-4 bg-[#0D0A07] border-2 border-[#2A1E14] rounded-2xl flex items-center justify-between gap-3 hover:border-[#FF8C00] focus:border-[#FF8C00] focus:outline-none focus:ring-4 focus:ring-[#FF8C00]/20 transition-all"
+                  className="w-full px-4 py-4 bg-[#161A1D] border border-[#2A3138] rounded-xl flex items-center justify-between gap-3 hover:border-[#586069] focus:border-[#5227FF] transition-all"
                 >
                   <div className="flex items-center gap-2">
-                    <selectedNetwork.icon style={{ color: selectedNetwork.color }} className="text-xl" />
+                    <div className="w-6 h-6 flex items-center justify-center rounded-full bg-[#111315] border border-[#2A3138]">
+                        <selectedNetwork.icon style={{ color: selectedNetwork.color }} className="text-sm" />
+                    </div>
                     <span className="text-white font-medium text-sm">{selectedNetwork.symbol}</span>
                   </div>
                   <motion.div
                     animate={{ rotate: isDropdownOpen ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <FaChevronDown className="text-[#FF8C00]" />
+                    <FaChevronDown className="text-[#586069] text-xs" />
                   </motion.div>
                 </motion.button>
 
                 <AnimatePresence>
                   {isDropdownOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      initial={{ opacity: 0, y: -10, scale: 0.98 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      className="absolute top-full mt-2 w-full bg-[#1A120C] border-2 border-[#2A1E14] rounded-2xl overflow-hidden shadow-2xl z-40"
+                      exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                      className="absolute top-full mt-2 w-full bg-[#1C2126] border border-[#2A3138] rounded-xl overflow-hidden shadow-xl z-50"
                     >
                       {networks.map((network) => (
                         <motion.button
                           key={network.id}
-                          whileHover={{ backgroundColor: 'rgba(255, 140, 0, 0.1)' }}
+                          whileHover={{ backgroundColor: '#2A3138' }}
                           onClick={() => handleNetworkSelect(network)}
-                          className="w-full px-4 py-3 flex items-center gap-3 text-left border-b border-[#2A1E14] last:border-b-0 transition-colors"
+                          className="w-full px-4 py-3 flex items-center gap-3 text-left border-b border-[#2A3138] last:border-b-0 transition-colors"
                         >
-                          <network.icon style={{ color: network.color }} className="text-xl" />
+                          <network.icon style={{ color: network.color }} className="text-lg" />
                           <div className="flex-1">
                             <div className="text-white font-medium text-sm">{network.name}</div>
-                            <div className="text-[#C9C3BD] text-xs">{network.symbol}</div>
                           </div>
                           {selectedNetwork.id === network.id && (
-                            <div className="w-2 h-2 rounded-full bg-[#FF8C00] shadow-lg shadow-[#FF8C00]/50" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#5227FF]" />
                           )}
                         </motion.button>
                       ))}
@@ -157,39 +169,69 @@ export default function Hero() {
                 </AnimatePresence>
               </div>
 
-              {/* Generate Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleAnalyze}
-                disabled={isLoading}
-                className="px-8 py-4 bg-gradient-to-r cursor-pointer from-[#FF6A00] via-[#FF8C00] to-[#FFB347] rounded-2xl text-[#0D0A07] font-bold text-base shadow-lg shadow-[#FF8C00]/50 hover:shadow-[#FF8C00]/70 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
-              >
-                {isLoading ? (
-                  <>
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      className="w-5 h-5 border-2 border-[#0D0A07] border-t-transparent rounded-full"
-                    />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <HiSparkles className="text-xl" />
-                    Generate
-                  </>
-                )}
-              </motion.button>
+              {/* =============================================
+                3D BUTTON IMPLEMENTATION 
+                =============================================
+              */}
+              <div className="relative group">
+                {/* Button Shadow/Depth Layer (The part that stays behind) */}
+                <div className="absolute inset-0 bg-[#3b1ec2] rounded-xl translate-y-1.5 rounded-b-xl" />
+                
+                {/* The Main Button Face */}
+                <motion.button
+                  whileHover={{ y: -1 }}
+                  whileTap={{ y: 4 }}
+                  onClick={handleAnalyze}
+                  disabled={isLoading}
+                  className={`
+                    relative w-full md:w-auto px-8 py-4 
+                    bg-gradient-to-b from-[#633aff] to-[#5227FF] 
+                    rounded-xl text-white font-bold text-base 
+                    border-t border-[#8e72ff] border-b-4 border-[#3016a3]
+                    shadow-[0_10px_20px_rgba(82,39,255,0.3),0_4px_0_#3016a3]
+                    active:shadow-none active:border-b-0
+                    transition-all duration-100 ease-in-out
+                    flex items-center justify-center gap-2 whitespace-nowrap overflow-hidden
+                    disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none
+                  `}
+                >
+                  {/* Subtle shine effect overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  
+                  {/* Moving Shine Animation */}
+                  <motion.div 
+                    initial={{ x: '-100%', opacity: 0 }}
+                    animate={{ x: '200%', opacity: 0.5 }}
+                    transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut", delay: 1 }}
+                    className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
+                  />
+
+                  {isLoading ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                      />
+                      <span className="relative z-10">Analyzing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <HiSparkles className="text-xl relative z-10 text-[#e0d6ff]" />
+                      <span className="relative z-10 text-shadow-sm">Generate</span>
+                    </>
+                  )}
+                </motion.button>
+              </div>
             </div>
           </div>
 
-          {/* Feature Tags */}
+          {/* Feature Tags - Updated for new color palette */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="hidden flex-wrap items-center justify-center gap-3 mt-8"
+            className="flex flex-wrap items-center justify-center gap-3 mt-8"
           >
             {[
               { text: 'AI Analysis' },
@@ -199,10 +241,10 @@ export default function Hero() {
             ].map((feature, idx) => (
               <motion.div
                 key={idx}
-                whileHover={{ scale: 1.05, y: -2 }}
-                className="px-4 py-2 rounded-full bg-[#1A120C]/50 border border-[#2A1E14] backdrop-blur-sm flex items-center gap-2 cursor-default"
+                whileHover={{ scale: 1.05, backgroundColor: '#2A3138' }}
+                className="px-4 py-2 rounded-full bg-[#1C2126] border border-[#2A3138] text-[#9CA3AF] text-sm font-medium hover:text-white hover:border-[#5227FF]/50 transition-all cursor-default"
               >
-                <span className="text-gray-300 text-sm font-medium">{feature.text}</span>
+                {feature.text}
               </motion.div>
             ))}
           </motion.div>
