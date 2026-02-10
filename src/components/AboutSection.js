@@ -7,6 +7,7 @@ import { HiLightningBolt, HiSparkles } from 'react-icons/hi';
 import { BiBot, BiCheckCircle } from 'react-icons/bi';
 import Image from 'next/image';
 import ConnecttoPlay from './ui/blueanimated';
+import CreativeAnimatedOrb from './ui/Creativeanimatedorb';
 
 // --- Theme Constants ---
 const colors = {
@@ -62,45 +63,7 @@ export default function FeaturesGrid() {
           {/* Animation: AI Brain / Data Flow */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
              {/* Central Core */}
-            <div className="absolute right-10 bottom-10 md:right-20 md:bottom-[-20px] w-48 h-48">
-               <motion.div 
-                 animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
-                 transition={{ duration: 4, repeat: Infinity }}
-                 className="absolute inset-0 bg-[#5227FF]/20 blur-3xl rounded-full" 
-               />
-               
-               {/* Hexagon Mesh Rotating */}
-               <motion.div 
-                 animate={{ rotate: 360 }}
-                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                 className="relative w-full h-full border-2 border-[#5227FF]/30 rounded-full border-dashed p-4"
-               >
-                 <div className="w-full h-full border border-[#5227FF]/50 rounded-full flex items-center justify-center bg-[#0B0D14]/80 backdrop-blur">
-                    <Image src="/icon.png" alt="AI Brain" width={200} height={200} />
-                 </div>
-               </motion.div>
-
-               {/* Flying Particles (Data Ingestion) */}
-               {[0, 1, 2, 3, 4].map((i) => (
-                 <motion.div
-                    key={i}
-                    className="absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full shadow-[0_0_10px_white]"
-                    initial={{ x: -200, y: -100, opacity: 0 }}
-                    animate={{ 
-                        x: 0, 
-                        y: 0, 
-                        opacity: [0, 1, 0],
-                        scale: [1, 0.5] 
-                    }}
-                    transition={{ 
-                        duration: 2, 
-                        delay: i * 0.4, 
-                        repeat: Infinity, 
-                        ease: "easeIn" 
-                    }}
-                 />
-               ))}
-            </div>
+           <CreativeAnimatedOrb />
           </div>
         </motion.div>
 
