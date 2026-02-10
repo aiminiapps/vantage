@@ -5,6 +5,8 @@ import { FaEthereum, FaBitcoin, FaWallet } from 'react-icons/fa';
 import { SiSolana, SiTether } from 'react-icons/si';
 import { HiLightningBolt, HiSparkles } from 'react-icons/hi';
 import { BiBot, BiCheckCircle } from 'react-icons/bi';
+import Image from 'next/image';
+import ConnecttoPlay from './ui/blueanimated';
 
 // --- Theme Constants ---
 const colors = {
@@ -74,7 +76,7 @@ export default function FeaturesGrid() {
                  className="relative w-full h-full border-2 border-[#5227FF]/30 rounded-full border-dashed p-4"
                >
                  <div className="w-full h-full border border-[#5227FF]/50 rounded-full flex items-center justify-center bg-[#0B0D14]/80 backdrop-blur">
-                    <HiSparkles className="text-4xl text-white" />
+                    <Image src="/icon.png" alt="AI Brain" width={200} height={200} />
                  </div>
                </motion.div>
 
@@ -219,25 +221,7 @@ export default function FeaturesGrid() {
             
             {/* Interaction Area */}
             <div className="flex-1 flex items-center justify-center md:justify-start">
-               
-               {/* Simulated App Window */}
-               <div className="w-full max-w-md bg-[#0B0D14] border border-[#2A3138] rounded-xl p-6 shadow-2xl relative overflow-hidden">
-                  
-                  {/* Header dots */}
-                  <div className="flex gap-2 mb-8">
-                      <div className="w-3 h-3 rounded-full bg-[#2A3138]" />
-                      <div className="w-3 h-3 rounded-full bg-[#2A3138]" />
-                  </div>
-
-                  {/* Connect Button Animation Loop */}
-                  <div className="flex flex-col items-center justify-center py-4">
-                      <ConnectButtonSimulation />
-                  </div>
-
-                  {/* Background Grid inside card */}
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#2A3138_1px,transparent_1px),linear-gradient(to_bottom,#2A3138_1px,transparent_1px)] bg-[size:24px_24px] opacity-10 pointer-events-none" />
-               </div>
-
+              <ConnecttoPlay/>
             </div>
           </div>
           
