@@ -1,28 +1,35 @@
 'use client'
 import React from 'react';
 import { motion } from 'motion/react';
-import { FaEthereum, FaBitcoin } from 'react-icons/fa';
+import { FaEthereum, FaBitcoin, FaWallet } from 'react-icons/fa';
 import { SiSolana, SiTether } from 'react-icons/si';
-import { HiCheck, HiCode, HiLightningBolt } from 'react-icons/hi';
+import { HiLightningBolt, HiSparkles } from 'react-icons/hi';
+import { BiBot, BiCheckCircle } from 'react-icons/bi';
 
 // --- Theme Constants ---
 const colors = {
-  bg: '#111315',      // Graphite Black
-  card: '#1C2126',    // Surface Slate
-  cardHighlight: '#232930',
+  bg: '#0B0D14',      // Deep Blue/Black
+  card: '#151921',    // Slightly lighter blue-grey
   border: '#2A3138',  // Soft Steel
   primary: '#5227FF', // Electric Blue
-  success: '#10B981', // Muted Emerald
+  success: '#10B981', // Emerald
+  warning: '#F59E0B', // Amber
   text: '#FFFFFF',
-  textMuted: '#9CA3AF'
+  textMuted: '#94A3B8'
 };
 
 export default function FeaturesGrid() {
   return (
-    <section className="py-24 px-4 md:px-6 relative overflow-hidden" style={{ backgroundColor: colors.bg }}>
+    <section className="py-24 px-4 md:px-6 relative overflow-hidden">
       
+      {/* Background: Deep Blue Gradient Mesh */}
+      <div className="absolute inset-0 bg-[#0B0D14] z-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1d2333] via-[#0B0D14] to-[#0B0D14]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[#5227FF]/10 blur-[120px] rounded-full opacity-40 pointer-events-none" />
+      </div>
+
       {/* Section Header */}
-      <div className="max-w-7xl mx-auto mb-16 md:mb-24">
+      <div className="relative z-10 max-w-7xl mx-auto mb-16 md:mb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -30,107 +37,108 @@ export default function FeaturesGrid() {
           className="max-w-2xl"
         >
           <h2 className="text-sm font-bold tracking-widest text-[#5227FF] uppercase mb-4">
-            Integration
+            Powerful Features
           </h2>
           <h3 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
-            Integrate Alfredo your way. <br />
-            <span className="text-[#9CA3AF]">API, Widgets, or Dashboard.</span>
+            Everything you need. <br />
+            <span className="text-[#94A3B8]">AI-Driven. Instant Access.</span>
           </h3>
         </motion.div>
       </div>
 
       {/* Grid Layout */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
         
-        {/* --- Card 1: Neural API (Wide) --- */}
+        {/* --- Card 1: AI Powered Intelligence (Wide) --- */}
         <motion.div 
-          className="md:col-span-7 relative h-[400px] rounded-3xl border border-[#2A3138] bg-[#1C2126] overflow-hidden group"
+          className="md:col-span-7 relative h-[400px] rounded-3xl border border-[#2A3138] bg-[#151921]/80 backdrop-blur-sm overflow-hidden group"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#5227FF]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          
           <div className="p-8 md:p-10 relative z-10">
-            <h4 className="text-2xl font-bold text-white mb-2">Clean & Simple APIs</h4>
-            <p className="text-[#9CA3AF]">Well documented endpoints with full sandbox environment.</p>
+            <div className="w-12 h-12 rounded-2xl bg-[#5227FF]/20 flex items-center justify-center mb-6">
+                <BiBot className="text-2xl text-[#5227FF]" />
+            </div>
+            <h4 className="text-2xl font-bold text-white mb-2">AI Powered Intelligence</h4>
+            <p className="text-[#94A3B8] max-w-md">Our neural engine continuously scans the blockchain, learning from market patterns to give you predictive insights.</p>
           </div>
 
-          {/* Animation: Neural Circuit */}
-          <div className="absolute inset-x-0 bottom-0 h-64 flex items-center justify-center">
-            {/* The Chip */}
-            <div className="relative z-20 bg-[#161A1D] border border-[#2A3138] px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3">
-              <HiCode className="text-[#5227FF] text-xl" />
-              <span className="text-white font-mono font-bold tracking-wide">ALFREDO_API</span>
+          {/* Animation: AI Brain / Data Flow */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+             {/* Central Core */}
+            <div className="absolute right-10 bottom-10 md:right-20 md:bottom-[-20px] w-48 h-48">
+               <motion.div 
+                 animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+                 transition={{ duration: 4, repeat: Infinity }}
+                 className="absolute inset-0 bg-[#5227FF]/20 blur-3xl rounded-full" 
+               />
+               
+               {/* Hexagon Mesh Rotating */}
+               <motion.div 
+                 animate={{ rotate: 360 }}
+                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                 className="relative w-full h-full border-2 border-[#5227FF]/30 rounded-full border-dashed p-4"
+               >
+                 <div className="w-full h-full border border-[#5227FF]/50 rounded-full flex items-center justify-center bg-[#0B0D14]/80 backdrop-blur">
+                    <HiSparkles className="text-4xl text-white" />
+                 </div>
+               </motion.div>
+
+               {/* Flying Particles (Data Ingestion) */}
+               {[0, 1, 2, 3, 4].map((i) => (
+                 <motion.div
+                    key={i}
+                    className="absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full shadow-[0_0_10px_white]"
+                    initial={{ x: -200, y: -100, opacity: 0 }}
+                    animate={{ 
+                        x: 0, 
+                        y: 0, 
+                        opacity: [0, 1, 0],
+                        scale: [1, 0.5] 
+                    }}
+                    transition={{ 
+                        duration: 2, 
+                        delay: i * 0.4, 
+                        repeat: Infinity, 
+                        ease: "easeIn" 
+                    }}
+                 />
+               ))}
             </div>
-
-            {/* Circuit Lines */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-              {/* Left Traces */}
-              <motion.path 
-                d="M 0 50 Q 150 50 200 120" 
-                fill="none" stroke="#2A3138" strokeWidth="2" 
-              />
-              <motion.circle r="3" fill="#5227FF">
-                <animateMotion dur="3s" repeatCount="indefinite" path="M 0 50 Q 150 50 200 120" />
-              </motion.circle>
-
-              <motion.path 
-                d="M 0 200 Q 100 200 200 140" 
-                fill="none" stroke="#2A3138" strokeWidth="2" 
-              />
-               <motion.circle r="3" fill="#5227FF">
-                <animateMotion dur="4s" repeatCount="indefinite" path="M 0 200 Q 100 200 200 140" />
-              </motion.circle>
-
-              {/* Right Traces */}
-              <motion.path 
-                d="M 1000 80 Q 800 80 600 120" 
-                fill="none" stroke="#2A3138" strokeWidth="2" 
-              />
-               <motion.circle r="3" fill="#5227FF">
-                <animateMotion dur="3.5s" repeatCount="indefinite" path="M 1000 80 Q 800 80 600 120" />
-              </motion.circle>
-            </svg>
-
-            {/* Background Grid for Chip area */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#2A3138_1px,transparent_1px),linear-gradient(to_bottom,#2A3138_1px,transparent_1px)] bg-[size:20px_20px] opacity-10 [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]" />
           </div>
         </motion.div>
 
 
-        {/* --- Card 2: Developer Dashboard (Tall) --- */}
+        {/* --- Card 2: Live Activity (Tall) --- */}
         <motion.div 
-          className="md:col-span-5 relative h-[400px] rounded-3xl border border-[#2A3138] bg-[#1C2126] overflow-hidden group"
+          className="md:col-span-5 relative h-[400px] rounded-3xl border border-[#2A3138] bg-[#151921]/80 backdrop-blur-sm overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
         >
-          <div className="p-8 relative z-10 bg-[#1C2126]/90 backdrop-blur-sm">
-            <h4 className="text-2xl font-bold text-white mb-2">Live Dashboard</h4>
-            <p className="text-[#9CA3AF]">Real-time tracking of onchain events.</p>
+          <div className="p-8 relative z-10 bg-gradient-to-b from-[#151921] to-transparent">
+            <h4 className="text-2xl font-bold text-white mb-2">Live Monitor</h4>
+            <p className="text-[#94A3B8]">Real-time onchain event tracking.</p>
           </div>
 
-          {/* Animation: Scrolling List */}
+          {/* Animation: Infinite Marquee */}
           <div className="absolute inset-x-6 top-32 bottom-0 overflow-hidden mask-linear-fade">
-             <div className="absolute inset-0 bg-gradient-to-b from-[#1C2126] via-transparent to-[#1C2126] z-20 pointer-events-none" />
-             
              <motion.div 
-               animate={{ y: [-200, 0] }}
-               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+               animate={{ y: [-240, 0] }} // Adjusted for smooth loop
+               transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
                className="flex flex-col gap-3"
              >
-                {/* Simulated Transactions duplicated for infinite loop */}
                 {[...transactions, ...transactions].map((tx, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-[#161A1D] border border-[#2A3138]">
+                  <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-[#0B0D14] border border-[#2A3138]/50">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-[#2A3138] text-white">
+                      <div className="p-2 rounded-lg bg-[#2A3138]/50 text-white">
                         {tx.icon}
                       </div>
                       <div>
                         <div className="text-sm font-medium text-white">{tx.title}</div>
-                        <div className="text-xs text-[#9CA3AF]">{tx.sub}</div>
+                        <div className="text-xs text-[#94A3B8]">{tx.sub}</div>
                       </div>
                     </div>
                     <div className={`text-xs px-2 py-1 rounded-md border ${tx.statusColor}`}>
@@ -139,159 +147,110 @@ export default function FeaturesGrid() {
                   </div>
                 ))}
              </motion.div>
+             {/* Gradient Overlay for bottom fade */}
+             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#151921] to-transparent" />
           </div>
         </motion.div>
 
 
-        {/* --- Card 3: Checkout Widget (Tall) --- */}
+        {/* --- Card 3: Checkout/Token Widget (Tall) --- */}
         <motion.div 
-          className="md:col-span-5 relative h-[400px] rounded-3xl border border-[#2A3138] bg-[#1C2126] overflow-hidden"
+          className="md:col-span-5 relative h-[400px] rounded-3xl border border-[#2A3138] bg-[#151921]/80 backdrop-blur-sm overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
         >
           <div className="p-8 relative z-10">
-            <h4 className="text-2xl font-bold text-white mb-2">Checkout Widget</h4>
-            <p className="text-[#9CA3AF]">Embed crypto payments in minutes.</p>
+            <h4 className="text-2xl font-bold text-white mb-2">Multi-Chain</h4>
+            <p className="text-[#94A3B8]">Analyze assets across any network.</p>
           </div>
 
-          <div className="absolute inset-0 flex items-center justify-center pt-16">
-            {/* The Widget Mockup */}
-            <div className="w-64 bg-[#161A1D] border border-[#2A3138] rounded-2xl p-4 shadow-2xl relative">
-              {/* Header */}
-              <div className="flex justify-between items-center mb-6">
-                <span className="text-sm text-[#9CA3AF]">Pay with</span>
-                <span className="w-2 h-2 rounded-full bg-[#5227FF]" />
-              </div>
+          <div className="absolute inset-0 flex items-center justify-center pt-20">
+            {/* Widget Container */}
+            <div className="w-64 bg-[#0B0D14] border border-[#2A3138] rounded-2xl p-4 shadow-2xl relative transform rotate-[-2deg]">
               
-              {/* Selected Option */}
-              <div className="flex items-center justify-between p-3 bg-[#1C2126] border border-[#5227FF] rounded-xl mb-2 relative overflow-hidden">
-                <div className="flex items-center gap-2 relative z-10">
-                  <SiSolana className="text-[#14F195]" />
-                  <span className="text-white font-medium">Solana</span>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex -space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-[#151921] border border-[#2A3138] flex items-center justify-center z-20"><FaBitcoin className="text-[#F59E0B]" /></div>
+                    <div className="w-8 h-8 rounded-full bg-[#151921] border border-[#2A3138] flex items-center justify-center z-10"><FaEthereum className="text-[#5227FF]" /></div>
+                    <div className="w-8 h-8 rounded-full bg-[#151921] border border-[#2A3138] flex items-center justify-center z-0"><SiSolana className="text-[#10B981]" /></div>
                 </div>
-                <div className="relative z-10 w-4 h-4 rounded-full border border-[#5227FF] flex items-center justify-center">
-                    <div className="w-2 h-2 bg-[#5227FF] rounded-full" />
-                </div>
-                <motion.div 
-                    layoutId="highlight"
-                    className="absolute inset-0 bg-[#5227FF]/10" 
-                />
+                <div className="px-2 py-1 rounded bg-[#5227FF]/10 text-[#5227FF] text-xs font-bold">Active</div>
               </div>
 
-              {/* Other Options (Floating Animation) */}
-              <motion.div 
-                animate={{ y: [0, 5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="flex items-center justify-between p-3 bg-[#111315] border border-[#2A3138] rounded-xl opacity-60 scale-95"
-              >
-                 <div className="flex items-center gap-2">
-                  <FaEthereum className="text-[#627EEA]" />
-                  <span className="text-[#9CA3AF] font-medium">Ethereum</span>
-                </div>
-              </motion.div>
+              {/* Selection Box Animation */}
+              <div className="space-y-2">
+                  <motion.div 
+                    animate={{ scale: [1, 1.02, 1], borderColor: ['#2A3138', '#5227FF', '#2A3138'] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="p-3 bg-[#151921] border border-[#2A3138] rounded-xl flex justify-between items-center"
+                  >
+                      <span className="text-sm text-white">Ethereum Mainnet</span>
+                      <div className="w-2 h-2 rounded-full bg-[#5227FF] shadow-[0_0_8px_#5227FF]" />
+                  </motion.div>
+                  <div className="p-3 bg-[#151921] border border-[#2A3138] rounded-xl opacity-50 flex justify-between items-center">
+                      <span className="text-sm text-white">Solana</span>
+                  </div>
+              </div>
 
-              {/* Floating Coins Effect */}
-              <motion.div 
-                animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-6 -right-6 w-12 h-12 bg-[#1C2126] rounded-full border border-[#2A3138] flex items-center justify-center shadow-lg z-20"
-              >
-                <FaBitcoin className="text-[#F7931A] text-xl" />
-              </motion.div>
-
+              {/* Floating Element */}
                <motion.div 
                 animate={{ y: [10, -10, 10], x: [5, -5, 5] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-4 -left-4 w-10 h-10 bg-[#1C2126] rounded-full border border-[#2A3138] flex items-center justify-center shadow-lg z-20"
+                className="absolute -bottom-6 -right-6 w-14 h-14 bg-[#151921] rounded-2xl border border-[#2A3138] flex items-center justify-center shadow-xl z-20"
               >
-                <SiTether className="text-[#26A17B] text-lg" />
+                <div className="text-center">
+                    <div className="text-[10px] text-[#94A3B8]">APY</div>
+                    <div className="text-xs font-bold text-[#10B981]">+12%</div>
+                </div>
               </motion.div>
-
             </div>
           </div>
         </motion.div>
 
 
-        {/* --- Card 4: Plug & Play UIs (Wide) --- */}
+        {/* --- Card 4: Connect To Play (Wide) --- */}
         <motion.div 
-          className="md:col-span-7 relative h-[400px] rounded-3xl border border-[#2A3138] bg-[#1C2126] overflow-hidden"
+          className="md:col-span-7 relative h-[400px] rounded-3xl border border-[#2A3138] bg-[#151921]/80 backdrop-blur-sm overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
         >
-          <div className="p-8 md:p-10 flex flex-col md:flex-row gap-8 h-full">
+          <div className="p-8 md:p-10 flex flex-col h-full z-10 relative">
+            <h4 className="text-2xl font-bold text-white mb-2">Connect to Play</h4>
+            <p className="text-[#94A3B8] max-w-sm mb-8">
+              No registration forms. Just connect your MetaMask and start exploring immediately.
+            </p>
             
-            {/* Text Side */}
-            <div className="md:w-1/2 relative z-10">
-              <h4 className="text-2xl font-bold text-white mb-2">Plug & Play UIs</h4>
-              <p className="text-[#9CA3AF] mb-6">Pre-built flows to go from zero to live in a day.</p>
-              
-              <ul className="space-y-3">
-                {['Onboarding / KYC', 'Account Details', 'Email Notifications'].map((item, i) => (
-                  <motion.li 
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 + (i * 0.1) }}
-                    className="flex items-center gap-2 text-sm text-[#9CA3AF]"
-                  >
-                    <HiCheck className="text-[#5227FF]" /> {item}
-                  </motion.li>
-                ))}
-              </ul>
+            {/* Interaction Area */}
+            <div className="flex-1 flex items-center justify-center md:justify-start">
+               
+               {/* Simulated App Window */}
+               <div className="w-full max-w-md bg-[#0B0D14] border border-[#2A3138] rounded-xl p-6 shadow-2xl relative overflow-hidden">
+                  
+                  {/* Header dots */}
+                  <div className="flex gap-2 mb-8">
+                      <div className="w-3 h-3 rounded-full bg-[#2A3138]" />
+                      <div className="w-3 h-3 rounded-full bg-[#2A3138]" />
+                  </div>
+
+                  {/* Connect Button Animation Loop */}
+                  <div className="flex flex-col items-center justify-center py-4">
+                      <ConnectButtonSimulation />
+                  </div>
+
+                  {/* Background Grid inside card */}
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#2A3138_1px,transparent_1px),linear-gradient(to_bottom,#2A3138_1px,transparent_1px)] bg-[size:24px_24px] opacity-10 pointer-events-none" />
+               </div>
+
             </div>
-
-            {/* Visual Side: UI Mockup */}
-            <div className="flex-1 relative">
-                <div className="absolute right-0 top-0 w-full md:w-[120%] h-full bg-[#161A1D] border border-[#2A3138] rounded-tl-2xl p-6 shadow-2xl">
-                    {/* Fake Header */}
-                    <div className="flex gap-4 mb-6 border-b border-[#2A3138] pb-4">
-                        <div className="px-3 py-1 rounded-full bg-[#5227FF]/20 border border-[#5227FF]/50 text-[#5227FF] text-xs font-bold">USD</div>
-                        <div className="px-3 py-1 rounded-full bg-[#2A3138] text-[#9CA3AF] text-xs">EUR</div>
-                        <div className="px-3 py-1 rounded-full bg-[#2A3138] text-[#9CA3AF] text-xs">GBP</div>
-                    </div>
-
-                    {/* Fake Form */}
-                    <div className="space-y-4">
-                        <div className="space-y-1">
-                            <div className="h-2 w-12 bg-[#2A3138] rounded"/>
-                            <div className="h-10 w-full bg-[#111315] rounded border border-[#2A3138] flex items-center px-3">
-                                <span className="text-[#5227FF] text-xs">Alfredo User</span>
-                            </div>
-                        </div>
-                        <div className="space-y-1">
-                            <div className="h-2 w-8 bg-[#2A3138] rounded"/>
-                            <div className="h-10 w-full bg-[#111315] rounded border border-[#2A3138] flex items-center px-3">
-                                <motion.div 
-                                    animate={{ opacity: [0, 1, 0] }}
-                                    transition={{ duration: 1.5, repeat: Infinity }}
-                                    className="w-0.5 h-4 bg-[#5227FF]"
-                                />
-                            </div>
-                        </div>
-                        
-                        {/* Toggle Animation */}
-                        <div className="flex items-center justify-between pt-2">
-                            <div className="h-2 w-24 bg-[#2A3138] rounded"/>
-                            <motion.div 
-                                animate={{ backgroundColor: ["#2A3138", "#5227FF", "#2A3138"] }}
-                                transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
-                                className="w-10 h-6 rounded-full p-1 flex items-center"
-                            >
-                                <motion.div 
-                                    animate={{ x: [0, 16, 0] }}
-                                    transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
-                                    className="w-4 h-4 bg-white rounded-full shadow-sm" 
-                                />
-                            </motion.div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+          </div>
+          
+          {/* Decorative Fox Tail / Abstract Shape behind */}
+          <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+             <FaWallet className="text-[200px] text-white transform -rotate-12 translate-x-10 translate-y-10" />
           </div>
         </motion.div>
 
@@ -300,34 +259,113 @@ export default function FeaturesGrid() {
   );
 }
 
-// --- Data for Dashboard Card ---
+// --- Helper Components & Data ---
+
+function ConnectButtonSimulation() {
+    return (
+        <motion.div
+            initial="idle"
+            animate="cycle"
+            variants={{
+                idle: {},
+                cycle: { transition: { staggerChildren: 0.2 } }
+            }}
+            className="relative"
+        >
+            {/* Container for the loop animation */}
+            <motion.div
+                animate={{ 
+                   scale: [1, 0.95, 1],
+                   background: [
+                       "linear-gradient(90deg, #E2761B, #F6851B)", // Orange (MetaMask)
+                       "linear-gradient(90deg, #2A3138, #2A3138)", // Loading dark
+                       "linear-gradient(90deg, #10B981, #059669)", // Green Success
+                       "linear-gradient(90deg, #E2761B, #F6851B)"  // Back to Orange
+                   ]
+                }}
+                transition={{ duration: 6, repeat: Infinity, times: [0, 0.1, 0.6, 0.9] }}
+                className="w-48 h-12 rounded-lg flex items-center justify-center shadow-lg relative overflow-hidden"
+            >
+                {/* Text / Icon Content Swapping */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                    
+                    {/* Stage 1: Connect */}
+                    <motion.div
+                        animate={{ opacity: [1, 0, 0, 1] }}
+                        transition={{ duration: 6, repeat: Infinity, times: [0, 0.1, 0.9, 1] }}
+                        className="flex items-center gap-2 font-bold text-white"
+                    >
+                        <FaWallet /> Connect Wallet
+                    </motion.div>
+
+                    {/* Stage 2: Loading */}
+                    <motion.div
+                        animate={{ opacity: [0, 1, 0, 0] }}
+                        transition={{ duration: 6, repeat: Infinity, times: [0.1, 0.2, 0.5, 0.6] }}
+                        className="absolute"
+                    >
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    </motion.div>
+
+                    {/* Stage 3: Success */}
+                    <motion.div
+                        animate={{ opacity: [0, 0, 1, 0], y: [10, 10, 0, -10] }}
+                        transition={{ duration: 6, repeat: Infinity, times: [0.5, 0.55, 0.6, 0.9] }}
+                        className="flex items-center gap-2 font-bold text-white absolute"
+                    >
+                        <BiCheckCircle className="text-xl" /> Connected
+                    </motion.div>
+
+                </div>
+            </motion.div>
+
+            {/* Cursor Hand Animation */}
+            <motion.div
+                animate={{ 
+                    x: [20, 0, 0, 100], 
+                    y: [20, 0, 0, 100],
+                    opacity: [0, 1, 1, 0]
+                }}
+                transition={{ duration: 6, repeat: Infinity, times: [0, 0.1, 0.2, 0.3] }}
+                className="absolute top-8 left-24 w-8 h-8 pointer-events-none z-50"
+            >
+               {/* Simple CSS shape for cursor */}
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.5 3.5L19 16.5L13.5 17.5L18.5 24.5L15.5 26.5L10.5 19.5L4.5 23.5L5.5 3.5Z" fill="white" stroke="black" strokeWidth="2"/>
+                </svg>
+            </motion.div>
+
+        </motion.div>
+    );
+}
+
 const transactions = [
   { 
     icon: <SiTether className="text-[#26A17B]" />, 
-    title: "USD Deposit (ACH)", 
-    sub: "$500,000 from J. Kirk", 
-    status: "Credited",
-    statusColor: "bg-[#10B981]/10 text-[#10B981] border-[#10B981]/20"
+    title: "USDT Transfer", 
+    sub: "$5,000 to Binance", 
+    status: "Sent",
+    statusColor: "bg-[#2A3138] text-[#94A3B8] border-[#2A3138]"
   },
   { 
-    icon: <FaEthereum className="text-[#627EEA]" />, 
-    title: "+5.2 ETH", 
-    sub: "from 0x82...92a", 
-    status: "Received",
+    icon: <FaEthereum className="text-[#5227FF]" />, 
+    title: "Uniswap Swap", 
+    sub: "0.5 ETH → PEPE", 
+    status: "Success",
     statusColor: "bg-[#10B981]/10 text-[#10B981] border-[#10B981]/20"
   },
   { 
     icon: <HiLightningBolt className="text-[#F59E0B]" />, 
-    title: "Execution Fee", 
-    sub: "Smart Contract Interaction", 
+    title: "Contract Interaction", 
+    sub: "Mint NFT #8832", 
     status: "Pending",
     statusColor: "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20"
   },
   { 
-    icon: <SiSolana className="text-[#14F195]" />, 
-    title: "-1,000 USDC", 
-    sub: "to x710...810z", 
-    status: "Confirming",
-    statusColor: "bg-[#9CA3AF]/10 text-[#9CA3AF] border-[#9CA3AF]/20"
+    icon: <SiSolana className="text-[#10B981]" />, 
+    title: "Solana Stake", 
+    sub: "+250 SOL", 
+    status: "Staked",
+    statusColor: "bg-[#5227FF]/10 text-[#5227FF] border-[#5227FF]/20"
   }
 ];
