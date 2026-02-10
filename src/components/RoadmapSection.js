@@ -44,7 +44,7 @@ export default function RoadmapSection() {
       status: 'upcoming',
       milestones: [
         'Public Beta Release (Open Access)',
-        'AFRD Token Generation Event (TGE)',
+        'VANT Token Generation Event (TGE)',
         'Initial DEX Listings (PancakeSwap)',
         'Governance V1 (Snapshot Voting)'
       ]
