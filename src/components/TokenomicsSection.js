@@ -1,14 +1,16 @@
 'use client'
 import { motion } from 'motion/react';
 import { FaExternalLinkAlt, FaFileAlt, FaCoins, FaLock, FaFire, FaShieldAlt } from 'react-icons/fa';
-import { BiNetworkChart } from 'react-icons/bi';
+import { BiNetworkChart, BiPieChartAlt2 } from 'react-icons/bi';
+import { RiOrganizationChart } from "react-icons/ri";
 
+// THEME CONSTANTS
 const theme = {
-  primary: '#FF8C00',
-  secondary: '#FFB347',
-  background: '#0D0A07',
-  cardBg: '#1A120C',
-  border: '#2A1E14'
+  primary: '#2471a4',    // Deep Ocean Blue
+  secondary: '#38bdf8',  // Sky Blue
+  background: '#0B0D14', // Graphite
+  cardBg: '#1C2126',     // Slate
+  border: '#2A3138'      // Steel
 };
 
 export default function TokenomicsSection() {
@@ -17,49 +19,49 @@ export default function TokenomicsSection() {
       category: 'Ecosystem & Rewards', 
       allocation: '25%', 
       vesting: '36 months',
-      color: '#FF8C00',
+      color: '#2471a4', // Primary Blue
       description: 'Community rewards and ecosystem growth'
     },
     { 
       category: 'Development & Research', 
       allocation: '20%', 
       vesting: '48 months',
-      color: '#4CD964',
+      color: '#06b6d4', // Cyan
       description: 'AI development and platform innovation'
     },
     { 
       category: 'Private / Partners', 
       allocation: '15%', 
       vesting: '24 months',
-      color: '#5E5CE6',
+      color: '#8b5cf6', // Violet
       description: 'Strategic partnerships and early investors'
     },
     { 
       category: 'Public Sale', 
       allocation: '10%', 
       vesting: '12 months',
-      color: '#FFB347',
+      color: '#10b981', // Emerald
       description: 'Public distribution and listing'
     },
     { 
       category: 'Team & Advisors', 
       allocation: '15%', 
       vesting: '36 months',
-      color: '#32ADE6',
+      color: '#94a3b8', // Slate
       description: 'Core team and advisory board'
     },
     { 
       category: 'Liquidity & Exchange', 
       allocation: '10%', 
-      vesting: '—',
-      color: '#FF453A',
+      vesting: 'Unlocked',
+      color: '#6366f1', // Indigo
       description: 'DEX and CEX liquidity pools'
     },
     { 
       category: 'Reserve', 
       allocation: '5%', 
-      vesting: '—',
-      color: '#A855F7',
+      vesting: 'Locked',
+      color: '#f43f5e', // Rose
       description: 'Emergency reserve and future use'
     }
   ];
@@ -67,270 +69,224 @@ export default function TokenomicsSection() {
   const quickFacts = [
     {
       icon: BiNetworkChart,
-      label: 'Chain',
-      value: 'Binance Smart Chain',
-      subValue: 'BEP-20',
-      color: '#FFB347'
+      label: 'Network',
+      value: 'BSC (BEP-20)',
+      subValue: 'Fast & Low Cost',
+      color: '#F0B90B' // BNB Yellow
     },
     {
       icon: FaCoins,
       label: 'Total Supply',
-      value: '10,000,000,000',
-      subValue: 'AFRD',
-      color: '#FF8C00'
+      value: '1,000,000,000,000',
+      subValue: 'Fixed Supply',
+      color: '#2471a4'
     },
     {
       icon: FaShieldAlt,
-      label: 'Audit',
-      value: 'Security Partners',
-      subValue: 'Scheduled',
-      color: '#4CD964'
+      label: 'Security',
+      value: 'Audited',
+      subValue: '100% Score',
+      color: '#10b981'
     },
     {
       icon: FaFire,
-      label: 'Deflation',
-      value: 'Burn Mechanism',
-      subValue: 'Report-based',
-      color: '#FF453A'
+      label: 'Deflationary',
+      value: 'Auto-Burn',
+      subValue: '1% per tx',
+      color: '#f43f5e'
     }
   ];
 
   return (
     <section 
       id='tokenomics'
-      className="relative py-14 sm:py-32 lg:py-40 overflow-hidden" 
+      className="relative py-20 sm:py-32 overflow-hidden" 
       style={{ backgroundColor: theme.background }}
     >
-      {/* Premium Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/5 via-transparent to-transparent" />
-        {/* Dot Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,140,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,140,0,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Header */}
+        {/* --- Section Header --- */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-16 sm:mb-20"
+          className="text-center mb-16 sm:mb-24"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border backdrop-blur-sm"
-            style={{ 
-              backgroundColor: `${theme.primary}10`,
-              borderColor: `${theme.primary}30`
-            }}
-          >
-            <FaCoins className="text-lg" style={{ color: theme.primary }} />
-            <span className="text-sm font-medium" style={{ color: theme.primary }}>
-              AFRD TOKEN
-            </span>
-          </motion.div>
-
-          <h2 className="text-2xl heading md:text-6xl lg:text-5xl text-white mb-6 leading-tight">
-            The Utility Engine
-            <br />
-            <span 
-              className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent"
-            >
-              Behind Alfredo
-            </span>
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+            The Fuel for <br />
+            <span className="text-[#2471a4]">Intelligent Finance</span>
           </h2>
 
-          <p className="text-base sm:text-lg text-balance text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            The AFRD token fuels the Alfredo ecosystem enabling AI reports, governance, rewards, and sustainable growth.
+          <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            A carefully balanced economic model designed for long-term sustainability, rewarding holders while funding continuous AI innovation.
           </p>
         </motion.div>
 
-        {/* Quick Facts Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
+        {/* --- Quick Facts Grid --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {quickFacts.map((fact, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              whileHover={{ y: -5, scale: 1.02 }}
-              className="group relative rounded-2xl border p-6 backdrop-blur-sm"
-              style={{
-                backgroundColor: `${theme.cardBg}95`,
-                borderColor: theme.border
-              }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ y: -5 }}
+              className="relative group p-6 rounded-2xl border bg-[#1C2126] transition-all duration-300"
+              style={{ borderColor: theme.border }}
             >
-              <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">{fact.label}</p>
-              <p className="text-xl font-bold text-white mb-1">{fact.value}</p>
-              <p className="text-sm font-medium" style={{ color: fact.color }}>{fact.subValue}</p>
-
-              {/* Hover Effect */}
-              <div 
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle at 50% 50%, ${fact.color}10, transparent 70%)`
-                }}
-              />
+              {/* Hover Glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#2471a4]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
+              
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-[#111315] border border-[#2A3138] flex items-center justify-center">
+                    <fact.icon className="text-xl" style={{ color: fact.color }} />
+                  </div>
+                  <span className="text-xs font-mono text-gray-500 uppercase">{fact.label}</span>
+                </div>
+                <div className="text-2xl font-bold text-white mb-1">{fact.value}</div>
+                <div className="text-sm font-medium" style={{ color: fact.color }}>{fact.subValue}</div>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Allocation Table */}
+        {/* --- Allocation Ledger --- */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="rounded-3xl border overflow-hidden backdrop-blur-xl mb-6"
-          style={{
-            backgroundColor: `${theme.cardBg}95`,
-            borderColor: theme.border,
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
-          }}
+          className="rounded-3xl border overflow-hidden bg-[#1C2126] shadow-2xl relative"
+          style={{ borderColor: theme.border }}
         >
+          {/* Top Bar Decoration */}
+          <div className="h-1 w-full bg-gradient-to-r from-[#2471a4] via-[#38bdf8] to-[#2471a4]" />
+
           {/* Table Header */}
-          <div 
-            className="px-6 sm:px-8 py-4 border-b"
-            style={{ 
-              backgroundColor: `${theme.primary}10`,
-              borderColor: theme.border
-            }}
-          >
-            <div className="grid grid-cols-12 gap-4 text-sm font-bold text-white uppercase tracking-wider">
-              <div className="col-span-6 sm:col-span-5">Category</div>
-              <div className="col-span-3 sm:col-span-2 text-center">Allocation</div>
-              <div className="col-span-3 sm:col-span-2 text-center">Vesting</div>
-              <div className="hidden sm:block sm:col-span-3" />
-            </div>
+          <div className="hidden sm:grid grid-cols-12 gap-4 px-8 py-4 bg-[#161A1D] border-b border-[#2A3138] text-xs font-bold text-gray-500 uppercase tracking-wider">
+            <div className="col-span-5">Category / Purpose</div>
+            <div className="col-span-2 text-center">Allocation</div>
+            <div className="col-span-2 text-center">Vesting</div>
+            <div className="col-span-3 text-right">Distribution</div>
           </div>
 
-          {/* Table Body */}
-          <div className="divide-y" style={{ borderColor: theme.border }}>
+          {/* List Items */}
+          <div className="divide-y divide-[#2A3138]">
             {allocationData.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.08, duration: 0.5 }}
-                className="group px-6 sm:px-8 py-5 hover:bg-opacity-50 transition-all duration-300"
-                style={{
-                  backgroundColor: 'transparent'
-                }}
+                transition={{ delay: index * 0.05 }}
+                className="grid grid-cols-1 sm:grid-cols-12 gap-4 px-6 sm:px-8 py-5 items-center group hover:bg-[#161A1D]/50 transition-colors"
               >
-                <div className="grid grid-cols-12 gap-4 items-center">
-                  {/* Category */}
-                  <div className="col-span-6 sm:col-span-5">
-                    <div className="flex items-center gap-3">
-                      <div 
-                        className="w-1 h-12 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: item.color }}
-                      />
-                      <div>
-                        <h4 className="text-white font-semibold text-sm sm:text-base mb-1">
-                          {item.category}
-                        </h4>
-                        <p className="text-gray-500 text-xs hidden sm:block">
-                          {item.description}
-                        </p>
-                      </div>
+                
+                {/* Category */}
+                <div className="col-span-1 sm:col-span-5 flex items-center gap-4">
+                  <div className="relative">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#111315] border border-[#2A3138]">
+                      <RiOrganizationChart className="text-[#2471a4]" />
                     </div>
-                  </div>
-
-                  {/* Allocation */}
-                  <div className="col-span-3 sm:col-span-2 text-center">
+                    {/* Color Dot */}
                     <div 
-                      className="inline-flex px-3 py-1.5 rounded-full font-bold text-sm"
-                      style={{
-                        backgroundColor: `${item.color}15`,
-                        color: item.color
-                      }}
-                    >
-                      {item.allocation}
-                    </div>
+                      className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#1C2126]"
+                      style={{ backgroundColor: item.color }} 
+                    />
                   </div>
-
-                  {/* Vesting */}
-                  <div className="col-span-3 sm:col-span-2 text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      {item.vesting !== '—' && (
-                        <FaLock className="text-gray-500 text-xs" />
-                      )}
-                      <span className="text-gray-400 text-sm font-medium">
-                        {item.vesting}
-                      </span>
-                    </div>
+                  <div>
+                    <h4 className="text-white font-bold text-sm sm:text-base">{item.category}</h4>
+                    <p className="text-gray-500 text-xs">{item.description}</p>
                   </div>
+                </div>
 
-                  {/* Progress Bar (Desktop) */}
-                  <div className="hidden sm:block sm:col-span-3">
-                    <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: `${item.color}15` }}>
+                {/* Allocation (Mobile Row) */}
+                <div className="col-span-1 sm:col-span-2 flex sm:justify-center items-center gap-2 sm:gap-0">
+                  <span className="text-gray-500 text-xs sm:hidden">Allocation:</span>
+                  <span className="text-white font-mono font-bold">{item.allocation}</span>
+                </div>
+
+                {/* Vesting (Mobile Row) */}
+                <div className="col-span-1 sm:col-span-2 flex sm:justify-center items-center gap-2 sm:gap-0">
+                  <span className="text-gray-500 text-xs sm:hidden">Vesting:</span>
+                  <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-[#111315] border border-[#2A3138]">
+                    <FaLock className="text-[10px] text-gray-500" />
+                    <span className="text-xs text-gray-400">{item.vesting}</span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="col-span-1 sm:col-span-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-2 bg-[#111315] rounded-full overflow-hidden border border-[#2A3138]">
                       <motion.div
                         initial={{ width: 0 }}
                         whileInView={{ width: item.allocation }}
                         viewport={{ once: true }}
-                        transition={{ delay: index * 0.08 + 0.3, duration: 1 }}
-                        className="h-full rounded-full"
+                        transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
+                        className="h-full rounded-full relative"
                         style={{ backgroundColor: item.color }}
-                      />
+                      >
+                         <div className="absolute inset-0 bg-white/20 w-full animate-[shimmer_2s_infinite]" />
+                      </motion.div>
                     </div>
                   </div>
                 </div>
+
               </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* CTA Buttons */}
+        {/* --- Action Buttons (3D Style) --- */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          transition={{ delay: 0.5 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-16"
         >
-          <motion.a
-            href="https://bscscan.com/token/0x5defe90ace2cc2eb1a3a356dfdc56589bdb7ebcc"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05, boxShadow: `0 20px 60px ${theme.primary}50` }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-white transition-all duration-300"
-            style={{
-              background: `linear-gradient(135deg, ${theme.primary}, ${theme.secondary})`,
-              boxShadow: `0 10px 40px ${theme.primary}40`
-            }}
-          >
-            <FaExternalLinkAlt />
-            View Token on BscScan
-          </motion.a>
+          {/* External Link Button */}
+          <a href="https://bscscan.com/token/0x6699ac45E9a93E3CA6850A07800e6508Bb25103e" target="_blank" rel="noopener noreferrer">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-[#1a5278] rounded-xl translate-y-1.5 rounded-b-xl" />
+              <button className="
+                relative px-8 py-4 
+                bg-[#2471a4] hover:bg-[#206694]
+                rounded-xl text-white font-bold text-sm tracking-wide
+                border-t border-[#60a5fa]/30 border-b-0
+                shadow-[0_10px_20px_rgba(36,113,164,0.3)]
+                active:shadow-none active:translate-y-1.5
+                transition-all duration-100 ease-in-out
+                flex items-center gap-2
+              ">
+                <FaExternalLinkAlt />
+                <span>View on BscScan</span>
+              </button>
+            </div>
+          </a>
 
-          <motion.a
-            href="https://alfredoai.gitbook.io/alfredoai-docs/"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ 
-              scale: 1.05,
-              backgroundColor: `${theme.cardBg}`,
-              borderColor: theme.primary
-            }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-white border transition-all duration-300"
-            style={{
-              backgroundColor: 'transparent',
-              borderColor: `${theme.primary}40`
-            }}
-          >
-            <FaFileAlt />
-            Read Full Tokenomics
-          </motion.a>
+          {/* Doc Button (Outline 3D) */}
+          <a href="https://vantage-ai.gitbook.io/vantage-ai-docs/" target="_blank" rel="noopener noreferrer">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-[#2A3138] rounded-xl translate-y-1.5 rounded-b-xl" />
+              <button className="
+                relative px-8 py-4 
+                bg-[#161A1D] hover:bg-[#1C2126]
+                rounded-xl text-white font-bold text-sm tracking-wide
+                border border-[#2A3138] border-b-0
+                active:shadow-none active:translate-y-1.5
+                transition-all duration-100 ease-in-out
+                flex items-center gap-2
+              ">
+                <FaFileAlt className="text-gray-400" />
+                <span>Documentation</span>
+              </button>
+            </div>
+          </a>
         </motion.div>
+
       </div>
     </section>
   );
