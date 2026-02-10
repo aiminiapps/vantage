@@ -1,136 +1,125 @@
 'use client'
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaCheckCircle } from 'react-icons/fa';
+import { BiCoinStack } from "react-icons/bi";
 
+// THEME CONSTANTS
 const theme = {
-  primary: '#FF8C00',
-  secondary: '#FFB347',
-  background: '#0D0A07',
-  cardBg: '#1A120C'
+  primary: '#2471a4',    // Deep Ocean Blue
+  primaryDark: '#1a5278', // Darker Blue for button depth
+  accent: '#38bdf8',     // Light Blue for highlights
+  background: '#0B0D14', // Graphite
+  cardBg: '#1C2126',     // Slate
+  border: '#2A3138'      // Steel
 };
 
 export default function TaskCenterSection() {
   return (
     <section 
-      className="relative py-14 sm:py-32 overflow-hidden" 
+      className="relative py-20 overflow-hidden" 
       style={{ backgroundColor: theme.background }}
     >
-      {/* Premium Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/5 via-transparent to-transparent" />
-        {/* Dot Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,140,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,140,0,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Main Content Container */}
+        {/* Main Card */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="rounded-[32px] overflow-hidden border relative"
+          transition={{ duration: 0.8 }}
+          className="relative rounded-3xl overflow-hidden border"
           style={{
             backgroundColor: theme.cardBg,
-            borderColor: `${theme.primary}20`,
-            boxShadow: `0 20px 60px rgba(0, 0, 0, 0.5)`
+            borderColor: theme.border,
+            boxShadow: `0 30px 60px -20px rgba(0, 0, 0, 0.5)`
           }}
         >
-          {/* Subtle Gradient Background */}
-          <div 
-            className="absolute inset-0 opacity-40"
-            style={{
-              background: `radial-gradient(circle at 30% 50%, ${theme.primary}15, transparent 60%)`
-            }}
-          />
-
-          <div className="relative px-8 sm:px-12 lg:px-20 py-16 sm:py-20 text-center">
-            
+          <div className="relative px-8 sm:px-12 py-16 sm:py-20 text-center">
             {/* Main Heading */}
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="text-2xl heading md:text-6xl lg:text-5xl text-white mb-6 leading-tight"
+              transition={{ delay: 0.1 }}
+              className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight"
             >
-              <span className="text-white">READY TO </span>
-              <span 
-                className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent"
-              >
-                EARN REWARDS
+              Ready to Earn <br />
+              <span className="text-[#2471a4] inline-block relative">
+                Real Rewards?
+                {/* Underline decorative */}
+                <svg className="absolute w-full h-3 -bottom-1 left-0 text-[#2471a4] opacity-40" viewBox="0 0 100 10" preserveAspectRatio="none">
+                   <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="none" />
+                </svg>
               </span>
-              <br />
-              <span className="text-white">THIS MONTH?</span>
             </motion.h2>
 
             {/* Description */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-base sm:text-lg text-gray-400 text-balance max-w-3xl mx-auto mb-10 leading-relaxed"
+              transition={{ delay: 0.2 }}
+              className="text-base sm:text-lg text-balance text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed"
             >
-              Complete simple social tasks and earn real AFRD tokens instantly.
-              Connect your wallet, engage with our community, and get rewarded on-chain.
+              Complete simple social tasks, connect with the community, and earn <span className="text-white font-medium">VANT tokens</span> directly to your wallet.
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* 3D CTA Button */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+              transition={{ delay: 0.3 }}
+              className="flex justify-center mb-12"
             >
-              {/* Primary CTA */}
               <Link href="/tasks">
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: `0 20px 60px ${theme.primary}50` }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-white text-base transition-all duration-300"
-                  style={{
-                    background: `linear-gradient(135deg, ${theme.primary}, ${theme.secondary})`,
-                    boxShadow: `0 10px 40px ${theme.primary}40`
-                  }}
-                >
-                  START EARNING NOW
-                  <motion.span
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                <div className="relative group">
+                  {/* Button Depth Layer */}
+                  <div className="absolute inset-0 bg-[#1a5278] rounded-xl translate-y-2 rounded-b-xl" />
+                  
+                  {/* Main Button Surface */}
+                  <motion.button
+                    whileHover={{ y: -2 }}
+                    whileTap={{ y: 8 }} // Push down effect
+                    className={`
+                      relative px-10 py-5
+                      bg-[#2471a4] hover:bg-[#206694]
+                      rounded-xl text-white font-bold text-lg tracking-wide
+                      border-t border-[#60a5fa]/30 border-b-0
+                      shadow-[0_10px_20px_rgba(36,113,164,0.3)]
+                      active:shadow-none active:border-t-0
+                      transition-all duration-100 ease-in-out
+                      flex items-center gap-3
+                    `}
                   >
-                    <FaArrowRight />
-                  </motion.span>
-                </motion.button>
+                    START EARNING
+                    <FaArrowRight className="text-[#bae6fd]" />
+                  </motion.button>
+                </div>
               </Link>
             </motion.div>
 
-            {/* Trust Badge */}
+            {/* Trust Badges */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="mt-10 sm:text-base text-xs flex items-center justify-center gap-2 sm:gap-4 text-gray-500"
+              transition={{ delay: 0.4 }}
+              className="border-t border-[#2A3138] pt-8 flex flex-wrap justify-center gap-6 sm:gap-12"
             >
-              <div className="flex items-center gap-2">
-                <div className="size-1 sm:size-2 rounded-full bg-green-500" />
-                <span>Instant Payouts</span>
-              </div>
-              <div className="hidden sm:block w-px h-4 bg-gray-700" />
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500" />
-                <span>100% Secure</span>
-              </div>
-              <div className="hidden sm:block w-px h-4 bg-gray-700" />
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500" />
-                <span>No Minimum</span>
-              </div>
+              {[
+                "Instant Payouts",
+                "100% Secure",
+                "No Minimum"
+              ].map((text, i) => (
+                <div key={i} className="flex items-center gap-2.5 text-gray-500 text-sm font-medium">
+                  <FaCheckCircle className="text-[#2471a4]" />
+                  {text}
+                </div>
+              ))}
             </motion.div>
+
           </div>
         </motion.div>
       </div>
