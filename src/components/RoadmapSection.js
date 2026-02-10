@@ -1,15 +1,17 @@
 'use client'
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
-import { FaCircle } from 'react-icons/fa';
-import { HiSparkles } from 'react-icons/hi';
+import { BiMap, BiRadioCircleMarked, BiCheckCircle, BiLoaderAlt } from 'react-icons/bi';
+import { RiRouteLine } from "react-icons/ri";
 
+// THEME CONSTANTS
 const theme = {
-  primary: '#FF8C00',
-  secondary: '#FFB347',
-  background: '#0D0A07',
-  cardBg: '#1A120C',
-  border: '#2A1E14'
+  primary: '#2471a4',    // Deep Ocean Blue
+  secondary: '#38bdf8',  // Sky Blue
+  background: '#0B0D14', // Graphite
+  cardBg: '#1C2126',     // Slate
+  border: '#2A3138',     // Steel
+  text: '#9CA3AF'        // Gray
 };
 
 export default function RoadmapSection() {
@@ -19,54 +21,68 @@ export default function RoadmapSection() {
     offset: ["start end", "end start"]
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  // Parallax for the background text
+  const yBg = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   const phases = [
     {
-      phase: 'Phase 1',
-      timeframe: 'Q1–Q2 2025',
-      milestones: [
-        { title: 'AI Prototype', description: 'Core AI engine development' },
-        { title: 'Smart Contract Deploy', description: 'Launch on BSC' },
-        { title: 'Private Beta', description: 'Limited user testing' }
-      ]
-    },
-    {
-      phase: 'Phase 2',
-      timeframe: 'Q3–Q4 2025',
-      milestones: [
-        { title: 'Public Beta', description: 'Open access to all users' },
-        { title: 'AFRD IDO', description: 'Token launch event' },
-        { title: 'Exchange Listings', description: 'DEX and CEX integration' },
-        { title: 'Governance Beta', description: 'DAO voting system' }
-      ]
-    },
-    {
-      phase: 'Phase 3',
+      id: '01',
+      title: 'Foundation & AI Core',
       timeframe: 'Q1–Q2 2026',
+      status: 'active', // Special animation for current phase
       milestones: [
-        { title: 'AI v2.0', description: 'Enhanced prediction models' },
-        { title: 'Staking Launch', description: 'Earn rewards with AFRD' },
-        { title: 'Mobile App', description: 'iOS and Android release' },
-        { title: 'API Integration', description: 'Developer tools' }
+        'AI Engine V1 Prototype Development',
+        'Smart Contract Audits & Deployment (BSC)',
+        'Private Beta Access for Early Adopters',
+        'Community Formation & Social Launch'
       ]
     },
     {
-      phase: 'Phase 4',
+      id: '02',
+      title: 'Public Launch & Expansion',
       timeframe: 'Q3–Q4 2026',
+      status: 'upcoming',
       milestones: [
-        { title: 'DAO Launch', description: 'Full decentralized governance' },
-        { title: 'AI Chat Advisor', description: 'Real-time portfolio assistance' },
-        { title: 'Buyback System', description: 'Token value mechanism' }
+        'Public Beta Release (Open Access)',
+        'AFRD Token Generation Event (TGE)',
+        'Initial DEX Listings (PancakeSwap)',
+        'Governance V1 (Snapshot Voting)'
       ]
     },
     {
-      phase: 'Phase 5',
-      timeframe: '2027+',
+      id: '03',
+      title: 'Ecosystem Growth',
+      timeframe: 'Q1–Q2 2027',
+      status: 'upcoming',
       milestones: [
-        { title: 'Predictive AI', description: 'Advanced market predictions' },
-        { title: 'Multi-Chain Analytics', description: 'Cross-chain support' },
-        { title: 'Global Expansion', description: 'Worldwide partnerships' }
+        'AI Prediction Model V2.0 (Neural Update)',
+        'Staking Platform Launch (Yield Farming)',
+        'Mobile App Beta (iOS & Android)',
+        'Developer API SDK Release'
+      ]
+    },
+    {
+      id: '04',
+      title: 'Decentralization',
+      timeframe: 'Q3–Q4 2027',
+      status: 'upcoming',
+      milestones: [
+        'Full DAO Governance Implementation',
+        'AI Chat Advisor (Real-time Assistant)',
+        'Automated Buyback & Burn Protocol',
+        'Cross-Chain Bridge Integration'
+      ]
+    },
+    {
+      id: '05',
+      title: 'The Singularity',
+      timeframe: '2028+',
+      status: 'upcoming',
+      milestones: [
+        'Autonomous Portfolio Management AI',
+        'Institutional Analytics Suite',
+        'Global Strategic Partnerships',
+        'Multi-Chain AI Oracle Services'
       ]
     }
   ];
@@ -74,211 +90,127 @@ export default function RoadmapSection() {
   return (
     <section 
       ref={containerRef}
-      className="relative py-14 sm:py-32 lg:py-40 overflow-hidden" 
+      className="relative py-20 sm:py-32 overflow-hidden" 
       style={{ backgroundColor: theme.background }}
     >
-              {/* Premium Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/5 via-transparent to-transparent" />
-        {/* Dot Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,140,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,140,0,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
-      </div>
-      {/* Large "100x" Background - Animated on Scroll */}
-      <motion.div 
-        style={{ opacity }}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
-      >
-        <motion.h1 
-          className="text-[15rem] sm:text-[20rem] lg:text-[30rem] xl:text-[40rem] font-black tracking-tighter select-none"
-          style={{
-            background: `linear-gradient(180deg, ${theme.primary}15, transparent)`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            // opacity: useTransform(scrollYProgress, [0, 0.5, 1], [0.02, 0.05, 0.02]),
-            // scale: useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8])
-          }}
+      {/* --- Background Elements --- */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Giant Watermark Text */}
+        <motion.div 
+          style={{ y: yBg }}
+          className="absolute top-0 right-0 text-[20vw] font-bold leading-none text-white/5 select-none z-0"
         >
-          100x
-        </motion.h1>
-      </motion.div>
-
-      {/* Gradient Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/10 via-transparent to-transparent" />
+          2026
+        </motion.div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Header */}
+        {/* --- Header --- */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border backdrop-blur-sm"
-            style={{ 
-              backgroundColor: `${theme.primary}10`,
-              borderColor: `${theme.primary}30`
-            }}
-          >
-            <HiSparkles className="text-lg" style={{ color: theme.primary }} />
-            <span className="text-sm font-medium" style={{ color: theme.primary }}>
-              OUR JOURNEY
+          className="mb-20 md:mb-32"
+        >          
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            Roadmap to <br />
+            <span className="text-[#2471a4]">
+              Intelligent Finance
             </span>
-          </motion.div>
-
-          <h2 className="text-2xl heading md:text-6xl lg:text-5xl text-white mb-6 leading-tight">
-            Roadmap
           </h2>
-
-          <p className="text-base sm:text-lg text-gray-400 max-w-3xl text-balance mx-auto leading-relaxed">
-            From Prototype to AI Governance Alfredo evolves with you, becoming smarter every cycle.
+          <p className="text-gray-400 max-w-xl text-lg">
+            From prototype to full decentralized AI governance. Alfredo evolves with the market, becoming smarter every cycle.
           </p>
         </motion.div>
 
-        {/* Timeline */}
+        {/* --- Vertical Tech Layout --- */}
         <div className="relative">
-          {/* Vertical Center Line */}
-          <div 
-            className="absolute left-8 sm:left-12 md:left-1/2 top-0 bottom-0 w-px md:-ml-px"
-            style={{
-              background: `linear-gradient(to bottom, transparent, ${theme.primary}40, transparent)`
-            }}
-          />
+          
+          {/* The "Data Rail" Line (Desktop: Left side, Mobile: Left side) */}
+          <div className="absolute left-[11px] md:left-[26px] top-0 bottom-0 w-px bg-gradient-to-b from-[#2471a4] via-[#2A3138] to-transparent" />
 
-          {/* Phase Cards */}
-          <div className="space-y-16 sm:space-y-20">
+          <div className="space-y-12 md:space-y-24">
             {phases.map((phase, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: index * 0.1,
-                  ease: [0.16, 1, 0.3, 1]
-                }}
-                className="relative"
+                transition={{ delay: index * 0.1 }}
+                className="relative pl-12 md:pl-24 group"
               >
-                {/* Timeline Dot */}
-                <motion.div
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 + 0.3, type: "spring", stiffness: 200 }}
-                  className="absolute left-6 sm:left-12 md:left-1/2 w-4 h-4 md:-ml-2 rounded-full border-4 z-10"
-                  style={{
-                    backgroundColor: theme.background,
-                    borderColor: theme.primary,
-                    boxShadow: `0 0 0 4px ${theme.primary}20`
-                  }}
-                />
+                {/* Node Connector Point */}
+                <div className="absolute left-[11px] md:left-[27px] top-8 -translate-x-1/2 flex flex-col items-center">
+                   {/* The Dot */}
+                   <div className={`
+                     w-4 h-4 rounded-full border-2 z-10 relative
+                     ${phase.status === 'active' 
+                       ? 'bg-[#2471a4] border-[#38bdf8] shadow-[0_0_15px_#2471a4]' 
+                       : 'bg-[#111315] border-[#2A3138] group-hover:border-[#2471a4] transition-colors'}
+                   `}>
+                     {phase.status === 'active' && (
+                       <span className="absolute inset-0 rounded-full bg-[#2471a4] animate-ping opacity-75" />
+                     )}
+                   </div>
+                   {/* Horizontal Line connecting to card */}
+                   <div className="hidden md:block absolute left-full top-1/2 h-px w-16 bg-[#2A3138] group-hover:bg-[#2471a4]/50 transition-colors" />
+                </div>
 
-                {/* Content Container - Alternating Layout on Desktop */}
-                <div className={`md:grid md:grid-cols-2 md:gap-12 ${
-                  index % 2 === 0 ? '' : 'md:grid-flow-dense'
-                }`}>
-                  {/* Phase Label - Left on Even, Right on Odd */}
-                  <motion.div
-                    initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 + 0.4 }}
-                    className={`mb-6 md:mb-0 md:text-${index % 2 === 0 ? 'right' : 'left'} ${
-                      index % 2 === 0 ? '' : 'md:col-start-2'
-                    } pl-20 sm:pl-24 md:pl-0 md:pr-${index % 2 === 0 ? '8' : '0'}`}
-                  >
-                    <h3 className="text-2xl heading sm:text-3xl font-bold text-white mb-2">
-                      {phase.phase}
+                {/* Content Card */}
+                <div className="md:grid md:grid-cols-12 gap-8 items-start">
+                  
+                  {/* Phase Info (Left Side on Desktop) */}
+                  <div className="md:col-span-4 mb-4 md:mb-0">
+                    <div className="flex items-center gap-3 mb-2">
+                       <span className="text-5xl font-bold text-[#2A3138] select-none group-hover:text-[#2471a4]/20 transition-colors">
+                         {phase.id}
+                       </span>
+                       {phase.status === 'active' && (
+                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#2471a4] text-white animate-pulse">
+                           IN PROGRESS
+                         </span>
+                       )}
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[#38bdf8] transition-colors">
+                      {phase.title}
                     </h3>
-                    <div 
-                      className="inline-flex px-4 py-1.5 rounded-full text-sm font-bold"
-                      style={{
-                        backgroundColor: `${theme.primary}15`,
-                        color: theme.primary
-                      }}
-                    >
+                    <div className="text-[#2471a4] font-mono text-sm font-bold tracking-wide">
                       {phase.timeframe}
                     </div>
-                  </motion.div>
+                  </div>
 
-                  {/* Milestones Card - Right on Even, Left on Odd */}
-                  <motion.div
-                    initial={{ opacity: 0, x: index % 2 === 0 ? 30 : -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 + 0.5 }}
-                    className={`${
-                      index % 2 === 0 ? '' : 'md:col-start-1 md:row-start-1'
-                    } pl-20 sm:pl-24 md:pl-${index % 2 === 0 ? '8' : '0'}`}
-                  >
-                    <div 
-                      className="rounded-2xl border p-6 sm:p-8 backdrop-blur-sm hover:scale-[1.02] transition-all duration-300"
-                      style={{
-                        backgroundColor: `${theme.cardBg}95`,
-                        borderColor: theme.border
-                      }}
-                    >
-                      <div className="space-y-4">
-                        {phase.milestones.map((milestone, mIdx) => (
-                          <motion.div
-                            key={mIdx}
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 + 0.6 + mIdx * 0.05 }}
-                            className="flex items-start gap-3"
-                          >
-                            <FaCircle 
-                              className="text-xs mt-1.5 flex-shrink-0" 
-                              style={{ color: theme.primary }} 
-                            />
-                            <div>
-                              <h4 className="text-white font-semibold mb-1">
-                                {milestone.title}
-                              </h4>
-                              <p className="text-gray-400 text-sm">
-                                {milestone.description}
-                              </p>
-                            </div>
-                          </motion.div>
+                  {/* Milestones Box (Right Side on Desktop) */}
+                  <div className="md:col-span-8">
+                    <div className={`
+                      rounded-2xl border p-6 md:p-8 backdrop-blur-sm transition-all duration-300
+                      ${phase.status === 'active' 
+                        ? 'bg-[#1C2126] border-[#2471a4] shadow-[0_10px_40px_-10px_rgba(36,113,164,0.2)]' 
+                        : 'bg-[#161A1D] border-[#2A3138] hover:border-[#2471a4]/30'}
+                    `}>
+                      <ul className="space-y-4">
+                        {phase.milestones.map((item, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            {phase.status === 'active' ? (
+                               i === 0 ? <BiLoaderAlt className="text-[#2471a4] mt-1 animate-spin shrink-0" /> : <BiRadioCircleMarked className="text-[#2471a4] mt-1 shrink-0" />
+                            ) : (
+                               <BiCheckCircle className="text-[#2A3138] mt-1 shrink-0 group-hover:text-[#2471a4]/50 transition-colors" />
+                            )}
+                            <span className={`text-sm md:text-base ${phase.status === 'active' ? 'text-gray-200' : 'text-gray-400'}`}>
+                              {item}
+                            </span>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
-                  </motion.div>
+                  </div>
+
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
 
-        {/* Tagline */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-20 text-center"
-        >
-          <p className="text-xl sm:text-2xl font-semibold text-gray-400 italic">
-            "Alfredo evolves with you becoming{' '}
-            <span 
-              className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent"
-            >
-              smarter every cycle
-            </span>
-            ."
-          </p>
-        </motion.div>
       </div>
     </section>
   );
