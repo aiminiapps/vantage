@@ -8,12 +8,12 @@ import { RiBnbLine } from "react-icons/ri";
 
 // New Theme Palette
 const theme = {
-  primary: '#5227FF',     // Electric Blue
-  secondary: '#a855f7',   // Purple accent
-  background: '#111315',  // Graphite Black
-  surface: '#1C2126',     // Surface Slate
-  border: '#2A3138',      // Soft Steel
-  text: '#9CA3AF'         // Cool Gray
+  primary: '#5227FF',     
+  secondary: '#a855f7',   
+  background: '#111315',  
+  surface: '#1C2126',     
+  border: '#2A3138',      
+  text: '#9CA3AF'         
 };
 
 export default function Navbar() {
@@ -160,7 +160,7 @@ export default function Navbar() {
                         transition={{ duration: 3, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
                       />
-                      <span>Earn AFRD</span>
+                      <span>Earn VANT</span>
                     </motion.button>
                   </div>
                 </Link>
