@@ -36,12 +36,8 @@ export default function FeaturesGrid() {
           viewport={{ once: true }}
           className="max-w-2xl"
         >
-          <h2 className="text-sm font-bold tracking-widest text-[#5227FF] uppercase mb-4">
-            Powerful Features
-          </h2>
           <h3 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
-            Everything you need. <br />
-            <span className="text-[#94A3B8]">AI-Driven. Instant Access.</span>
+            Everything you need.
           </h3>
         </motion.div>
       </div>
@@ -57,9 +53,6 @@ export default function FeaturesGrid() {
           viewport={{ once: true }}
         >
           <div className="p-8 md:p-10 relative z-10">
-            <div className="w-12 h-12 rounded-2xl bg-[#5227FF]/20 flex items-center justify-center mb-6">
-                <BiBot className="text-2xl text-[#5227FF]" />
-            </div>
             <h4 className="text-2xl font-bold text-white mb-2">AI Powered Intelligence</h4>
             <p className="text-[#94A3B8] max-w-md">Our neural engine continuously scans the blockchain, learning from market patterns to give you predictive insights.</p>
           </div>
