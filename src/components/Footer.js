@@ -2,16 +2,17 @@
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaExternalLinkAlt, FaEnvelope, FaFileAlt } from 'react-icons/fa';
+import { FaExternalLinkAlt, FaEnvelope, FaFileAlt, FaGlobe } from 'react-icons/fa';
 import { RiTwitterXLine } from "react-icons/ri";
-import { LiaTelegram } from "react-icons/lia";
 
+// THEME CONSTANTS
 const theme = {
-  primary: '#FF8C00',
-  secondary: '#FFB347',
-  background: '#0D0A07',
-  cardBg: '#1A120C',
-  border: '#2A1E14'
+  primary: '#2471a4',    // Deep Ocean Blue
+  secondary: '#38bdf8',  // Sky Blue
+  background: '#0B0D14', // Graphite
+  cardBg: '#1C2126',     // Slate
+  border: '#2A3138',     // Steel
+  text: '#9CA3AF'        // Gray
 };
 
 export default function Footer() {
@@ -23,10 +24,9 @@ export default function Footer() {
     resources: [
       { label: 'Whitepaper', href: 'https://vantage-ai.gitbook.io/vantage-ai-docs/', icon: FaFileAlt },
       { label: 'BSC Scan', href: 'https://bscscan.com/token/0x6699ac45E9a93E3CA6850A07800e6508Bb25103e', icon: FaExternalLinkAlt }
-
     ],
     community: [
-      { label: 'X', href: 'https://x.com/AI_VANT', icon: RiTwitterXLine }
+      { label: 'Follow on X', href: 'https://x.com/AI_VANT', icon: RiTwitterXLine }
     ]
   };
 
@@ -41,11 +41,11 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Main Footer Content */}
-        <div className="py-16 sm:py-20">
+        <div className="py-16 sm:py-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
             
             {/* Brand Column */}
-            <div className="lg:col-span-4">
+            <div className="lg:col-span-5">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -53,28 +53,26 @@ export default function Footer() {
                 transition={{ duration: 0.6 }}
               >
                 {/* Logo */}
-                <Link href="/" className="inline-flex items-center gap-3 mb-4 group">
-                  <Image src="/logo.png" alt='logo' width={200} height={100}/>
+                <Link href="/" className="inline-block mb-6 group">
+                   {/* Replace with your actual logo path */}
+                  <Image 
+                    src="/logo.png" 
+                    alt='Alfredo Logo' 
+                    width={160} 
+                    height={80}
+                    className="opacity-90 group-hover:opacity-100 transition-opacity"
+                  />
                 </Link>
 
                 {/* Description */}
-                <p className="text-gray-400 mb-2 leading-relaxed">
-                  AI-powered crypto portfolio intelligence.
+                <p className="text-[#9CA3AF] mb-6 leading-relaxed max-w-sm text-sm">
+                  The intelligent bridge between raw blockchain data and actionable insights. Powered by advanced AI algorithms on the Binance Smart Chain.
                 </p>
-
-                {/* Email */}
-                <a 
-                  href="mailto:official@alfredo.world"
-                  className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300 group"
-                >
-                  <FaEnvelope className="group-hover:scale-110 transition-transform" />
-                  <span className="text-sm">official@alfredo.world</span>
-                </a>
               </motion.div>
             </div>
 
             {/* Links Columns */}
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 lg:pl-12">
               
               {/* Product */}
               <motion.div
@@ -83,15 +81,15 @@ export default function Footer() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <h3 className="text-white font-bold mb-4">Product</h3>
-                <ul className="space-y-3">
+                <h3 className="text-white font-bold mb-6 text-sm uppercase tracking-widest border-b border-[#2A3138] pb-2 inline-block">Product</h3>
+                <ul className="space-y-4">
                   {footerLinks.product.map((link, index) => (
                     <li key={index}>
                       <Link 
                         href={link.href}
-                        className="text-gray-400 hover:text-white transition-colors duration-300 text-sm inline-flex items-center gap-2 group"
+                        className="text-[#9CA3AF] hover:text-[#2471a4] transition-colors duration-200 text-sm inline-flex items-center gap-2 group"
                       >
-                        <span className="group-hover:translate-x-1 transition-transform duration-300">
+                        <span className="group-hover:translate-x-1 transition-transform duration-200">
                           {link.label}
                         </span>
                       </Link>
@@ -107,20 +105,20 @@ export default function Footer() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <h3 className="text-white font-bold mb-4">Resources</h3>
-                <ul className="space-y-3">
+                <h3 className="text-white font-bold mb-6 text-sm uppercase tracking-widest border-b border-[#2A3138] pb-2 inline-block">Resources</h3>
+                <ul className="space-y-4">
                   {footerLinks.resources.map((link, index) => (
                     <li key={index}>
                       <a 
                         href={link.href}
                         target={link.icon === FaExternalLinkAlt ? "_blank" : undefined}
                         rel={link.icon === FaExternalLinkAlt ? "noopener noreferrer" : undefined}
-                        className="text-gray-400 hover:text-white transition-colors duration-300 text-sm inline-flex items-center gap-2 group"
+                        className="text-[#9CA3AF] hover:text-[#2471a4] transition-colors duration-200 text-sm inline-flex items-center gap-2 group"
                       >
-                        <span className="group-hover:translate-x-1 transition-transform duration-300">
+                        <span className="group-hover:translate-x-1 transition-transform duration-200">
                           {link.label}
                         </span>
-                        {link.icon && <link.icon className="text-xs opacity-50" />}
+                        {link.icon === FaExternalLinkAlt && <FaExternalLinkAlt className="text-[10px] opacity-50" />}
                       </a>
                     </li>
                   ))}
@@ -134,18 +132,18 @@ export default function Footer() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
-                <h3 className="text-white font-bold mb-4">Community</h3>
-                <ul className="space-y-3">
+                <h3 className="text-white font-bold mb-6 text-sm uppercase tracking-widest border-b border-[#2A3138] pb-2 inline-block">Connect</h3>
+                <ul className="space-y-4">
                   {footerLinks.community.map((link, index) => (
                     <li key={index}>
                       <a 
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-white transition-colors duration-300 text-sm inline-flex items-center gap-2 group"
+                        className="text-[#9CA3AF] hover:text-[#2471a4] transition-colors duration-200 text-sm inline-flex items-center gap-2 group"
                       >
-                        <link.icon />
-                        <span className="group-hover:translate-x-1 transition-transform duration-300">
+                        <link.icon className="text-sm" />
+                        <span className="group-hover:translate-x-1 transition-transform duration-200">
                           {link.label}
                         </span>
                       </a>
@@ -163,29 +161,24 @@ export default function Footer() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="border-t py-8"
+          className="border-t py-8 flex flex-col md:flex-row items-center justify-between gap-4"
           style={{ borderColor: theme.border }}
         >
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            
-            {/* Copyright */}
-            <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} Alfredo. All rights reserved.
-            </p>
-            {/* Built with love */}
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
-              <span>Built with</span>
-              <motion.span
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-red-500"
-              >
-                ❤️
-              </motion.span>
-              <span>by Alfredo Team</span>
-            </div>
+          {/* Copyright */}
+          <div className="text-gray-500 text-sm flex items-center gap-2">
+             © {new Date().getFullYear()} Vantage AI. All rights reserved.
+          </div>
+
+          {/* Social / Tech Stack or simple message */}
+          <div className="flex items-center gap-6">
+             <div className="h-3 w-px bg-[#2A3138]" />
+             <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                <span>Made by</span>
+                <span className="text-white font-semibold">Vantage Team</span>
+             </div>
           </div>
         </motion.div>
+
       </div>
     </footer>
   );
