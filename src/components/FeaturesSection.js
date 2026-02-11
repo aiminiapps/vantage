@@ -2,16 +2,17 @@
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import { HiSparkles } from 'react-icons/hi';
-import { 
-  FaWallet, FaChartLine, FaBrain
-} from 'react-icons/fa';
+import { FaWallet, FaChartLine, FaBrain, FaArrowRight } from 'react-icons/fa';
+import { BiLayer } from "react-icons/bi";
 
+// THEME CONSTANTS
 const theme = {
-  primary: '#FF8C00',
-  secondary: '#FFB347',
-  background: '#0D0A07',
-  cardBg: '#1A120C',
-  border: '#2A1E14'
+  primary: '#2471a4',    // Deep Ocean Blue
+  secondary: '#38bdf8',  // Sky Blue
+  background: '#0B0D14', // Graphite
+  cardBg: '#1C2126',     // Slate
+  border: '#2A3138',     // Steel
+  text: '#9CA3AF'        // Gray
 };
 
 export default function FeaturesSection() {
@@ -21,32 +22,27 @@ export default function FeaturesSection() {
     offset: ["start end", "end start"]
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
   const features = [
     {
       icon: FaWallet,
       title: 'Universal Wallet Analysis',
-      description: 'Connect any wallet address and instantly analyze your complete crypto portfolio across all networks.',
+      description: 'Connect any address to instantly decode your complete portfolio DNA across EVM & Solana networks.',
       illustration: '/illustrations/wallet.png', 
-      color: '#FF8C00',
-      gradient: 'from-orange-500 to-amber-600'
+      color: '#38bdf8' // Sky Blue
     },
     {
       icon: FaChartLine,
       title: 'Market Intelligence',
-      description: 'Track live market trends, price movements, and portfolio performance with advanced analytics.',
+      description: 'Live predictive modeling and sentiment analysis that helps you spot the next trend before the crowd.',
       illustration: '/illustrations/chart.png',
-      color: '#4CD964',
-      gradient: 'from-green-500 to-emerald-600'
+      color: '#2471a4' // Ocean Blue
     },
     {
       icon: FaBrain,
-      title: 'AI Chat',
-      description: 'To get personalized investment strategies powered by machine learning and predictive analytics.',
+      title: 'AI Neural Assistant',
+      description: 'Your 24/7 quant analyst. Ask complex questions about tokenomics, risk, and strategy in plain English.',
       illustration: '/illustrations/ai.png',
-      color: '#5E5CE6',
-      gradient: 'from-purple-500 to-indigo-600'
+      color: '#818cf8' // Indigo
     }
   ];
 
@@ -54,156 +50,116 @@ export default function FeaturesSection() {
     <section 
       id='features'
       ref={containerRef}
-      className="relative py-14 sm:py-32 lg:py-40 overflow-hidden" 
+      className="relative py-24 sm:py-32 overflow-hidden" 
       style={{ backgroundColor: theme.background }}
     >
-      {/* Premium Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/5 via-transparent to-transparent" />
-        {/* Dot Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,140,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,140,0,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header */}
+        {/* --- Header --- */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-16 sm:mb-20"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border backdrop-blur-sm"
-            style={{ 
-              backgroundColor: `${theme.primary}10`,
-              borderColor: `${theme.primary}30`
-            }}
-          >
-            <HiSparkles className="text-lg" style={{ color: theme.primary }} />
-            <span className="text-sm font-medium" style={{ color: theme.primary }}>
-              Why Choose Alfredo?
-            </span>
-          </motion.div>
-
-          <h2 className="text-2xl heading md:text-6xl lg:text-5xl text-white mb-6 leading-tight">
-            Everything You Need for
-            <br />
-            <span 
-              className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent"
-            >
-              Smart Investing
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+            Intelligence at <br />
+            <span className="text-[#2471a4]">
+              Institutional Scale
             </span>
           </h2>
 
-          <p className="text-base sm:text-lg text-gray-400 max-w-3xl text-balance mx-auto leading-relaxed">
-            Powerful tools and intelligent features designed to help you make better investment decisions.
+          <p className="text-base sm:text-lg text-balance text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            We combine on-chain forensics with large language models to give you an unfair advantage in the market.
           </p>
         </motion.div>
 
-        {/* Feature Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        {/* --- Feature Cards Grid --- */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ 
-                duration: 0.7, 
-                delay: index * 0.2,
-                ease: [0.16, 1, 0.3, 1]
-              }}
-              whileHover={{ y: -12, scale: 1.02 }}
-              className="group relative"
+              transition={{ delay: index * 0.2, duration: 0.6 }}
+              className="group relative h-full"
             >
-              {/* Glow Effect */}
+              {/* Card Container */}
               <div 
-                className="absolute -inset-1 rounded-3xl opacity-0 group-hover:opacity-100 blur-2xl transition-all duration-700"
-                style={{ 
-                  background: `linear-gradient(135deg, ${feature.color}50, transparent)`
-                }}
-              />
-              
-              {/* Card */}
-              <div 
-                className="relative h-full rounded-3xl border overflow-hidden transition-all duration-500"
-                style={{
-                  backgroundColor: theme.cardBg,
-                  borderColor: theme.border
-                }}
+                className="relative h-full rounded-3xl border bg-[#1C2126] overflow-hidden transition-all duration-300 group-hover:border-[#2471a4]/50 group-hover:shadow-[0_0_30px_-10px_rgba(36,113,164,0.3)]"
+                style={{ borderColor: theme.border }}
               >
-                {/* Gradient Background Overlay */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
-                  style={{
-                    background: `linear-gradient(135deg, ${feature.color}, transparent)`
-                  }}
-                />
-
-                {/* Content */}
-                <div className="relative p-4">
-                  {/* Illustration/Image Area */}
-                  <div className="relative h-48 rounded-2xl border overflow-hidden mb-6"
-                    style={{
-                      backgroundColor: `${theme.background}80`,
-                      borderColor: `${feature.color}30`
-                    }}
-                  >
-                    {/* Gradient Background */}
-                    <div 
-                      className="absolute inset-0"
-                      style={{
-                        background: `radial-gradient(circle at 30% 30%, ${feature.color}20, transparent 70%)`
+                
+                {/* Image Window (Top Half) */}
+                <div className="relative h-56 w-full overflow-hidden bg-[#111315] border-b border-[#2A3138] group-hover:border-[#2471a4]/30 transition-colors">
+                  {/* Grid Overlay inside image area */}
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px] opacity-20" />
+                  
+                  {/* Illustration Placeholder / Image */}
+                  <div className="absolute inset-4 rounded-xl border border-[#2A3138] bg-[#161A1D] overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-500">
+                    <img 
+                      src={feature.illustration} 
+                      alt={feature.title}
+                      className="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity"
+                      onError={(e) => {
+                        // Fallback if image fails - shows a tech icon instead
+                        e.target.style.display = 'none';
+                        e.target.parentNode.innerHTML = `<div class="text-4xl text-[#2471a4] opacity-50"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>`;
                       }}
                     />
-                    {/* image here */}
-                    <img src={feature.illustration} alt='features image'/>
+                    
+                    {/* Inner Reflection */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
                   </div>
-                  <h3 className="text-xl font-semibold heading text-white mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-orange-400 group-hover:to-amber-400 group-hover:bg-clip-text transition-all duration-300">
-                    {feature.title}
-                  </h3>
-                  
-                  {/* Description */}
-                  <p className="text-gray-400 text-sm leading-relaxed mb-2">
-                    {feature.description}
-                  </p>
-
                 </div>
+
+                {/* Content (Bottom Half) */}
+                <div className="p-6 relative">
+                  {/* Icon Badge */}
+                  <div className="absolute -top-6 left-6 w-12 h-12 rounded-xl bg-[#2471a4] border-2 border-[#1C2126] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <feature.icon className="text-white text-lg" />
+                  </div>
+
+                  <div className="mt-6">
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#38bdf8] transition-colors">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-gray-400 leading-relaxed mb-6">
+                      {feature.description}
+                    </p>
+                    
+                    {/* Learn More Link */}
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#2471a4] uppercase tracking-wider group-hover:gap-3 transition-all">
+                      <span>Explore Feature</span>
+                      <FaArrowRight />
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Bottom CTA Section */}
+        {/* --- Bottom Trust Bar --- */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-20 sm:flex items-center justify-center hidden text-center"
+          transition={{ delay: 0.6 }}
+          className="mt-20 pt-10 border-t border-[#2A3138] flex flex-wrap justify-center gap-8 md:gap-16 opacity-70"
         >
-          <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-            <div className="flex items-center gap-2 text-gray-400">
-              <span className="text-sm">Secure & Encrypted</span>
-            </div>
-            <div className="hidden sm:block w-1 h-1 rounded-full bg-gray-600" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <span className="text-sm">Lightning Fast</span>
-            </div>
-            <div className="hidden sm:block w-1 h-1 rounded-full bg-gray-600" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <span className="text-sm">Always Improving</span>
-            </div>
-          </div>
+          {['Secure Enclave', 'Real-Time Data', 'EVM Compatible', 'Zero-Log Privacy'].map((item, i) => (
+             <div key={i} className="flex items-center gap-3">
+               <div className="w-1.5 h-1.5 rounded-full bg-[#2471a4]" />
+               <span className="text-sm font-medium text-gray-400 uppercase tracking-wide">{item}</span>
+             </div>
+          ))}
         </motion.div>
+
       </div>
     </section>
   );
 }
- 
