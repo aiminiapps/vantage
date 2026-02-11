@@ -1,18 +1,18 @@
 'use client'
 import { motion } from 'motion/react';
 import { useRef } from 'react';
-import { FaUsers, FaVoteYea } from 'react-icons/fa';
+import { FaUsers, FaBook, FaTwitter } from 'react-icons/fa';
 import { HiSparkles } from 'react-icons/hi';
-import { BiCodeAlt } from 'react-icons/bi';
-import { RiTwitterXLine } from "react-icons/ri";
-import { LiaTelegram } from "react-icons/lia";
+import { BiWorld } from 'react-icons/bi';
 
+// THEME CONSTANTS
 const theme = {
-  primary: '#FF8C00',
-  secondary: '#FFB347',
-  background: '#0D0A07',
-  cardBg: '#1A120C',
-  border: '#2A1E14'
+  primary: '#2471a4',    // Deep Ocean Blue
+  secondary: '#38bdf8',  // Sky Blue
+  background: '#111315', // Graphite
+  cardBg: '#1C2126',     // Slate
+  border: '#2A3138',     // Steel
+  text: '#9CA3AF'        // Gray
 };
 
 export default function CommunitySection() {
@@ -21,192 +21,106 @@ export default function CommunitySection() {
   return (
     <section 
       ref={containerRef}
-      className="relative py-14 sm:py-32 lg:py-40 overflow-hidden" 
+      className="relative py-20 sm:py-32 overflow-hidden" 
       style={{ backgroundColor: theme.background }}
     >
-        {/* Premium Background */}
-        <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/5 via-transparent to-transparent" />
-        {/* Dot Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,140,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,140,0,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]" />
+      {/* --- Ambient Background --- */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#2471a4]/10 blur-[100px] rounded-full" />
       </div>
 
-      <motion.div 
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
-      >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Header */}
+        {/* --- Header --- */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16 sm:mb-20"
+          className="text-center mb-16"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border backdrop-blur-sm"
-            style={{ 
-              backgroundColor: `${theme.primary}10`,
-              borderColor: `${theme.primary}30`
-            }}
-          >
-            <FaUsers className="text-lg" style={{ color: theme.primary }} />
-            <span className="text-sm font-medium" style={{ color: theme.primary }}>
-              COMMUNITY GOVERNANCE
-            </span>
-          </motion.div>
 
-          <h2 className="text-2xl heading md:text-6xl lg:text-5xl text-white mb-6 leading-tight">
-            <span className="text-white">Driven by Data.</span>
-            <br />
-            <span 
-              className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent"
-            >
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            Driven by Data. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2471a4] via-[#38bdf8] to-white">
               Governed by You.
             </span>
           </h2>
 
-          <p className="text-base sm:text-lg text-balance text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            AFRD holders are not just users they're decision-makers. Through Alfredo DAO, the community shapes product upgrades, AI model improvements, and partnership directions.
+          <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            AFRD holders are decision-makers. Through the Alfredo DAO, the community shapes product upgrades, AI model improvements, and future partnerships.
           </p>
         </motion.div>
 
-        {/* CTA Container */}
+        {/* --- Main Action Card --- */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ delay: 0.2 }}
           className="max-w-4xl mx-auto"
         >
-          <div 
-            className="rounded-3xl border p-8 sm:p-12 backdrop-blur-xl"
-            style={{
-              backgroundColor: `${theme.cardBg}80`,
-              borderColor: `${theme.primary}20`,
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
-            }}
+          <div className="relative rounded-3xl border bg-[#1C2126] p-8 sm:p-12 overflow-hidden text-center shadow-2xl"
+             style={{ borderColor: theme.border }}
           >
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-              {/* Telegram */}
-              <motion.a
-                href="https://t.me/AI_UR_Alfredo"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05, boxShadow: `0 20px 60px ${theme.primary}50` }}
-                whileTap={{ scale: 0.98 }}
-                className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-white transition-all duration-300 w-full sm:w-auto justify-center"
-                style={{
-                  background: `linear-gradient(135deg, ${theme.primary}, ${theme.secondary})`,
-                  boxShadow: `0 10px 40px ${theme.primary}40`
-                }}
-              >
-                <LiaTelegram className="text-xl" />
-                Join Telegram Community
-              </motion.a>
+            {/* Background Glow inside card */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-[#2471a4]/5 to-transparent pointer-events-none" />
 
-              {/* Twitter */}
-              <motion.a
-                href="https://x.com/AI_UR_Alfredo"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: `${theme.cardBg}`,
-                  borderColor: theme.primary
-                }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-white border transition-all duration-300 w-full sm:w-auto justify-center"
-                style={{
-                  backgroundColor: 'transparent',
-                  borderColor: `${theme.primary}40`
-                }}
-              >
-                <RiTwitterXLine className="text-xl" />
-                Follow on X (Twitter)
-              </motion.a>
+            {/* Buttons Row */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 relative z-10">
+              
+              {/* Documentation Button (Primary 3D) */}
+              <a href="https://alfredoai.gitbook.io/alfredoai-docs/" target="_blank" rel="noopener noreferrer">
+                <div className="relative group w-full sm:w-auto">
+                  <div className="absolute inset-0 bg-[#1a5278] rounded-xl translate-y-1.5 rounded-b-xl" />
+                  <button className="
+                    relative w-full sm:w-auto px-8 py-4 
+                    bg-[#2471a4] hover:bg-[#206694]
+                    rounded-xl text-white font-bold text-sm tracking-wide
+                    border-t border-[#60a5fa]/30 border-b-0
+                    shadow-[0_10px_20px_rgba(36,113,164,0.3)]
+                    active:shadow-none active:translate-y-1.5
+                    transition-all duration-100 ease-in-out
+                    flex items-center justify-center gap-3
+                  ">
+                    <FaBook className="text-[#bae6fd]" />
+                    <span>Read the Docs</span>
+                  </button>
+                </div>
+              </a>
+
+              {/* Twitter Button (Secondary Outline) */}
+              <a href="https://x.com/AI_UR_Alfredo" target="_blank" rel="noopener noreferrer">
+                <div className="relative group w-full sm:w-auto">
+                  <div className="absolute inset-0 bg-[#2A3138] rounded-xl translate-y-1.5 rounded-b-xl" />
+                  <button className="
+                    relative w-full sm:w-auto px-8 py-4 
+                    bg-[#161A1D] hover:bg-[#1C2126]
+                    rounded-xl text-white font-bold text-sm tracking-wide
+                    border border-[#2A3138] border-b-0
+                    active:shadow-none active:translate-y-1.5
+                    transition-all duration-100 ease-in-out
+                    flex items-center justify-center gap-3
+                  ">
+                    <FaTwitter className="text-gray-400 group-hover:text-white transition-colors" />
+                    <span>Follow on X</span>
+                  </button>
+                </div>
+              </a>
             </div>
 
-            {/* DAO Coming Soon Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              className="flex justify-center"
-            >
-              <div 
-                className="inline-flex items-center gap-3 px-6 py-3 rounded-full border"
-                style={{
-                  backgroundColor: `${theme.primary}10`,
-                  borderColor: `${theme.primary}30`
-                }}
-              >
-                <motion.div
-                  animate={{ 
-                    scale: [1, 1.2, 1],
-                    opacity: [0.5, 1, 0.5]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <HiSparkles className="text-lg" style={{ color: theme.primary }} />
-                </motion.div>
-                <span className="text-sm font-bold text-white">
-                  DAO Coming Soon
-                </span>
+            {/* Status Badge */}
+            <div className="mt-10 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#111315] border border-[#2A3138]">
+              <div className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#38bdf8] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#38bdf8]"></span>
               </div>
-            </motion.div>
+              <span className="text-xs font-medium text-gray-400">DAO Governance Launching Soon</span>
+            </div>
+
           </div>
         </motion.div>
-
-        {/* Stats Bar - now hidden */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-16 hidden grid grid-cols-1 sm:grid-cols-3 gap-6"
-        >
-          {[
-            { label: 'Community Members', value: '10K+', icon: FaUsers },
-            { label: 'Governance Votes', value: 'Coming Soon', icon: FaVoteYea },
-            { label: 'Active Proposals', value: 'Soon', icon: BiCodeAlt }
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 + index * 0.1 }}
-              className="text-center p-6 rounded-2xl border backdrop-blur-sm"
-              style={{
-                backgroundColor: `${theme.cardBg}60`,
-                borderColor: theme.border
-              }}
-            >
-              <div className="inline-flex p-3 rounded-xl mb-3"
-                style={{ backgroundColor: `${theme.primary}15` }}
-              >
-                <stat.icon 
-                  className="text-2xl" 
-                  style={{ color: theme.primary }} 
-                />
-              </div>
-              <p className="text-3xl font-bold text-white mb-1">
-                {stat.value}
-              </p>
-              <p className="text-sm text-gray-500">
-                {stat.label}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
+        </div>
     </section>
   );
 }
