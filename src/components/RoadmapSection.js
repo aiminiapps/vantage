@@ -2,7 +2,6 @@
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import { BiMap, BiRadioCircleMarked, BiCheckCircle, BiLoaderAlt } from 'react-icons/bi';
-import { RiRouteLine } from "react-icons/ri";
 
 // THEME CONSTANTS
 const theme = {
@@ -10,7 +9,7 @@ const theme = {
   secondary: '#38bdf8',  
   background: '#0B0D14', 
   cardBg: '#1C2126',     
-  border: '#2A3138',     
+  border: '#2A3138',      
   text: '#9CA3AF'        
 };
 
