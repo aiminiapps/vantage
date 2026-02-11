@@ -47,13 +47,13 @@ export default function Hero() {
 
   return (
     // THEME: Primary Background #111315
-    <div className="relative min-h-screen bg-[#111315] overflow-hidden selection:bg-[#5227FF] selection:text-white">
+    <div className="relative min-h-screen bg-[#111315] overflow-hidden selection:bg-[#2471a4] selection:text-white">
       
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden opacity-60 pointer-events-none">
         <LightPillar
-            topColor="#5227FF"
-            bottomColor="#a855f7"
+            topColor="#2471a4" // Deep Ocean Blue
+            bottomColor="#38bdf8" // Sky Blue
             intensity={0.8}
             rotationSpeed={0.3}
             glowAmount={0.002}
@@ -79,10 +79,18 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="text-center mb-12 md:mb-16 sm:mt-0 mt-28"
         >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2471a4]/10 border border-[#2471a4]/20 mb-6 backdrop-blur-sm">
+             <div className="relative flex h-2 w-2">
+               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#38bdf8] opacity-75"></span>
+               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2471a4]"></span>
+             </div>
+             <span className="text-xs text-[#2471a4] font-bold tracking-wide uppercase">Live Market Intelligence</span>
+          </div>
+
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
             See the Market From
             <br />
-            <span className="text-white">A Higher Perspective</span>
+            <span className="text-[#2471a4]">A Higher Perspective</span>
           </h1>
 
           <p className="text-base md:text-xl text-[#9CA3AF] max-w-2xl mx-auto leading-relaxed">
@@ -99,13 +107,13 @@ export default function Hero() {
         >
           {/* THEME: CardsElevated SurfaceSlate Deep #1C2126 */}
           {/* THEME: BorderSoft Steel #2A3138 */}
-          <div className="relative bg-[#1C2126] rounded-3xl border border-[#2A3138] p-4 md:p-5 shadow-[0_0_50px_-12px_rgba(82,39,255,0.15)]">
+          <div className="relative bg-[#1C2126] rounded-3xl border border-[#2A3138] p-4 md:p-5 shadow-[0_0_50px_-12px_rgba(36,113,164,0.15)]">
             
             <div className="flex flex-col md:flex-row gap-4">
               
               {/* Wallet Input */}
               <div className="flex-1 relative group">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] group-focus-within:text-[#5227FF] transition-colors">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] group-focus-within:text-[#2471a4] transition-colors">
                     <IoWalletOutline className="text-xl" />
                 </div>
                 {/* THEME: Secondary SurfaceCarbon #161A1D */}
@@ -115,7 +123,7 @@ export default function Hero() {
                   onChange={(e) => setWalletAddress(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleAnalyze()}
                   placeholder="Paste wallet address..."
-                  className="w-full pl-12 pr-6 py-4 bg-[#161A1D] border border-[#2A3138] rounded-xl text-white placeholder-[#586069] focus:border-[#5227FF] focus:outline-none focus:ring-1 focus:ring-[#5227FF] transition-all text-base"
+                  className="w-full pl-12 pr-6 py-4 bg-[#161A1D] border border-[#2A3138] rounded-xl text-white placeholder-[#586069] focus:border-[#2471a4] focus:outline-none focus:ring-1 focus:ring-[#2471a4] transition-all text-base"
                 />
               </div>
 
@@ -124,7 +132,7 @@ export default function Hero() {
                 <motion.button
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-full px-4 py-4 bg-[#161A1D] border border-[#2A3138] rounded-xl flex items-center justify-between gap-3 hover:border-[#586069] focus:border-[#5227FF] transition-all"
+                  className="w-full px-4 py-4 bg-[#161A1D] border border-[#2A3138] rounded-xl flex items-center justify-between gap-3 hover:border-[#586069] focus:border-[#2471a4] transition-all"
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 flex items-center justify-center rounded-full bg-[#111315] border border-[#2A3138]">
@@ -160,7 +168,7 @@ export default function Hero() {
                             <div className="text-white font-medium text-sm">{network.name}</div>
                           </div>
                           {selectedNetwork.id === network.id && (
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#5227FF]" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#2471a4]" />
                           )}
                         </motion.button>
                       ))}
@@ -175,7 +183,7 @@ export default function Hero() {
               */}
               <div className="relative group">
                 {/* Button Shadow/Depth Layer (The part that stays behind) */}
-                <div className="absolute inset-0 bg-[#3b1ec2] rounded-xl translate-y-1.5 rounded-b-xl" />
+                <div className="absolute inset-0 bg-[#1a5278] rounded-xl translate-y-1.5 rounded-b-xl" />
                 
                 {/* The Main Button Face */}
                 <motion.button
@@ -185,10 +193,10 @@ export default function Hero() {
                   disabled={isLoading}
                   className={`
                     relative w-full md:w-auto px-8 py-4 
-                    bg-gradient-to-b from-[#633aff] to-[#5227FF] 
+                    bg-[#2471a4] hover:bg-[#206694] 
                     rounded-xl text-white font-bold text-base 
-                    border-t border-[#8e72ff] border-b-4 border-[#3016a3]
-                    shadow-[0_10px_20px_rgba(82,39,255,0.3),0_4px_0_#3016a3]
+                    border-t border-[#60a5fa]/30 border-b-4 border-[#1a5278]
+                    shadow-[0_10px_20px_rgba(36,113,164,0.3),0_4px_0_#1a5278]
                     active:shadow-none active:border-b-0
                     transition-all duration-100 ease-in-out
                     flex items-center justify-center gap-2 whitespace-nowrap overflow-hidden
@@ -217,7 +225,7 @@ export default function Hero() {
                     </>
                   ) : (
                     <>
-                      <HiSparkles className="text-xl relative z-10 text-[#e0d6ff]" />
+                      <HiSparkles className="text-xl relative z-10 text-[#bae6fd]" />
                       <span className="relative z-10 text-shadow-sm">Generate</span>
                     </>
                   )}
@@ -242,7 +250,7 @@ export default function Hero() {
               <motion.div
                 key={idx}
                 whileHover={{ scale: 1.05, backgroundColor: '#2A3138' }}
-                className="px-4 py-2 rounded-full bg-[#1C2126] border border-[#2A3138] text-[#9CA3AF] text-sm font-medium hover:text-white hover:border-[#5227FF]/50 transition-all cursor-default"
+                className="px-4 py-2 rounded-full bg-[#1C2126] border border-[#2A3138] text-[#9CA3AF] text-sm font-medium hover:text-white hover:border-[#2471a4]/50 transition-all cursor-default"
               >
                 {feature.text}
               </motion.div>
