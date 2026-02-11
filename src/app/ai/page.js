@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast, Toaster } from 'react-hot-toast';
-import { FaWallet, FaChartLine, FaLayerGroup, FaBrain, FaDownload, FaShare } from 'react-icons/fa';
+import { FaWallet, FaChartLine, FaLayerGroup, FaBrain, FaDownload, FaShare, FaBug, FaTimes } from 'react-icons/fa';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -39,9 +39,11 @@ function AIDashboard() {
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [walletData, setWalletData] = useState(null);
+  const [rawApiData, setRawApiData] = useState(null); // For debugging
   const [aiInsights, setAiInsights] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [showChat, setShowChat] = useState(false);
+  const [showDebug, setShowDebug] = useState(false);
   const [cacheAge, setCacheAge] = useState(null);
 
   // Load wallet data
@@ -60,13 +62,11 @@ function AIDashboard() {
       const age = getCacheAge(wallet);
 
       if (cached) {
-        console.log('📦 Using cached data');
+        console.log('📦 Using cached data', cached);
         setWalletData(cached);
         setCacheAge(age);
         setIsLoading(false);
         toast.success(`✓ Loaded from cache (${age}m ago)`);
-
-        // Fetch AI insights in background
         loadAIInsights(cached);
         return;
       }
@@ -77,33 +77,35 @@ function AIDashboard() {
       const response = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet, chains: [network] })
+        body: JSON.stringify({ wallet, chains: [network.toLowerCase()] })
       });
 
-      if (!response.ok) throw new Error('Scan failed');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Scan failed');
+      }
 
       const scanData = await response.json();
+      console.log('📥 Raw API Response:', scanData);
+      setRawApiData(scanData); // Save for debug modal
 
       // Transform data
       const transformed = transformAlchemyData(scanData);
-
-      // Enhance with prices (optional)
-      await enhanceWithPrices(transformed);
+      console.log('✨ Transformed Data:', transformed);
 
       // Save to localStorage
       saveWalletData(wallet, transformed);
 
       setWalletData(transformed);
       setCacheAge(0);
-      toast.success('✓ Wallet data loaded!', { id: 'scan' });
+      toast.success(`✓ Found ${transformed.allTokens.length} tokens!`, { id: 'scan' });
 
       // Fetch AI insights
       loadAIInsights(transformed);
 
     } catch (error) {
       console.error('Error loading wallet:', error);
-      toast.error('Failed to load wallet data', { id: 'scan' });
-      setTimeout(() => router.push('/'), 2000);
+      toast.error(`Failed: ${error.message}`, { id: 'scan' });
     } finally {
       setIsLoading(false);
     }
@@ -126,32 +128,6 @@ function AIDashboard() {
       }
     } catch (error) {
       console.error('AI insights error:', error);
-    }
-  };
-
-  const enhanceWithPrices = async (data) => {
-    try {
-      const platform = CHAIN_TO_PLATFORM[network] || 'binance-smart-chain';
-      const addresses = data.allTokens
-        .filter(t => t.contractAddress && t.contractAddress !== '0x0000000000000000000000000000000000000000')
-        .map(t => t.contractAddress)
-        .slice(0, 10); // Limit to avoid rate limits
-
-      if (addresses.length > 0) {
-        const prices = await getBatchTokenPrices(addresses, platform);
-
-        // Update tokens with prices
-        data.allTokens.forEach(token => {
-          const priceData = prices[token.contractAddress?.toLowerCase()];
-          if (priceData) {
-            token.priceUSD = priceData.usd;
-            token.change24h = priceData.usd_24h_change;
-            token.valueUSD = token.balance * (priceData.usd || 0);
-          }
-        });
-      }
-    } catch (error) {
-      console.error('Price fetch error:', error);
     }
   };
 
@@ -244,6 +220,20 @@ function AIDashboard() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => setShowDebug(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all"
+            style={{
+              background: `${VANTAGE_THEME.warning}20`,
+              border: `1px solid ${VANTAGE_THEME.warning}`,
+              color: VANTAGE_THEME.warning
+            }}
+          >
+            <FaBug />
+            Debug API
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleShare}
             className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all"
             style={{
@@ -328,6 +318,77 @@ function AIDashboard() {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {/* Debug Modal */}
+      <AnimatePresence>
+        {showDebug && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ background: 'rgba(0,0,0,0.8)' }}
+            onClick={() => setShowDebug(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-4xl w-full max-h-[80vh] overflow-auto rounded-2xl p-6"
+              style={{
+                background: VANTAGE_THEME.cardBg,
+                border: `1px solid ${VANTAGE_THEME.border}`
+              }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                  🐛 Debug: API Response
+                </h3>
+                <button
+                  onClick={() => setShowDebug(false)}
+                  className="p-2 rounded-lg"
+                  style={{ background: `${VANTAGE_THEME.error}20` }}
+                >
+                  <FaTimes style={{ color: VANTAGE_THEME.error }} />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold mb-2" style={{ color: VANTAGE_THEME.info }}>
+                    Raw API Data:
+                  </h4>
+                  <pre
+                    className="p-4 rounded-xl text-xs overflow-auto"
+                    style={{
+                      background: VANTAGE_THEME.background,
+                      color: VANTAGE_THEME.text
+                    }}
+                  >
+                    {JSON.stringify(rawApiData, null, 2)}
+                  </pre>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2" style={{ color: VANTAGE_THEME.success }}>
+                    Transformed Data:
+                  </h4>
+                  <pre
+                    className="p-4 rounded-xl text-xs overflow-auto"
+                    style={{
+                      background: VANTAGE_THEME.background,
+                      color: VANTAGE_THEME.text
+                    }}
+                  >
+                    {JSON.stringify(walletData, null, 2)}
+                  </pre>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* AI Chat */}
       <AnimatePresence>
