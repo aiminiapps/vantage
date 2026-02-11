@@ -9,7 +9,7 @@ import { BiWorld } from 'react-icons/bi';
 const theme = {
   primary: '#2471a4',    // Deep Ocean Blue
   secondary: '#38bdf8',  // Sky Blue
-  background: '#111315', // Graphite
+  background: '#0B0D14', // Graphite
   cardBg: '#1C2126',     // Slate
   border: '#2A3138',     // Steel
   text: '#9CA3AF'        // Gray
@@ -24,12 +24,6 @@ export default function CommunitySection() {
       className="relative py-20 sm:py-32 overflow-hidden" 
       style={{ backgroundColor: theme.background }}
     >
-      {/* --- Ambient Background --- */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#2471a4]/10 blur-[100px] rounded-full" />
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* --- Header --- */}
@@ -41,14 +35,14 @@ export default function CommunitySection() {
         >
 
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Driven by Data. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2471a4] via-[#38bdf8] to-white">
+            Driven by Data, <br />
+            <span className="text-[#2471a4]">
               Governed by You.
             </span>
           </h2>
 
           <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            AFRD holders are decision-makers. Through the Alfredo DAO, the community shapes product upgrades, AI model improvements, and future partnerships.
+            VANT holders are decision-makers. Through the Alfredo DAO, the community shapes product upgrades, AI model improvements, and future partnerships.
           </p>
         </motion.div>
 
@@ -60,17 +54,11 @@ export default function CommunitySection() {
           transition={{ delay: 0.2 }}
           className="max-w-4xl mx-auto"
         >
-          <div className="relative rounded-3xl border bg-[#1C2126] p-8 sm:p-12 overflow-hidden text-center shadow-2xl"
-             style={{ borderColor: theme.border }}
-          >
-            {/* Background Glow inside card */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-[#2471a4]/5 to-transparent pointer-events-none" />
-
             {/* Buttons Row */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 relative z-10">
               
               {/* Documentation Button (Primary 3D) */}
-              <a href="https://alfredoai.gitbook.io/alfredoai-docs/" target="_blank" rel="noopener noreferrer">
+              <a href="https://vantage-ai.gitbook.io/vantage-ai-docs/" target="_blank" rel="noopener noreferrer">
                 <div className="relative group w-full sm:w-auto">
                   <div className="absolute inset-0 bg-[#1a5278] rounded-xl translate-y-1.5 rounded-b-xl" />
                   <button className="
@@ -90,7 +78,7 @@ export default function CommunitySection() {
               </a>
 
               {/* Twitter Button (Secondary Outline) */}
-              <a href="https://x.com/AI_UR_Alfredo" target="_blank" rel="noopener noreferrer">
+              <a href="https://x.com/AI_VANT" target="_blank" rel="noopener noreferrer">
                 <div className="relative group w-full sm:w-auto">
                   <div className="absolute inset-0 bg-[#2A3138] rounded-xl translate-y-1.5 rounded-b-xl" />
                   <button className="
@@ -108,17 +96,6 @@ export default function CommunitySection() {
                 </div>
               </a>
             </div>
-
-            {/* Status Badge */}
-            <div className="mt-10 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#111315] border border-[#2A3138]">
-              <div className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#38bdf8] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#38bdf8]"></span>
-              </div>
-              <span className="text-xs font-medium text-gray-400">DAO Governance Launching Soon</span>
-            </div>
-
-          </div>
         </motion.div>
         </div>
     </section>
