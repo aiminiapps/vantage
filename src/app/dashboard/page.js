@@ -4,13 +4,13 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast, Toaster } from 'sonner';
 import ReactMarkdown from 'react-markdown';
-import { 
-  FaWallet, FaChartLine, FaRobot, FaPaperPlane, FaCopy, FaChartPie, 
-  FaFire, FaLightbulb, FaBolt, FaTrophy, FaRocket, FaChartBar, 
-  FaLayerGroup, FaDownload, FaShare, FaStar, FaGlobe, FaBrain, 
-  FaCheckCircle, FaExclamationTriangle, FaHistory, FaCoins, 
-  FaShieldAlt, FaArrowUp, FaArrowDown, FaHome, FaTimes, FaExpand, 
-  FaMagic, FaChevronRight, FaBullseye, FaUser, FaExchangeAlt, 
+import {
+  FaWallet, FaChartLine, FaRobot, FaPaperPlane, FaCopy, FaChartPie,
+  FaFire, FaLightbulb, FaBolt, FaTrophy, FaRocket, FaChartBar,
+  FaLayerGroup, FaDownload, FaShare, FaStar, FaGlobe, FaBrain,
+  FaCheckCircle, FaExclamationTriangle, FaHistory, FaCoins,
+  FaShieldAlt, FaArrowUp, FaArrowDown, FaHome, FaTimes, FaExpand,
+  FaMagic, FaChevronRight, FaBullseye, FaUser, FaExchangeAlt,
   FaFilter, FaCompass, FaClock, FaSort, FaTwitter, FaSpinner,
   FaTelegram, FaExternalLinkAlt, FaRetweet, FaComment, FaThumbsUp,
   FaInfoCircle, FaGift, FaCheckDouble, FaEye
@@ -18,25 +18,25 @@ import {
 import { TbTarget } from 'react-icons/tb';
 import { BiCoin, BiData, BiShield } from 'react-icons/bi';
 import { HiSparkles } from 'react-icons/hi';
-import { 
-  PieChart, Pie, Cell, BarChart, Bar, RadarChart, PolarGrid, 
-  PolarAngleAxis, PolarRadiusAxis, Radar, XAxis, YAxis, 
-  CartesianGrid, Tooltip, ResponsiveContainer 
+import {
+  PieChart, Pie, Cell, BarChart, Bar, RadarChart, PolarGrid,
+  PolarAngleAxis, PolarRadiusAxis, Radar, XAxis, YAxis,
+  CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 
 // Theme Configuration
 const theme = {
-  primary: '#FF8C00',
-  secondary: '#FFB347',
+  primary: '#2471a4',
+  secondary: '#38bdf8',
   success: '#4CD964',
   error: '#FF453A',
   warning: '#FFCC00',
   info: '#5E5CE6',
-  background: '#0D0A07',
-  cardBg: '#1A120C',
-  border: '#2A1E14',
+  background: '#0B0D14',
+  cardBg: '#1C2126',
+  border: '#2A3138',
   text: '#F5F5F5',
-  textSecondary: '#A9A9B1'
+  textSecondary: '#9CA3AF'
 };
 
 // Storage Configuration
@@ -234,7 +234,7 @@ const useWallet = () => {
     try {
       const nonce = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const expiry = Math.floor(Date.now() / 1000) + 3600;
-      const message = `Welcome to Alfredo!\nAddress: ${address}\nNonce: ${nonce}\nExpiry: ${expiry}`;
+      const message = `Welcome to VANTAGE!\nAddress: ${address}\nNonce: ${nonce}\nExpiry: ${expiry}`;
 
       const signature = await signer.signMessage(message);
 
@@ -310,7 +310,7 @@ const useWallet = () => {
       try {
         const saved = getStorage();
         if (saved?.wallet?.isConnected && saved.wallet.address && window.ethereum) {
-          const isRecent = saved.wallet.lastConnected && 
+          const isRecent = saved.wallet.lastConnected &&
             (Date.now() - saved.wallet.lastConnected) < 24 * 60 * 60 * 1000;
 
           if (isRecent) {
@@ -319,11 +319,11 @@ const useWallet = () => {
 
             const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
-            if (accounts.length > 0 && 
-                accounts[0].toLowerCase() === saved.wallet.address.toLowerCase()) {
-              
+            if (accounts.length > 0 &&
+              accounts[0].toLowerCase() === saved.wallet.address.toLowerCase()) {
+
               let provider, signer, balance = saved.wallet.balance;
-              
+
               if (ethers.BrowserProvider) {
                 provider = new ethers.BrowserProvider(window.ethereum);
                 signer = await provider.getSigner();
@@ -412,11 +412,11 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 // Main Component
-function AlfredoDashboard() {
+function VantageDashboard() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const wallet = useWallet();
-  
+
   const walletParam = searchParams.get('wallet');
   const network = searchParams.get('network') || 'ethereum';
 
@@ -513,7 +513,7 @@ function AlfredoDashboard() {
       description: 'Share with your network',
       reward: 90,
       icon: FaShare,
-      action: 'https://twitter.com/intent/tweet?text=Check%20out%20Alfredo',
+      action: 'https://twitter.com/intent/tweet?text=Check%20out%20VANTAGE%20-%20AI-powered%20crypto%20portfolio%20analysis!',
       type: 'social',
       difficulty: 'medium'
     }
@@ -571,7 +571,7 @@ function AlfredoDashboard() {
 
     try {
       toast.loading('Scanning wallet...', { id: 'scan' });
-      
+
       const scanResponse = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -579,21 +579,21 @@ function AlfredoDashboard() {
       });
 
       if (!scanResponse.ok) throw new Error('Scan failed');
-      
+
       const scanData = await scanResponse.json();
       if (!scanData.success) throw new Error(scanData.error);
-      
+
       setWalletData(scanData);
       toast.success('Wallet scanned!', { id: 'scan' });
 
       toast.loading('Generating AI insights...', { id: 'ai' });
-      
+
       const insightsResponse = await fetch('/api/ai-insights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          analytics: scanData.analytics, 
-          wallet: walletParam 
+        body: JSON.stringify({
+          analytics: scanData.analytics,
+          wallet: walletParam
         })
       });
 
@@ -633,7 +633,7 @@ function AlfredoDashboard() {
     try {
       const nonce = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const expiry = Math.floor(Date.now() / 1000) + 3600;
-      const message = `Complete task: ${taskId}\nAddress: ${wallet.address}\nReward: ${task.reward} AFRD\nNonce: ${nonce}\nExpiry: ${expiry}`;
+      const message = `Complete task: ${taskId}\nAddress: ${wallet.address}\nReward: ${task.reward} VANT\nNonce: ${nonce}\nExpiry: ${expiry}`;
 
       const signature = await wallet.signer.signMessage(message);
 
@@ -677,7 +677,7 @@ function AlfredoDashboard() {
           }
         });
 
-        toast.success(`+${task.reward} AFRD earned!`);
+        toast.success(`+${task.reward} VANT earned!`);
       } else {
         throw new Error(data.error || 'Transaction failed');
       }
@@ -719,7 +719,7 @@ function AlfredoDashboard() {
       if (response.ok) {
         const data = await response.json();
         const responseContent = data.reply || 'Error processing request.';
-        
+
         const assistantMessage = {
           id: Date.now() + 1,
           role: 'assistant',
@@ -797,7 +797,7 @@ function AlfredoDashboard() {
                 <HiSparkles size={56} style={{ color: theme.primary }} />
               </motion.div>
               <h3 className="text-xl font-bold text-white mb-2">Processing Bonus</h3>
-              <p style={{ color: theme.textSecondary }}>Sending 10 AFRD...</p>
+              <p style={{ color: theme.textSecondary }}>Sending 10 VANT...</p>
             </div>
           </motion.div>
         )}
@@ -812,7 +812,7 @@ function AlfredoDashboard() {
             <div className="rounded-2xl p-8 max-w-sm w-full text-center" style={{ backgroundColor: theme.cardBg }}>
               <FaGift size={56} style={{ color: theme.success }} className="mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-white mb-2">Welcome!</h3>
-              <p className="text-xl font-bold mb-4" style={{ color: theme.success }}>+10 AFRD received!</p>
+              <p className="text-xl font-bold mb-4" style={{ color: theme.success }}>+10 VANT received!</p>
               <button
                 onClick={() => window.location.reload()}
                 className="w-full px-6 py-3 rounded-xl font-semibold text-white"
@@ -843,7 +843,7 @@ function AlfredoDashboard() {
               >
                 <HiSparkles size={24} style={{ color: theme.primary }} />
               </div>
-              <span className="font-bold text-white hidden sm:inline">Alfredo AI</span>
+              <span className="font-bold text-white hidden sm:inline">VANTAGE AI</span>
             </button>
 
             <div className="flex items-center gap-3">
@@ -994,14 +994,13 @@ function AlfredoDashboard() {
                 { id: 'overview', label: 'Overview', icon: FaChartLine },
                 { id: 'holdings', label: 'Holdings', icon: FaLayerGroup },
                 { id: 'insights', label: 'AI Insights', icon: FaBrain },
-                { id: 'tasks', label: `Earn AFRD (${taskStats.completed}/${taskStats.total})`, icon: FaCoins }
+                { id: 'tasks', label: `Earn VANT (${taskStats.completed}/${taskStats.total})`, icon: FaCoins }
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    activeTab === tab.id ? 'text-white' : 'text-gray-400'
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id ? 'text-white' : 'text-gray-400'
+                    }`}
                   style={activeTab === tab.id ? { backgroundColor: theme.primary } : { backgroundColor: theme.cardBg }}
                 >
                   <tab.icon className="inline mr-2" size={14} />
@@ -1115,7 +1114,7 @@ function AlfredoDashboard() {
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
                       { icon: FaCheckCircle, label: 'Completed', value: `${taskStats.completed}/${taskStats.total}`, color: theme.success },
-                      { icon: FaCoins, label: 'Earned', value: taskStats.earned, suffix: 'AFRD', color: theme.primary },
+                      { icon: FaCoins, label: 'Earned', value: taskStats.earned, suffix: 'VANT', color: theme.primary },
                       { icon: FaChartLine, label: 'Progress', value: `${Math.round(taskStats.progress)}%`, color: theme.info },
                       { icon: FaFire, label: 'Streak', value: getStorage()?.stats?.currentStreak || 0, color: theme.error }
                     ].map((stat, idx) => (
@@ -1143,7 +1142,7 @@ function AlfredoDashboard() {
 
                   {/* Tasks List */}
                   <div className="space-y-4">
-                    <h3 className="text-xl font-bold text-white">Complete Tasks & Earn AFRD</h3>
+                    <h3 className="text-xl font-bold text-white">Complete Tasks & Earn VANT</h3>
                     {Object.values(taskDefinitions).map((task, index) => {
                       const isCompleted = tasks[task.id]?.completed;
                       const isProcessing = processingTask === task.id;
@@ -1181,7 +1180,7 @@ function AlfredoDashboard() {
                             <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start w-full sm:w-auto gap-4">
                               <div className="text-center sm:text-right">
                                 <p className="text-2xl font-bold" style={{ color: theme.success }}>+{task.reward}</p>
-                                <p className="text-xs" style={{ color: theme.textSecondary }}>AFRD</p>
+                                <p className="text-xs" style={{ color: theme.textSecondary }}>VANT</p>
                               </div>
 
                               {isCompleted ? (
@@ -1235,7 +1234,7 @@ function AlfredoDashboard() {
                       <FaTrophy size={56} style={{ color: theme.primary }} className="mx-auto mb-4" />
                       <h3 className="text-2xl font-bold text-white mb-2">All Tasks Completed!</h3>
                       <p style={{ color: theme.textSecondary }} className="mb-6">
-                        You've earned a total of {taskStats.earned} AFRD tokens!
+                        You've earned a total of {taskStats.earned} VANT tokens!
                       </p>
                     </motion.div>
                   )}
@@ -1252,7 +1251,7 @@ function AlfredoDashboard() {
               >
                 <FaCoins size={32} style={{ color: theme.primary }} />
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Earn AFRD Tokens</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Earn VANT Tokens</h1>
               <p style={{ color: theme.textSecondary }} className="text-lg">
                 Complete tasks and get rewarded on BSC
               </p>
@@ -1262,7 +1261,7 @@ function AlfredoDashboard() {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
                   { icon: FaCheckCircle, label: 'Completed', value: `${taskStats.completed}/${taskStats.total}`, color: theme.success },
-                  { icon: FaCoins, label: 'Earned', value: taskStats.earned, suffix: 'AFRD', color: theme.primary },
+                  { icon: FaCoins, label: 'Earned', value: taskStats.earned, suffix: 'VANT', color: theme.primary },
                   { icon: FaChartLine, label: 'Progress', value: `${Math.round(taskStats.progress)}%`, color: theme.info },
                   { icon: FaFire, label: 'Streak', value: getStorage()?.stats?.currentStreak || 0, color: theme.error }
                 ].map((stat, idx) => (
@@ -1320,7 +1319,7 @@ function AlfredoDashboard() {
                       <div className="flex items-center gap-4">
                         <div className="text-right">
                           <p className="text-2xl font-bold" style={{ color: theme.success }}>+{task.reward}</p>
-                          <p className="text-xs" style={{ color: theme.textSecondary }}>AFRD</p>
+                          <p className="text-xs" style={{ color: theme.textSecondary }}>VANT</p>
                         </div>
 
                         {isCompleted ? (
@@ -1365,7 +1364,7 @@ function AlfredoDashboard() {
               <div className="flex items-center gap-3">
                 <FaRobot size={24} style={{ color: theme.primary }} />
                 <div>
-                  <h3 className="font-bold text-white">Alfredo AI</h3>
+                  <h3 className="font-bold text-white">VANTAGE AI</h3>
                   <p className="text-xs" style={{ color: theme.textSecondary }}>Portfolio Analyst</p>
                 </div>
               </div>
@@ -1457,7 +1456,7 @@ export default function Page() {
         <HiSparkles size={48} style={{ color: theme.primary }} className="animate-spin" />
       </div>
     }>
-      <AlfredoDashboard />
+      <VantageDashboard />
     </Suspense>
   );
 }

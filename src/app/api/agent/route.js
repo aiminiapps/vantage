@@ -6,7 +6,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   defaultHeaders: {
     'HTTP-Referer': process.env.YOUR_SITE_URL || 'https://alfredo.ai',
-    'X-Title': process.env.YOUR_SITE_NAME || 'Alfredo AI',
+    'X-Title': process.env.YOUR_SITE_NAME || 'VANTAGE AI',
   },
 });
 
@@ -22,7 +22,7 @@ export async function POST(request) {
     }
 
     // Build context-aware system message
-    let systemContext = `You are Alfredo, an advanced AI portfolio analyst specializing in Web3 and cryptocurrency. You provide insightful, actionable advice based on real wallet data.`;
+    let systemContext = `You are VANTAGE AI, an advanced AI portfolio analyst specializing in Web3 and cryptocurrency. You provide insightful, actionable advice based on real wallet data.`;
 
     if (walletData && walletData.analytics) {
       const { analytics } = walletData;

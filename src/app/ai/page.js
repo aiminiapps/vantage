@@ -19,7 +19,7 @@ import {
   PolarRadiusAxis, Radar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer
 } from 'recharts';
-import AlfredoTaskCenter from '@/components/Tasks';
+import VantageTaskCenter from '@/components/Tasks';
 
 function AIDashboard() {
   const searchParams = useSearchParams();
@@ -381,7 +381,7 @@ function AIDashboard() {
               <div className="flex items-center gap-3">
                 <div>
                   <h1 className="text-xl font-bold bg-gradient-to-r from-[#FF7A00] via-[#FFA64D] to-[#FF7A00] bg-clip-text text-transparent">
-                    Alfredo AI
+                    VANTAGE AI
                   </h1>
                   <p className="text-xs text-[#A9A9B1]">Portfolio Intelligence Platform</p>
                 </div>
@@ -1851,7 +1851,7 @@ function AIDashboard() {
             )}
             {activeTab === 'tasks' && aiInsights && (
               <div>
-                <AlfredoTaskCenter/>
+                <VantageTaskCenter/>
               </div>
             )}
           </motion.div>
@@ -1882,7 +1882,7 @@ function AIDashboard() {
                 <div className="flex items-center gap-3">
                   <div>
                     <h3 className="font-bold text-[#F5F5F7] flex items-center gap-2">
-                      Alfredo AI
+                      VANTAGE AI
                       <motion.span
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
@@ -2070,7 +2070,7 @@ export default function AIPage() {
       fallback={
         <div className="min-h-screen bg-[#0B0B0C] flex items-center justify-center">
           <div className="text-center">
-            <div className="text-[#F5F5F7] text-xl font-bold">Loading Alfredo AI...</div>
+            <div className="text-[#F5F5F7] text-xl font-bold">Loading VANTAGE AI...</div>
           </div>
         </div>
       }

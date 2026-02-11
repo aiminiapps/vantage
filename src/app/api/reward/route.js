@@ -6,7 +6,7 @@ const TOKEN_CONTRACT_ADDRESS = process.env.TOKEN_CONTRACT_ADDRESS || '0x47EF1B40
 const BSC_RPC_URL = process.env.BSC_RPC_URL || 'https://bsc-dataseed1.binance.org';
 
 // Startup validation
-console.log('\n🔧 AFRD Reward System Initialization');
+console.log('\n🔧 VANTAGE Reward System Initialization');
 console.log('=====================================');
 console.log('Admin Key:', ADMIN_PRIVATE_KEY ? '✅ Configured' : '❌ MISSING');
 console.log('Token Contract:', TOKEN_CONTRACT_ADDRESS);
@@ -48,7 +48,7 @@ async function directRPCCall(method, params = []) {
     }
 
     const data = await response.json();
-    
+
     if (data.error) {
       throw new Error(`RPC error: ${data.error.message || JSON.stringify(data.error)}`);
     }
@@ -64,18 +64,18 @@ async function directRPCCall(method, params = []) {
 function createTransferData(recipientAddress, tokenAmountWei) {
   // Remove 0x prefix and convert to lowercase
   const cleanAddress = recipientAddress.toLowerCase().replace('0x', '');
-  
+
   // Pad address to 32 bytes (64 hex chars) - LEFT padding with zeros
   const paddedAddress = cleanAddress.padStart(64, '0');
-  
+
   // Convert amount to hex and pad to 32 bytes (64 hex chars) - LEFT padding
   const amountBigInt = BigInt(tokenAmountWei);
   const amountHex = amountBigInt.toString(16);
   const paddedAmount = amountHex.padStart(64, '0');
-  
+
   // Combine: function signature + padded address + padded amount
   const data = TRANSFER_FUNCTION_SIGNATURE + paddedAddress + paddedAmount;
-  
+
   console.log('📝 Transfer Data Created:');
   console.log('  ├─ Function:', TRANSFER_FUNCTION_SIGNATURE);
   console.log('  ├─ To Address:', recipientAddress);
@@ -83,7 +83,7 @@ function createTransferData(recipientAddress, tokenAmountWei) {
   console.log('  ├─ Amount (wei):', tokenAmountWei);
   console.log('  ├─ Padded Amount:', '0x' + paddedAmount);
   console.log('  └─ Full Data:', data.slice(0, 30) + '...');
-  
+
   return data;
 }
 
@@ -91,7 +91,7 @@ function createTransferData(recipientAddress, tokenAmountWei) {
 export async function POST(request) {
   const requestId = Date.now();
   const startTime = Date.now();
-  
+
   console.log(`\n${'='.repeat(70)}`);
   console.log(`🎯 NEW REWARD REQUEST #${requestId}`);
   console.log(`Time: ${new Date().toISOString()}`);
@@ -124,7 +124,7 @@ export async function POST(request) {
     console.log('\n📦 Request Details:');
     console.log('  ├─ Type:', isWelcomeBonus ? '🎁 WELCOME BONUS' : `📋 TASK: ${taskId}`);
     console.log('  ├─ Recipient:', address);
-    console.log('  ├─ Amount:', reward, 'AFRD');
+    console.log('  ├─ Amount:', reward, 'VANT');
     console.log('  ├─ Nonce:', nonce);
     console.log('  └─ Expiry:', new Date(expiry * 1000).toISOString());
 
@@ -180,7 +180,7 @@ export async function POST(request) {
       recoveredAddress = ethersLib.verifyMessage(message, signature);
       console.log('  ├─ Recovered:', recoveredAddress);
       console.log('  └─ Expected:', address);
-      
+
       if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
         console.error('❌ Signature mismatch!');
         return NextResponse.json({
@@ -275,7 +275,7 @@ export async function POST(request) {
         directRPCCall('eth_getTransactionCount', [adminWallet.address, 'pending']),
         directRPCCall('eth_gasPrice')
       ]);
-      
+
       const gasPriceGwei = parseInt(gasPrice, 16) / 1e9;
       console.log('  ├─ Admin nonce:', parseInt(adminNonce, 16));
       console.log('  └─ Gas price:', gasPriceGwei.toFixed(2), 'Gwei');
@@ -291,7 +291,7 @@ export async function POST(request) {
     const decimals = 18;
     const tokenAmountWei = ethersLib.parseUnits(reward.toString(), decimals);
     console.log('\n💰 Token Transfer:');
-    console.log('  ├─ Amount:', reward, 'AFRD');
+    console.log('  ├─ Amount:', reward, 'VANT');
     console.log('  └─ Wei:', tokenAmountWei.toString());
 
     // 15. Create Transaction Data
@@ -299,7 +299,7 @@ export async function POST(request) {
 
     // 16. Build Transaction with 30% gas buffer
     const bufferedGasPrice = Math.floor(parseInt(gasPrice, 16) * 1.3);
-    
+
     const rawTransaction = {
       nonce: adminNonce,
       gasPrice: '0x' + bufferedGasPrice.toString(16),
@@ -342,7 +342,7 @@ export async function POST(request) {
       console.log('  └─ Explorer:', `https://bscscan.com/tx/${txHash}`);
     } catch (sendError) {
       console.error('❌ Broadcast failed:', sendError.message);
-      
+
       // Check if already known (duplicate)
       if (sendError.message.includes('already known') || sendError.message.includes('replacement')) {
         return NextResponse.json({
@@ -350,7 +350,7 @@ export async function POST(request) {
           error: 'Transaction already submitted or replaced'
         }, { status: 409 });
       }
-      
+
       return NextResponse.json({
         success: false,
         error: 'Failed to send transaction: ' + sendError.message
@@ -373,7 +373,7 @@ export async function POST(request) {
       } catch (error) {
         // Receipt not ready yet
       }
-      
+
       attempts++;
       if (attempts % 10 === 0) {
         console.log(`  ⏱️ Still waiting... (${attempts}s)`);
@@ -414,7 +414,7 @@ export async function POST(request) {
 
     console.log('\n🎉 TRANSACTION SUCCESSFUL!');
     console.log('='.repeat(70));
-    console.log('✅ Transferred:', reward, 'AFRD');
+    console.log('✅ Transferred:', reward, 'VANT');
     console.log('✅ From:', adminWallet.address);
     console.log('✅ To:', address);
     console.log('✅ TX Hash:', txHash);
@@ -430,7 +430,7 @@ export async function POST(request) {
       blockNumber: blockNum,
       gasUsed,
       amount: reward,
-      symbol: 'AFRD',
+      symbol: 'VANT',
       from: adminWallet.address,
       to: address,
       contract: TOKEN_CONTRACT_ADDRESS,
@@ -464,14 +464,14 @@ export async function GET() {
 
     return NextResponse.json({
       status: 'healthy',
-      project: 'Alfredo AI Reward System',
+      project: 'VANTAGE Reward System',
       mode: 'PRODUCTION',
       network: 'BSC Mainnet',
       chainId: 56,
       blockNumber: parseInt(blockNumber, 16),
       adminWallet: adminWallet.address,
       tokenContract: TOKEN_CONTRACT_ADDRESS,
-      tokenSymbol: 'AFRD',
+      tokenSymbol: 'VANT',
       rpcUrl: BSC_RPC_URL,
       timestamp: new Date().toISOString()
     });

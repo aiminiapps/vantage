@@ -42,7 +42,7 @@ export default function CommunitySection() {
           </h2>
 
           <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            VANT holders are decision-makers. Through the Alfredo DAO, the community shapes product upgrades, AI model improvements, and future partnerships.
+            VANT holders are decision-makers. Through the VANTAGE DAO, the community shapes product upgrades, AI model improvements, and future partnerships.
           </p>
         </motion.div>
 

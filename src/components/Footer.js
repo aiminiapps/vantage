@@ -57,7 +57,7 @@ export default function Footer() {
                    {/* Replace with your actual logo path */}
                   <Image 
                     src="/logo.png" 
-                    alt='Alfredo Logo' 
+                    alt='VANTAGE Logo' 
                     width={160} 
                     height={80}
                     className="opacity-90 group-hover:opacity-100 transition-opacity"

@@ -1,10 +1,10 @@
 'use client';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FaTwitter, FaWallet, FaSpinner, FaCheckCircle, FaTelegram, 
-  FaExternalLinkAlt, FaRetweet, FaComment, FaThumbsUp, FaCopy, 
-  FaInfoCircle, FaGift, FaCoins, FaChartLine, 
+import {
+  FaTwitter, FaWallet, FaSpinner, FaCheckCircle, FaTelegram,
+  FaExternalLinkAlt, FaRetweet, FaComment, FaThumbsUp, FaCopy,
+  FaInfoCircle, FaGift, FaCoins, FaChartLine,
   FaTrophy, FaFire, FaShare, FaCheckDouble, FaEye
 } from 'react-icons/fa';
 import { TbTarget } from 'react-icons/tb';
@@ -17,16 +17,17 @@ const TOKEN_CONTRACT = process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS || '0x...'
 
 // Theme
 const theme = {
-  primary: '#FF8C00',
-  secondary: '#FFB347',
+  primary: '#2471a4',
+  secondary: '#38bdf8',
   success: '#4CD964',
   error: '#FF453A',
   warning: '#FFCC00',
   info: '#5E5CE6',
-  cardBg: '#1A120C',
-  border: '#2A1E14',
+  background: '#0B0D14',
+  cardBg: '#1C2126',
+  border: '#2A3138',
   text: '#F5F5F5',
-  textSecondary: '#A9A9B1'
+  textSecondary: '#9CA3AF'
 };
 
 // Animations
@@ -113,7 +114,7 @@ const useWallet = () => {
         window.location.href = `https://metamask.app.link/dapp/${window.location.host}`;
         return;
       }
-      alert('🔥 Please install MetaMask extension to start earning AFRD tokens!');
+      alert('🔥 Please install MetaMask extension to start earning VANT tokens!');
       return;
     }
 
@@ -222,7 +223,7 @@ const useWallet = () => {
     try {
       const nonce = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const expiry = Math.floor(Date.now() / 1000) + 3600;
-      const message = `Welcome to Alfredo!\nAddress: ${address}\nNonce: ${nonce}\nExpiry: ${expiry}`;
+      const message = `Welcome to VANTAGE!\nAddress: ${address}\nNonce: ${nonce}\nExpiry: ${expiry}`;
 
       const signature = await signer.signMessage(message);
 
@@ -298,7 +299,7 @@ const useWallet = () => {
       try {
         const saved = getStorage();
         if (saved?.wallet?.isConnected && saved.wallet.address && window.ethereum) {
-          const isRecent = saved.wallet.lastConnected && 
+          const isRecent = saved.wallet.lastConnected &&
             (Date.now() - saved.wallet.lastConnected) < 24 * 60 * 60 * 1000;
 
           if (isRecent) {
@@ -307,11 +308,11 @@ const useWallet = () => {
 
             const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
-            if (accounts.length > 0 && 
-                accounts[0].toLowerCase() === saved.wallet.address.toLowerCase()) {
-              
+            if (accounts.length > 0 &&
+              accounts[0].toLowerCase() === saved.wallet.address.toLowerCase()) {
+
               let provider, signer, balance = saved.wallet.balance;
-              
+
               if (ethers.BrowserProvider) {
                 provider = new ethers.BrowserProvider(window.ethereum);
                 signer = await provider.getSigner();
@@ -382,10 +383,10 @@ export default function TaskCenterComponent() {
     followX: {
       id: 'followX',
       title: 'Follow on X',
-      description: 'Follow @AI_UR_Alfredo on X for portfolio insights',
+      description: 'Follow @AI_UR_VANTAGE on X for portfolio insights',
       reward: 100,
       icon: FaTwitter,
-      action: 'https://x.com/AI_UR_Alfredo',
+      action: 'https://x.com/AI_UR_VANTAGE',
       type: 'social',
       difficulty: 'easy'
     },
@@ -395,7 +396,7 @@ export default function TaskCenterComponent() {
       description: 'Like our latest post about crypto portfolio analysis',
       reward: 50,
       icon: FaThumbsUp,
-      action: 'https://x.com/AI_UR_Alfredo',
+      action: 'https://x.com/AI_UR_VANTAGE',
       type: 'social',
       difficulty: 'easy'
     },
@@ -405,7 +406,7 @@ export default function TaskCenterComponent() {
       description: 'Share your portfolio analysis experience',
       reward: 75,
       icon: FaComment,
-      action: 'https://x.com/AI_UR_Alfredo',
+      action: 'https://x.com/AI_UR_VANTAGE',
       type: 'social',
       difficulty: 'medium'
     },
@@ -415,7 +416,7 @@ export default function TaskCenterComponent() {
       description: 'Help us spread the word about smart portfolio management',
       reward: 60,
       icon: FaRetweet,
-      action: 'https://x.com/AI_UR_Alfredo/status/1991318393442734394?s=20',
+      action: 'https://x.com/AI_UR_VANTAGE/status/1991318393442734394?s=20',
       type: 'social',
       difficulty: 'easy'
     },
@@ -425,17 +426,17 @@ export default function TaskCenterComponent() {
       description: 'Join our portfolio analysis community on Telegram',
       reward: 80,
       icon: FaTelegram,
-      action: 'https://t.me/AI_UR_Alfredo',
+      action: 'https://t.me/AI_UR_VANTAGE',
       type: 'social',
       difficulty: 'easy'
     },
     shareX: {
       id: 'shareX',
       title: 'Share with Friends',
-      description: 'Share Alfredo with your network',
+      description: 'Share VANTAGE with your network',
       reward: 90,
       icon: FaShare,
-      action: 'https://twitter.com/intent/tweet?text=Check%20out%20Alfredo%20-%20AI-powered%20crypto%20portfolio%20analysis!',
+      action: 'https://twitter.com/intent/tweet?text=Check%20out%20VANTAGE%20-%20AI-powered%20crypto%20portfolio%20analysis!',
       type: 'social',
       difficulty: 'medium'
     }
@@ -462,7 +463,7 @@ export default function TaskCenterComponent() {
     if (!wallet.isConnected || !wallet.signer) {
       setNotification({
         type: 'error',
-        message: 'Please connect your wallet first to earn AFRD!'
+        message: 'Please connect your wallet first to earn VANT!'
       });
       setTimeout(() => setNotification(null), 3000);
       return;
@@ -480,7 +481,7 @@ export default function TaskCenterComponent() {
     try {
       const nonce = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const expiry = Math.floor(Date.now() / 1000) + 3600;
-      const message = `Complete task: ${taskId}\nAddress: ${wallet.address}\nReward: ${task.reward} AFRD\nNonce: ${nonce}\nExpiry: ${expiry}`;
+      const message = `Complete task: ${taskId}\nAddress: ${wallet.address}\nReward: ${task.reward} VANT\nNonce: ${nonce}\nExpiry: ${expiry}`;
 
       const signature = await wallet.signer.signMessage(message);
 
@@ -526,7 +527,7 @@ export default function TaskCenterComponent() {
 
         setNotification({
           type: 'success',
-          message: `+${task.reward} AFRD earned!`,
+          message: `+${task.reward} VANT earned!`,
           txHash: data.txHash
         });
 
@@ -562,7 +563,7 @@ export default function TaskCenterComponent() {
           type: 'ERC20',
           options: {
             address: TOKEN_CONTRACT,
-            symbol: 'AFRD',
+            symbol: 'VANT',
             decimals: 18,
             image: 'https://your-domain.com/alfredo-logo.png'
           }
@@ -572,7 +573,7 @@ export default function TaskCenterComponent() {
       if (wasAdded) {
         setNotification({
           type: 'success',
-          message: 'AFRD token added to MetaMask successfully!'
+          message: 'VANT token added to MetaMask successfully!'
         });
         setTimeout(() => setNotification(null), 3000);
       }
@@ -670,7 +671,7 @@ export default function TaskCenterComponent() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className="rounded-2xl p-8 max-w-sm w-full text-center"
-              style={{ 
+              style={{
                 backgroundColor: theme.cardBg,
                 border: `1px solid ${theme.border}`
               }}
@@ -683,7 +684,7 @@ export default function TaskCenterComponent() {
                 <HiSparkles size={56} style={{ color: theme.primary }} />
               </motion.div>
               <h3 className="text-xl font-bold text-white mb-2">Processing Welcome Bonus</h3>
-              <p style={{ color: theme.textSecondary }}>Sending 10 AFRD to your wallet...</p>
+              <p style={{ color: theme.textSecondary }}>Sending 10 VANT to your wallet...</p>
             </motion.div>
           </motion.div>
         )}
@@ -700,14 +701,14 @@ export default function TaskCenterComponent() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className="rounded-2xl p-8 max-w-sm w-full text-center"
-              style={{ 
+              style={{
                 backgroundColor: theme.cardBg,
                 border: `1px solid ${theme.border}`
               }}
             >
               <FaGift size={56} style={{ color: theme.success }} className="mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white mb-2">Welcome to Alfredo!</h3>
-              <p className="text-xl font-bold mb-4" style={{ color: theme.success }}>+10 AFRD received!</p>
+              <h3 className="text-2xl font-bold text-white mb-2">Welcome to VANTAGE!</h3>
+              <p className="text-xl font-bold mb-4" style={{ color: theme.success }}>+10 VANT received!</p>
               {wallet.welcomeBonusStatus.txHash && (
                 <a
                   href={`https://bscscan.com/tx/${wallet.welcomeBonusStatus.txHash}`}
@@ -734,7 +735,7 @@ export default function TaskCenterComponent() {
       <div className="w-full py-8 sm:py-12">
         {/* Header */}
         <motion.div {...fadeIn} className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-5xl font-bold text-white mb-3">Earn AFRD Tokens</h1>
+          <h1 className="text-3xl sm:text-5xl font-bold text-white mb-3">Earn VANT Tokens</h1>
           <p style={{ color: theme.textSecondary }} className="text-lg">
             Complete tasks and earn rewards on BSC
           </p>
@@ -742,10 +743,10 @@ export default function TaskCenterComponent() {
 
         {/* Wallet Connection */}
         {!wallet.isConnected ? (
-          <motion.div 
+          <motion.div
             {...fadeIn}
             className="rounded-2xl p-6 sm:p-8 text-center mb-8 sm:mb-12"
-            style={{ 
+            style={{
               backgroundColor: theme.cardBg,
               border: `1px solid ${theme.border}`
             }}
@@ -823,7 +824,7 @@ export default function TaskCenterComponent() {
             <motion.div {...fadeIn} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
               {[
                 { icon: FaCheckCircle, label: 'Completed', value: `${stats.completed}/${stats.total}`, color: theme.success },
-                { icon: FaCoins, label: 'Earned', value: stats.earned, suffix: 'AFRD', color: theme.primary },
+                { icon: FaCoins, label: 'Earned', value: stats.earned, suffix: 'VANT', color: theme.primary },
                 { icon: FaChartLine, label: 'Progress', value: `${Math.round(stats.progress)}%`, color: theme.info },
                 { icon: FaFire, label: 'Streak', value: getStorage()?.stats?.currentStreak || 0, color: theme.error }
               ].map((stat, idx) => (
@@ -893,7 +894,7 @@ export default function TaskCenterComponent() {
                       <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start w-full sm:w-auto gap-3 sm:gap-2">
                         <div className="text-left sm:text-right">
                           <p className="text-xl sm:text-2xl font-bold" style={{ color: theme.success }}>+{task.reward}</p>
-                          <p className="text-xs" style={{ color: theme.textSecondary }}>AFRD</p>
+                          <p className="text-xs" style={{ color: theme.textSecondary }}>VANT</p>
                         </div>
 
                         {isCompleted ? (
@@ -951,7 +952,7 @@ export default function TaskCenterComponent() {
                   style={{ backgroundColor: `${theme.primary}20` }}
                 >
                   <p className="text-sm" style={{ color: theme.textSecondary }}>Total Earned</p>
-                  <p className="text-3xl sm:text-4xl font-bold" style={{ color: theme.primary }}>{stats.earned} AFRD</p>
+                  <p className="text-3xl sm:text-4xl font-bold" style={{ color: theme.primary }}>{stats.earned} VANT</p>
                 </div>
               </motion.div>
             )}
@@ -971,10 +972,10 @@ export default function TaskCenterComponent() {
                     >
                       <BiCoin size={24} style={{ color: theme.primary }} />
                     </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-white">Add AFRD to MetaMask</h3>
+                    <h3 className="text-lg sm:text-xl font-bold text-white">Add VANT to MetaMask</h3>
                   </div>
                   <p style={{ color: theme.textSecondary }} className="mb-4 text-sm sm:text-base">
-                    Import the AFRD token to track your balance
+                    Import the VANT token to track your balance
                   </p>
                   <div className="rounded-lg p-3 sm:p-4 mb-4"
                     style={{ backgroundColor: `${theme.primary}10`, border: `1px solid ${theme.primary}30` }}
