@@ -6,14 +6,14 @@ import Image from 'next/image';
 import { RiTwitterXLine } from "react-icons/ri";
 import { RiBnbLine } from "react-icons/ri";
 
-// New Theme Palette
+// New Theme Palette - Deep Ocean & Graphite
 const theme = {
-  primary: '#5227FF',     
-  secondary: '#a855f7',   
-  background: '#111315',  
-  surface: '#1C2126',     
-  border: '#2A3138',      
-  text: '#9CA3AF'         
+  primary: '#2471a4',     // Deep Ocean Blue
+  secondary: '#38bdf8',   // Sky Blue
+  background: '#111315',  // Graphite
+  surface: '#1C2126',     // Slate
+  border: '#2A3138',      // Steel
+  text: '#9CA3AF'         // Gray
 };
 
 export default function Navbar() {
@@ -52,7 +52,7 @@ export default function Navbar() {
         {/* Liquid Steel Container */}
         <div 
           className={`relative overflow-hidden rounded-2xl transition-all duration-500 group ${
-            isScrolled ? 'shadow-2xl shadow-[#5227FF]/10' : 'shadow-xl'
+            isScrolled ? 'shadow-2xl shadow-[#2471a4]/10' : 'shadow-xl'
           }`}
           style={{
             // Deep Slate with blur
@@ -136,20 +136,21 @@ export default function Navbar() {
                   ))}
                 </div>
 
-                {/* 3D "Earn AFRD" Button (Mini Version) */}
+                {/* 3D "Earn VANT" Button (Mini Version) */}
                 <Link href="/tasks">
                   <div className="relative group overflow-hidden">
-                    <div className="absolute inset-0 bg-[#3b1ec2] rounded-lg translate-y-1 rounded-b-lg" />
+                    {/* Background Depth Layer */}
+                    <div className="absolute inset-0 bg-[#1a5278] rounded-lg translate-y-1 rounded-b-lg" />
                     <motion.button
                       whileHover={{ y: -1 }}
                       whileTap={{ y: 2 }}
                       className={`
                         relative px-5 py-2 overflow-hidden
-                        bg-gradient-to-b from-[#633aff] to-[#5227FF] 
+                        bg-[#2471a4] hover:bg-[#206694]
                         rounded-lg text-white font-bold text-sm
-                        border-t border-[#8e72ff] border-b-2 border-[#3016a3]
+                        border-t border-[#60a5fa]/30 border-b-2 border-[#1a5278]
                         active:border-b-0
-                        shadow-[0_4px_10px_rgba(82,39,255,0.3)]
+                        shadow-[0_4px_10px_rgba(36,113,164,0.3)]
                         transition-all duration-100 ease-in-out
                         flex items-center gap-2
                       `}
@@ -174,7 +175,7 @@ export default function Navbar() {
               opacity: isScrolled ? 1 : 0.3,
               scaleX: isScrolled ? 1 : 0.8
             }}
-            className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#5227FF]/50 to-transparent"
+            className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2471a4]/50 to-transparent"
           />
           
         </div>
