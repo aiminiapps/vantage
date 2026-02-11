@@ -307,26 +307,36 @@ function AIDashboard() {
 
   // Enhanced chart data
   const chainDistributionData = Object.entries(analytics.chainDistribution || {}).map(([chainName, txCount], idx) => ({
-    name: chain.chain,
-    value: chain.value,
-    percentage: parseFloat(chain.percentage),
+    name: chainName,
+    value: txCount,
+    percentage: analytics.totalTransactions > 0 ? ((txCount / analytics.totalTransactions) * 100).toFixed(1) : 0,
     color: CHART_COLORS.primary[idx % CHART_COLORS.primary.length]
   }));
 
-  const topHoldingsData = analytics.topHoldings.slice(0, 10).map((token, idx) => ({
+  // Get tokens from chains data for holdings view
+  const allTokens = walletData.chains?.flatMap(chain => 
+    chain.tokens?.map(token => ({
+      symbol: token.symbol || 'UNKNOWN',
+      name: token.name || 'Unknown Token',
+      balance: parseFloat(token.balance) || 0,
+      chain: chain.chain
+    })) || []
+  ) || [];
+
+  const topHoldingsData = allTokens.slice(0, 10).map((token, idx) => ({
     name: token.symbol,
-    value: token.valueUSD,
-    change: token.percentChange24h,
-    color: token.percentChange24h >= 0 ? CHART_COLORS.performance.positive : CHART_COLORS.performance.negative
+    value: token.balance,
+    change: 0,
+    color: CHART_COLORS.primary[idx % CHART_COLORS.primary.length]
   }));
 
-  const pnlData = Object.values(analytics.pnlData).slice(0, 12).map(token => ({
+  const pnlData = allTokens.slice(0, 12).map(token => ({
     name: token.symbol,
-    totalPnL: token.totalPnL,
-    realized: token.realizedPnL,
-    unrealized: token.unrealizedPnL,
-    profit: token.totalPnL >= 0 ? token.totalPnL : 0,
-    loss: token.totalPnL < 0 ? Math.abs(token.totalPnL) : 0
+    totalPnL: 0,
+    realized: 0,
+    unrealized: 0,
+    profit: 0,
+    loss: 0
   }));
 
   // Radar chart data for portfolio health
@@ -446,37 +456,36 @@ function AIDashboard() {
             {
               icon: FaWallet,
               label: 'Total Value',
-              value: `$${analytics.totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-              change: analytics.totalPnL,
-              changePercent: analytics.totalValue > 0 ? ((analytics.totalPnL / analytics.totalValue) * 100).toFixed(2) : 0,
+              value: `$${(analytics.totalValue || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+              change: analytics.totalPnL || 0,
+              changePercent: (analytics.totalValue || 0) > 0 ? (((analytics.totalPnL || 0) / analytics.totalValue) * 100).toFixed(2) : 0,
               isPrimary: true,
               gradient: 'from-orange-500/20 to-amber-500/10'
             },
             {
               icon: FaGlobe,
               label: 'Active Chains',
-              value: analytics.activeChains,
-              subtext: `${analytics.totalTokens} tokens`,
-              badge: analytics.activeChains >= 4 ? 'Excellent' : analytics.activeChains >= 2 ? 'Good' : 'Limited',
-              badgeColor: analytics.activeChains >= 4 ? 'green' : analytics.activeChains >= 2 ? 'blue' : 'gray',
+              subtext: `${analytics.totalTokens || 0} tokens`,
+              badge: (analytics.totalChains || 0) >= 4 ? 'Excellent' : (analytics.totalChains || 0) >= 2 ? 'Good' : 'Limited',
+              badgeColor: (analytics.totalChains || 0) >= 4 ? 'green' : (analytics.totalChains || 0) >= 2 ? 'blue' : 'gray',
               gradient: 'from-blue-500/20 to-cyan-500/10'
             },
             {
               icon: FaChartPie,
               label: 'Diversification',
-              value: `${analytics.diversificationScore}/100`,
-              progress: analytics.diversificationScore,
-              badge: analytics.diversificationScore > 70 ? 'Strong' : analytics.diversificationScore > 50 ? 'Moderate' : 'Weak',
-              badgeColor: analytics.diversificationScore > 70 ? 'green' : analytics.diversificationScore > 50 ? 'yellow' : 'red',
+              value: `${analytics.diversificationScore || 0}/100`,
+              progress: analytics.diversificationScore || 0,
+              badge: (analytics.diversificationScore || 0) > 70 ? 'Strong' : (analytics.diversificationScore || 0) > 50 ? 'Moderate' : 'Weak',
+              badgeColor: (analytics.diversificationScore || 0) > 70 ? 'green' : (analytics.diversificationScore || 0) > 50 ? 'yellow' : 'red',
               gradient: 'from-purple-500/20 to-pink-500/10'
             },
             {
               icon: FaShieldAlt,
               label: 'Risk Score',
-              value: `${analytics.riskScore}/100`,
-              badge: analytics.riskScore > 70 ? 'Low Risk' : analytics.riskScore > 40 ? 'Moderate' : 'High Risk',
-              badgeColor: analytics.riskScore > 70 ? 'green' : analytics.riskScore > 40 ? 'yellow' : 'red',
-              progress: analytics.riskScore,
+              value: `${analytics.riskScore || 0}/100`,
+              badge: (analytics.riskScore || 0) > 70 ? 'Low Risk' : (analytics.riskScore || 0) > 40 ? 'Moderate' : 'High Risk',
+              badgeColor: (analytics.riskScore || 0) > 70 ? 'green' : (analytics.riskScore || 0) > 40 ? 'yellow' : 'red',
+              progress: analytics.riskScore || 0,
               gradient: 'from-green-500/20 to-emerald-500/10'
             }
           ].map((stat, idx) => (
@@ -791,7 +800,7 @@ function AIDashboard() {
                     </ResponsiveContainer>
 
                     <div className="mt-6 space-y-3">
-                      {analytics.chainDistribution.map((chain, idx) => (
+                      {chainDistributionData.map((chain, idx) => (
                         <motion.div
                           key={idx}
                           initial={{ opacity: 0, x: -20 }}
@@ -973,7 +982,7 @@ function AIDashboard() {
                           >
                             {item.isPercent
                               ? item.value
-                              : `${item.value >= 0 ? '+' : ''}$${item.value.toFixed(2)}`}
+                              : `${(item.value || 0) >= 0 ? '+' : ''}$${(item.value || 0).toFixed(2)}`}
                           </div>
                         </motion.div>
                       ))}
