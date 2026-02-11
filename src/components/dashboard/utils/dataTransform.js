@@ -3,7 +3,7 @@
  */
 
 /**
- * Convert hex balance to decimal number
+ * Convert hex balance to decimal number with proper precision
  */
 function hexToDecimal(hexString, decimals = 18) {
     try {
@@ -11,25 +11,67 @@ function hexToDecimal(hexString, decimals = 18) {
             return 0;
         }
 
-        // Remove 0x prefix if present
-        const hex = hexString.startsWith('0x') ? hexString.slice(2) : hexString;
+        // Remove 0x prefix and leading zeros
+        const hex = hexString.replace(/^0x/, '');
 
-        // Convert hex to BigInt
-        const bigIntValue = BigInt('0x' + hex);
+        // Convert hex to decimal string
+        let decimalStr = '0';
+        for (let i = 0; i < hex.length; i++) {
+            const digit = parseInt(hex[i], 16);
+            decimalStr = multiplyBy16AndAdd(decimalStr, digit);
+        }
 
-        // Convert to decimal with proper decimal places
-        const divisor = BigInt(10 ** decimals);
-        const integerPart = bigIntValue / divisor;
-        const remainder = bigIntValue % divisor;
+        // Apply decimals
+        if (decimals === 0) {
+            return parseFloat(decimalStr);
+        }
 
-        // Combine integer and decimal parts
-        const decimalValue = Number(integerPart) + Number(remainder) / Number(divisor);
+        // Insert decimal point
+        if (decimalStr.length <= decimals) {
+            decimalStr = '0'.repeat(decimals - decimalStr.length + 1) + decimalStr;
+        }
 
-        return decimalValue;
+        const decimalIndex = decimalStr.length - decimals;
+        const result = decimalStr.slice(0, decimalIndex) + '.' + decimalStr.slice(decimalIndex);
+
+        return parseFloat(result);
     } catch (error) {
         console.error('Hex conversion error:', error, hexString);
         return 0;
     }
+}
+
+/**
+ * Helper function for hex to decimal conversion
+ */
+function multiplyBy16AndAdd(numStr, digit) {
+    let carry = digit;
+    let result = '';
+
+    for (let i = numStr.length - 1; i >= 0; i--) {
+        const product = parseInt(numStr[i]) * 16 + carry;
+        result = (product % 10) + result;
+        carry = Math.floor(product / 10);
+    }
+
+    while (carry > 0) {
+        result = (carry % 10) + result;
+        carry = Math.floor(carry / 10);
+    }
+
+    return result || '0';
+}
+
+/**
+ * Format balance for display
+ */
+function formatBalance(balance) {
+    if (balance === 0) return '0';
+    if (balance < 0.000001) return balance.toExponential(2);
+    if (balance < 1) return balance.toFixed(6);
+    if (balance < 1000) return balance.toFixed(4);
+    if (balance < 1000000) return balance.toFixed(2);
+    return balance.toLocaleString('en-US', { maximumFractionDigits: 2 });
 }
 
 /**
@@ -40,21 +82,24 @@ export function transformAlchemyData(alchemyResponse) {
 
     console.log('🔄 Transforming data...', { chains, analytics });
 
-    // Extract all tokens from chains
+    // Extract all tokens from chains with proper hex conversion
     const allTokens = chains?.flatMap(chain =>
         chain.tokens?.map(token => {
-            const balance = hexToDecimal(token.balance, token.decimals || 18);
+            const rawBalance = hexToDecimal(token.balance, token.decimals || 18);
 
             return {
                 symbol: token.symbol || '???',
                 name: token.name || 'Unknown Token',
-                balance: balance,
-                value: balance, // Same as balance for now
+                balance: rawBalance,
+                balanceFormatted: formatBalance(rawBalance),
+                value: rawBalance,
                 contractAddress: token.contractAddress,
-                decimals: token.decimals,
+                decimals: token.decimals || 18,
                 chain: chain.chain || chain.chainName || 'Unknown',
                 logo: token.logo || null,
-                change: 0
+                change: 0,
+                priceUSD: 0,
+                valueUSD: 0
             };
         }) || []
     ) || [];
@@ -62,45 +107,70 @@ export function transformAlchemyData(alchemyResponse) {
     // Filter out tokens with 0 balance
     const tokensWithBalance = allTokens.filter(t => t.balance > 0);
 
-    console.log(`✅ Extracted ${allTokens.length} tokens, ${tokensWithBalance.length} with balance > 0`);
+    console.log(`✅ Extracted ${allTokens.length} total tokens, ${tokensWithBalance.length} with balance > 0`);
+    tokensWithBalance.slice(0, 5).forEach(t => {
+        console.log(`  ${t.symbol}: ${t.balanceFormatted} (raw: ${t.balance})`);
+    });
 
-    // Transform chain distribution from object to array
-    const chainDistribution = Object.entries(analytics?.chainDistribution || {}).map(
-        ([chainName, txCount], idx) => ({
-            name: chainName,
-            value: txCount || 0,
-            percentage: (analytics?.totalTransactions || 0) > 0
-                ? ((txCount / analytics.totalTransactions) * 100).toFixed(1)
-                : 0,
-            tokenCount: chains?.find(c => (c.chain || c.chainName) === chainName)?.tokens?.length || 0
-        })
-    );
+    // Get native balance (BNB, ETH, etc.)
+    const nativeBalance = chains?.map(chain => {
+        const balance = hexToDecimal(chain.nativeBalance || '0x0', 18);
+        return {
+            symbol: getNativeSymbol(chain.chain || chain.chainName),
+            name: getNativeName(chain.chain || chain.chainName),
+            balance: balance,
+            balanceFormatted: formatBalance(balance),
+            value: balance,
+            contractAddress: 'NATIVE',
+            decimals: 18,
+            chain: chain.chain || chain.chainName || 'Unknown',
+            logo: null,
+            change: 0,
+            priceUSD: 0,
+            valueUSD: 0,
+            isNative: true
+        };
+    }).filter(t => t.balance > 0) || [];
 
-    // Build top holdings (only tokens with balance > 0)
-    const topHoldings = tokensWithBalance
+    // Combine native + tokens
+    const allBalances = [...nativeBalance, ...tokensWithBalance];
+
+    // Transform chain distribution
+    const chainDistribution = chains?.map((chain, idx) => ({
+        name: chain.chain || chain.chainName || `Chain ${idx + 1}`,
+        value: chain.tokens?.filter(t => hexToDecimal(t.balance, t.decimals || 18) > 0).length || 0,
+        percentage: 100, // Will recalculate below
+        tokenCount: chain.tokens?.length || 0,
+        color: getChainColor(chain.chain || chain.chainName)
+    })) || [];
+
+    // Recalculate percentages
+    const totalTokensAcrossChains = chainDistribution.reduce((sum, c) => sum + c.value, 0);
+    chainDistribution.forEach(c => {
+        c.percentage = totalTokensAcrossChains > 0
+            ? ((c.value / totalTokensAcrossChains) * 100).toFixed(1)
+            : 0;
+    });
+
+    // Build top holdings
+    const topHoldings = allBalances
         .sort((a, b) => b.balance - a.balance)
-        .slice(0, 50) // Show up to 50 tokens
+        .slice(0, 100)
         .map((token, idx) => ({
             ...token,
-            rank: idx + 1,
-            change: 0,
-            valueUSD: 0
+            rank: idx + 1
         }));
 
-    console.log(`📊 Top holdings: ${topHoldings.length} tokens with balance`);
-
-    // Calculate total value (we'll need prices for accurate USD value)
-    const totalTokenBalance = topHoldings.reduce((sum, t) => sum + t.balance, 0);
+    console.log(`📊 Top holdings: ${topHoldings.length} tokens/assets`);
 
     // Build P&L data
-    const pnlData = tokensWithBalance.slice(0, 15).map(token => ({
+    const pnlData = allBalances.slice(0, 20).map(token => ({
         symbol: token.symbol,
         name: token.name,
+        balance: token.balance,
         totalPnL: 0,
         realized: 0,
-        unrealized: 0,
-        profit: 0,
-        loss: 0
+        unrealized: 0
     }));
 
     const transformed = {
@@ -108,26 +178,77 @@ export function transformAlchemyData(alchemyResponse) {
         chains: chains || [],
         analytics: {
             ...analytics,
-            totalTokens: tokensWithBalance.length, // Update to only count tokens with balance
-            totalValue: 0, // Will be updated with prices
+            totalTokens: allBalances.length,
+            totalValue: 0, // Will be updated with CoinGecko prices
             totalPnL: 0,
         },
-        allTokens: tokensWithBalance, // Only return tokens with balance
+        allTokens: allBalances,
         chainDistribution,
         topHoldings,
         pnlData
     };
 
-    console.log('✨ Transformation complete:', transformed);
+    console.log('✨ Transformation complete:', {
+        totalAssets: allBalances.length,
+        chains: chainDistribution.length,
+        topHoldings: topHoldings.length
+    });
 
     return transformed;
+}
+
+/**
+ * Get native token symbol for chain
+ */
+function getNativeSymbol(chainName) {
+    const symbols = {
+        'BSC': 'BNB',
+        'ETH': 'ETH',
+        'POLYGON': 'MATIC',
+        'ARBITRUM': 'ETH',
+        'OPTIMISM': 'ETH',
+        'BASE': 'ETH'
+    };
+    return symbols[chainName?.toUpperCase()] || 'NATIVE';
+}
+
+/**
+ * Get native token name for chain
+ */
+function getNativeName(chainName) {
+    const names = {
+        'BSC': 'Binance Coin',
+        'ETH': 'Ethereum',
+        'POLYGON': 'Polygon',
+        'ARBITRUM': 'Ethereum',
+        'OPTIMISM': 'Ethereum',
+        'BASE': 'Ethereum'
+    };
+    return names[chainName?.toUpperCase()] || 'Native Token';
+}
+
+/**
+ * Get color for chain
+ */
+function getChainColor(chainName) {
+    const colors = {
+        'BSC': '#F3BA2F',
+        'ETH': '#627EEA',
+        'POLYGON': '#8247E5',
+        'ARBITRUM': '#28A0F0',
+        'OPTIMISM': '#FF0420',
+        'BASE': '#0052FF'
+    };
+    return colors[chainName?.toUpperCase()] || '#9CA3AF';
 }
 
 /**
  * Format large numbers with commas
  */
 export function formatNumber(num) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if (num === 0) return '0';
+    if (num < 0.01) return num.toFixed(6);
+    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 /**
@@ -171,7 +292,7 @@ export function getCacheAge(address) {
 
         const cacheData = JSON.parse(cached);
         const ageMs = Date.now() - cacheData.timestamp;
-        return Math.floor(ageMs / 60000); // Convert to minutes
+        return Math.floor(ageMs / 60000);
     } catch (error) {
         return null;
     }
