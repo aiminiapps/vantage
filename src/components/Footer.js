@@ -21,13 +21,12 @@ export default function Footer() {
       { label: 'Task Center', href: '/tasks' }
     ],
     resources: [
-      { label: 'Whitepaper', href: 'https://alfredoai.gitbook.io/alfredoai-docs/', icon: FaFileAlt },
-      { label: 'BSC Scan', href: 'https://bscscan.com/token/0x5defe90ace2cc2eb1a3a356dfdc56589bdb7ebcc', icon: FaExternalLinkAlt }
+      { label: 'Whitepaper', href: 'https://vantage-ai.gitbook.io/vantage-ai-docs/', icon: FaFileAlt },
+      { label: 'BSC Scan', href: 'https://bscscan.com/token/0x6699ac45E9a93E3CA6850A07800e6508Bb25103e', icon: FaExternalLinkAlt }
 
     ],
     community: [
-      { label: 'X', href: 'https://x.com/AI_UR_Alfredo', icon: RiTwitterXLine },
-      { label: 'Telegram', href: 'https://t.me/AI_UR_Alfredo', icon: LiaTelegram }
+      { label: 'X', href: 'https://x.com/AI_VANT', icon: RiTwitterXLine }
     ]
   };
 
