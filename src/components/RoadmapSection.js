@@ -6,12 +6,12 @@ import { RiRouteLine } from "react-icons/ri";
 
 // THEME CONSTANTS
 const theme = {
-  primary: '#2471a4',    // Deep Ocean Blue
-  secondary: '#38bdf8',  // Sky Blue
-  background: '#0B0D14', // Graphite
-  cardBg: '#1C2126',     // Slate
-  border: '#2A3138',     // Steel
-  text: '#9CA3AF'        // Gray
+  primary: '#2471a4',    
+  secondary: '#38bdf8',  
+  background: '#0B0D14', 
+  cardBg: '#1C2126',     
+  border: '#2A3138',     
+  text: '#9CA3AF'        
 };
 
 export default function RoadmapSection() {
