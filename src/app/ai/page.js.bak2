@@ -306,7 +306,7 @@ function AIDashboard() {
   const analytics = walletData.analytics;
 
   // Enhanced chart data
-  const chainDistributionData = Object.entries(analytics.chainDistribution || {}).map(([chainName, txCount], idx) => ({
+  const chainDistributionData = analytics.chainDistribution.map((chain, idx) => ({
     name: chain.chain,
     value: chain.value,
     percentage: parseFloat(chain.percentage),

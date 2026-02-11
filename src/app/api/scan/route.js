@@ -1,298 +1,184 @@
 import { NextResponse } from 'next/server';
+import { scanMultiChain, getTokenBalances, getTransactionHistory, getNativeBalance, ALCHEMY_CHAINS } from '@/lib/alchemy';
 
-const COVALENT_API_KEY = process.env.NEXT_PUBLIC_COVALENT_API_KEY;
+// Supported chains for scanning
+const SUPPORTED_CHAINS = ['bsc', 'eth', 'polygon', 'arbitrum', 'optimism', 'base'];
 
-const SUPPORTED_CHAINS = {
-  ethereum: { id: '1', name: 'Ethereum', symbol: 'ETH', rpc: 'https://eth.llamarpc.com', icon: '⟠' },
-  bsc: { id: '56', name: 'BSC', symbol: 'BNB', rpc: 'https://bsc-dataseed.binance.org', icon: '🔶' },
-  polygon: { id: '137', name: 'Polygon', symbol: 'MATIC', rpc: 'https://polygon-rpc.com', icon: '🟣' },
-  arbitrum: { id: '42161', name: 'Arbitrum', symbol: 'ETH', rpc: 'https://arb1.arbitrum.io/rpc', icon: '🔵' },
-  optimism: { id: '10', name: 'Optimism', symbol: 'ETH', rpc: 'https://mainnet.optimism.io', icon: '🔴' },
-  base: { id: '8453', name: 'Base', symbol: 'ETH', rpc: 'https://mainnet.base.org', icon: '🔷' },
-  avalanche: { id: '43114', name: 'Avalanche', symbol: 'AVAX', rpc: 'https://api.avax.network/ext/bc/C/rpc', icon: '🔺' },
-  fantom: { id: '250', name: 'Fantom', symbol: 'FTM', rpc: 'https://rpc.ftm.tools', icon: '👻' }
-};
-
-async function fetchWithRetry(url, options = {}, retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000);
-      
-      const response = await fetch(url, { 
-        ...options, 
-        signal: controller.signal 
-      });
-      
-      clearTimeout(timeout);
-      
-      if (response.ok) return response;
-      if (response.status === 429) {
-        await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
-        continue;
-      }
-      throw new Error(`HTTP ${response.status}`);
-    } catch (error) {
-      if (i === retries - 1) throw error;
-      await new Promise(resolve => setTimeout(resolve, 500 * (i + 1)));
+/**
+ * Calculate advanced analytics from wallet data
+ */
+function calculateAnalytics(chainData) {
+  const analytics = {
+    totalChains: 0,
+    totalTokens: 0,
+    totalTransactions: 0,
+    uniqueContracts: new Set(),
+    chainDistribution: {},
+    activityScore: 0,
+    riskScore: 0,
+    diversificationScore: 0,
+    patterns: {
+      mostActiveChain: null,
+      maxActivity: 0,
+      recentActivity: false,
+      crossChainUser: false
     }
-  }
-}
+  };
 
-async function scanChain(wallet, chainKey) {
-  const chain = SUPPORTED_CHAINS[chainKey];
-  const chainId = chain.id;
+  chainData.forEach(chain => {
+    if (!chain.success) return;
 
-  try {
-    const [balanceRes, txRes] = await Promise.all([
-      fetchWithRetry(
-        `https://api.covalenthq.com/v1/${chainId}/address/${wallet}/balances_v2/?key=${COVALENT_API_KEY}&nft=false&no-spam=true`
-      ),
-      fetchWithRetry(
-        `https://api.covalenthq.com/v1/${chainId}/address/${wallet}/transactions_v2/?key=${COVALENT_API_KEY}&page-size=100`
-      )
-    ]);
+    analytics.totalChains++;
+    analytics.totalTokens += chain.tokens?.length || 0;
+    analytics.totalTransactions += chain.transactions?.length || 0;
 
-    const balanceData = await balanceRes.json();
-    const txData = await txRes.json();
-
-    if (!balanceData.data || balanceData.error) {
-      return { 
-        chain: chainKey, 
-        chainName: chain.name,
-        icon: chain.icon,
-        error: balanceData.error_message || 'Failed to fetch', 
-        hasAssets: false 
-      };
-    }
-
-    const items = balanceData.data.items || [];
-    const txItems = txData.data?.items || [];
-
-    const tokens = items
-      .filter(item => item.balance && parseFloat(item.balance) > 0)
-      .map(item => {
-        const balance = parseFloat(item.balance) / Math.pow(10, item.contract_decimals);
-        const valueUSD = item.quote || 0;
-        const priceUSD = balance > 0 ? valueUSD / balance : 0;
-
-        return {
-          name: item.contract_name || 'Unknown',
-          symbol: item.contract_ticker_symbol || 'UNKN',
-          balance: balance,
-          balanceFormatted: balance.toFixed(6),
-          contractAddress: item.contract_address,
-          valueUSD: valueUSD,
-          priceUSD: priceUSD,
-          logo: item.logo_url,
-          isNative: item.native_token || false,
-          percentChange24h: item.quote_rate_24h || 0,
-          chain: chainKey,
-          chainName: chain.name,
-          decimals: item.contract_decimals
-        };
-      })
-      .filter(token => token.valueUSD > 0.01)
-      .sort((a, b) => b.valueUSD - a.valueUSD);
-
-    const totalValue = tokens.reduce((sum, t) => sum + t.valueUSD, 0);
-
-    const transactions = txItems.slice(0, 50).map(tx => {
-      const value = parseFloat(tx.value) / Math.pow(10, 18);
-      const gasSpent = (parseFloat(tx.gas_spent) * parseFloat(tx.gas_price)) / Math.pow(10, 18);
-      
-      return {
-        hash: tx.tx_hash,
-        from: tx.from_address,
-        to: tx.to_address,
-        value: value,
-        valueUSD: tx.value_quote || 0,
-        timestamp: new Date(tx.block_signed_at).getTime(),
-        gasSpent: gasSpent,
-        successful: tx.successful,
-        chain: chainKey,
-        chainName: chain.name
-      };
+    // Track unique contracts
+    chain.tokens?.forEach(token => {
+      analytics.uniqueContracts.add(token.contractAddress);
     });
 
-    return {
-      chain: chainKey,
-      chainName: chain.name,
-      symbol: chain.symbol,
-      icon: chain.icon,
-      hasAssets: tokens.length > 0,
-      totalValue: totalValue,
-      tokens: tokens,
-      transactions: transactions,
-      tokenCount: tokens.length,
-      txCount: transactions.length
-    };
+    // Chain distribution
+    const txCount = chain.transactions?.length || 0;
+    analytics.chainDistribution[chain.chainName] = txCount;
 
-  } catch (error) {
-    console.error(`Error scanning ${chainKey}:`, error);
-    return {
-      chain: chainKey,
-      chainName: chain.name,
-      icon: chain.icon,
-      error: error.message,
-      hasAssets: false
-    };
-  }
-}
+    // Most active chain
+    if (txCount > analytics.patterns.maxActivity) {
+      analytics.patterns.maxActivity = txCount;
+      analytics.patterns.mostActiveChain = chain.chainName;
+    }
 
-function calculatePnL(transactions, tokens) {
-  const tokenPnL = {};
-  
-  tokens.forEach(token => {
-    const relatedTxs = transactions.filter(tx => 
-      tx.to?.toLowerCase().includes(token.contractAddress?.toLowerCase().slice(0, 10)) ||
-      tx.from?.toLowerCase().includes(token.contractAddress?.toLowerCase().slice(0, 10))
-    );
+    // Recent activity (transactions in last 30 days)
+    const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+    const recentTxs = chain.transactions?.filter(tx => {
+      const txTime = new Date(tx.metadata?.blockTimestamp || 0).getTime();
+      return txTime > thirtyDaysAgo;
+    }) || [];
 
-    const buys = relatedTxs.filter(tx => tx.to?.toLowerCase() !== token.contractAddress?.toLowerCase());
-    const sells = relatedTxs.filter(tx => tx.from?.toLowerCase() !== token.contractAddress?.toLowerCase());
-
-    const totalBuyValue = buys.reduce((sum, tx) => sum + (tx.valueUSD || 0), 0);
-    const totalSellValue = sells.reduce((sum, tx) => sum + (tx.valueUSD || 0), 0);
-    const currentValue = token.valueUSD;
-
-    const avgBuyPrice = totalBuyValue > 0 && token.balance > 0 ? totalBuyValue / token.balance : 0;
-    const unrealizedPnL = currentValue - (avgBuyPrice * token.balance);
-    const realizedPnL = totalSellValue - totalBuyValue;
-    const totalPnL = unrealizedPnL + realizedPnL;
-    const profitPercent = totalBuyValue > 0 ? ((totalPnL / totalBuyValue) * 100) : 0;
-
-    tokenPnL[token.symbol] = {
-      symbol: token.symbol,
-      name: token.name,
-      entryPrice: avgBuyPrice,
-      currentPrice: token.priceUSD,
-      realizedPnL: realizedPnL,
-      unrealizedPnL: unrealizedPnL,
-      totalPnL: totalPnL,
-      profitPercent: profitPercent,
-      totalBuyValue: totalBuyValue,
-      totalSellValue: totalSellValue,
-      currentValue: currentValue,
-      chain: token.chain
-    };
+    if (recentTxs.length > 0) {
+      analytics.patterns.recentActivity = true;
+    }
   });
 
-  return tokenPnL;
+  // Cross-chain user
+  analytics.patterns.crossChainUser = analytics.totalChains > 1;
+
+  // Activity score (0-100)
+  analytics.activityScore = Math.min(100,
+    (analytics.totalTransactions * 2) +
+    (analytics.totalChains * 10) +
+    (analytics.uniqueContracts.size * 5)
+  );
+
+  // Diversification score
+  analytics.diversificationScore = Math.min(100,
+    (analytics.totalChains * 15) +
+    (analytics.uniqueContracts.size * 3)
+  );
+
+  // Risk score (lower is better) - simplified for now
+  const avgTxPerChain = analytics.totalTransactions / Math.max(analytics.totalChains, 1);
+  if (avgTxPerChain < 5) analytics.riskScore = 70; // Low activity = higher risk
+  else if (avgTxPerChain < 20) analytics.riskScore = 40;
+  else analytics.riskScore = 20; // High activity = lower risk
+
+  analytics.uniqueContracts = analytics.uniqueContracts.size;
+
+  return analytics;
 }
 
-function generateAdvancedAnalytics(allChainData, wallet) {
-  const allTokens = allChainData.flatMap(chain => chain.tokens || []);
-  const allTransactions = allChainData.flatMap(chain => chain.transactions || []);
-  
-  const totalPortfolioValue = allTokens.reduce((sum, t) => sum + t.valueUSD, 0);
-  const activeChains = allChainData.filter(c => c.hasAssets);
-  
-  const oldestTx = allTransactions.length > 0
-    ? allTransactions.reduce((oldest, tx) => tx.timestamp < oldest.timestamp ? tx : oldest)
-    : null;
-  const walletAge = oldestTx
-    ? Math.floor((Date.now() - oldestTx.timestamp) / (1000 * 60 * 60 * 24))
-    : 0;
-
-  const pnlData = calculatePnL(allTransactions, allTokens);
-  
-  const totalRealizedPnL = Object.values(pnlData).reduce((sum, p) => sum + p.realizedPnL, 0);
-  const totalUnrealizedPnL = Object.values(pnlData).reduce((sum, p) => sum + p.unrealizedPnL, 0);
-  const totalPnL = totalRealizedPnL + totalUnrealizedPnL;
-
-  const topTokenValue = allTokens.length > 0 ? allTokens[0].valueUSD : 0;
-  const concentration = totalPortfolioValue > 0 ? (topTokenValue / totalPortfolioValue * 100) : 0;
-  const diversificationScore = Math.min(100, (allTokens.length * 5) + (100 - concentration));
-
-  const avgTxPerDay = walletAge > 0 ? allTransactions.length / walletAge : 0;
-  const tradingType = avgTxPerDay > 5 ? 'Day Trader' : avgTxPerDay > 1 ? 'Active Trader' : avgTxPerDay > 0.1 ? 'Moderate Investor' : 'HODLer';
-
-  const chainDistribution = activeChains.map(chain => ({
-    chain: chain.chainName,
-    chainKey: chain.chain,
-    icon: chain.icon,
-    value: chain.totalValue,
-    percentage: (chain.totalValue / totalPortfolioValue * 100).toFixed(2),
-    tokenCount: chain.tokenCount
-  })).sort((a, b) => b.value - a.value);
-
-  const riskScore = 100 - Math.min(50, concentration / 2) - (allTokens.length < 5 ? 20 : 0) - (activeChains.length === 1 ? 15 : 0);
-
-  const profitableTokens = Object.values(pnlData).filter(p => p.totalPnL > 0).length;
-  const losingTokens = Object.values(pnlData).filter(p => p.totalPnL < 0).length;
-  const winRate = allTokens.length > 0 ? (profitableTokens / allTokens.length * 100) : 0;
-
-  return {
-    wallet: wallet,
-    totalValue: totalPortfolioValue,
-    totalTokens: allTokens.length,
-    totalTransactions: allTransactions.length,
-    activeChains: activeChains.length,
-    walletAge: walletAge,
-    diversificationScore: Math.round(diversificationScore),
-    concentration: concentration.toFixed(2),
-    tradingType: tradingType,
-    riskScore: Math.round(riskScore),
-    chainDistribution: chainDistribution,
-    pnlData: pnlData,
-    totalRealizedPnL: totalRealizedPnL,
-    totalUnrealizedPnL: totalUnrealizedPnL,
-    totalPnL: totalPnL,
-    profitableTokens: profitableTokens,
-    losingTokens: losingTokens,
-    winRate: winRate.toFixed(1),
-    topHoldings: allTokens.slice(0, 10),
-    recentActivity: allTransactions.slice(0, 20),
-    avgTransactionsPerDay: avgTxPerDay.toFixed(2)
-  };
-}
-
+/**
+ * POST /api/scan
+ * Scan a wallet address across multiple chains using Alchemy
+ */
 export async function POST(request) {
   try {
     const { wallet, chains } = await request.json();
 
     if (!wallet) {
-      return NextResponse.json({ error: 'Wallet address required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Wallet address is required' },
+        { status: 400 }
+      );
     }
 
-    const chainsToScan = chains || Object.keys(SUPPORTED_CHAINS);
+    // Validate wallet address format
+    if (!/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
+      return NextResponse.json(
+        { error: 'Invalid wallet address format' },
+        { status: 400 }
+      );
+    }
+
+    // Check if Alchemy API key is configured
+    if (!process.env.NEXT_PUBLIC_ALCHEMY_API_KEY) {
+      return NextResponse.json(
+        { error: 'Alchemy API key not configured. Please add NEXT_PUBLIC_ALCHEMY_API_KEY to your .env file.' },
+        { status: 500 }
+      );
+    }
+
+    // Use provided chains or default to all supported
+    const chainsToScan = chains && Array.isArray(chains) ? chains : SUPPORTED_CHAINS;
 
     console.log(`🔍 Scanning ${wallet} across ${chainsToScan.length} chains...`);
 
-    const scanPromises = chainsToScan.map(chain => scanChain(wallet, chain));
-    const chainResults = await Promise.all(scanPromises);
+    // Scan all chains
+    const results = await scanMultiChain(wallet, chainsToScan);
 
-    const successfulScans = chainResults.filter(r => !r.error);
-    const activeChains = chainResults.filter(r => r.hasAssets);
+    // Calculate analytics
+    const analytics = calculateAnalytics(results);
 
-    if (successfulScans.length === 0) {
-      return NextResponse.json({ 
-        error: 'Failed to scan any chains',
-        details: chainResults.map(r => ({ chain: r.chain, error: r.error }))
-      }, { status: 500 });
-    }
+    // Format response
+    const response = {
+      wallet,
+      scannedAt: new Date().toISOString(),
+      chains: results.map(chain => ({
+        chain: chain.chainName || chain.chain,
+        chainId: chain.chainId,
+        success: chain.success,
+        error: chain.error,
+        tokens: chain.tokens || [],
+        nativeBalance: chain.nativeBalance || '0x0',
+        transactionCount: chain.transactions?.length || 0,
+        transactions: chain.transactions || []
+      })),
+      analytics,
+      summary: {
+        totalChains: analytics.totalChains,
+        totalTokens: analytics.totalTokens,
+        totalTransactions: analytics.totalTransactions,
+        activityScore: analytics.activityScore,
+        diversificationScore: analytics.diversificationScore
+      }
+    };
 
-    const analytics = generateAdvancedAnalytics(successfulScans, wallet);
+    console.log(`✅ Scan complete: ${analytics.totalChains} chains, ${analytics.totalTokens} tokens, ${analytics.totalTransactions} transactions`);
 
-    console.log(`✅ ${activeChains.length} active chains | $${analytics.totalValue.toFixed(2)}`);
-
-    return NextResponse.json({
-      success: true,
-      wallet: wallet,
-      timestamp: new Date().toISOString(),
-      scannedChains: successfulScans.length,
-      activeChains: activeChains.length,
-      chainResults: chainResults,
-      analytics: analytics,
-      supportedChains: SUPPORTED_CHAINS
-    });
+    return NextResponse.json(response);
 
   } catch (error) {
-    console.error('Scan Error:', error);
-    return NextResponse.json({
-      error: 'Failed to scan wallet',
-      message: error.message
-    }, { status: 500 });
+    console.error('❌ Scan error:', error);
+    return NextResponse.json(
+      {
+        error: 'Failed to scan wallet',
+        details: error.message,
+        hint: 'Make sure your Alchemy API key is correctly configured in .env'
+      },
+      { status: 500 }
+    );
   }
+}
+
+/**
+ * GET /api/scan (Health check)
+ */
+export async function GET() {
+  return NextResponse.json({
+    status: 'healthy',
+    service: 'VANTAGE Multi-Chain Scanner',
+    provider: 'Alchemy',
+    supportedChains: SUPPORTED_CHAINS,
+    configured: !!process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
+    timestamp: new Date().toISOString()
+  });
 }

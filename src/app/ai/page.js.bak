@@ -77,7 +77,7 @@ function AIDashboard() {
       if (!scanResponse.ok) throw new Error('Scan failed');
 
       const scanData = await scanResponse.json();
-      // Removed success check - Alchemy API returns data directly
+
       setWalletData(scanData);
       toast.success('✅ Wallet scanned successfully!', { id: 'scan' });
 
@@ -306,7 +306,7 @@ function AIDashboard() {
   const analytics = walletData.analytics;
 
   // Enhanced chart data
-  const chainDistributionData = Object.entries(analytics.chainDistribution || {}).map(([chainName, txCount], idx) => ({
+  const chainDistributionData = analytics.chainDistribution.map((chain, idx) => ({
     name: chain.chain,
     value: chain.value,
     percentage: parseFloat(chain.percentage),
