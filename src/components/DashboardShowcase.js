@@ -268,13 +268,6 @@ function PriceChart() {
           strokeLinecap="round"
           vectorEffect="non-scaling-stroke"
         />
-
-        {/* Pulsing Dot at the end */}
-        <motion.circle 
-           cx="100" cy="30" r="1.5" fill="white"
-           animate={{ r: [1.5, 3, 1.5], opacity: [1, 0.5, 1] }}
-           transition={{ duration: 2, repeat: Infinity }}
-        />
       </svg>
     </div>
   );
