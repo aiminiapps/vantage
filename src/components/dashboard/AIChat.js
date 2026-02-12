@@ -36,7 +36,7 @@ export default function AIChat({ walletData, onClose }) {
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/ai-chat', {
+            const response = await fetch('/api/agent', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -45,14 +45,20 @@ export default function AIChat({ walletData, onClose }) {
                 })
             });
 
-            if (!response.ok) throw new Error('AI response failed');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'AI response failed');
+            }
 
             const data = await response.json();
-            setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
+            const aiMessage = data.message || data.response || 'No response received';
+
+            setMessages(prev => [...prev, { role: 'assistant', content: aiMessage }]);
         } catch (error) {
+            console.error('AI Chat error:', error);
             setMessages(prev => [...prev, {
                 role: 'assistant',
-                content: '❌ Sorry, I encountered an error. Please try again.'
+                content: `❌ Sorry, I encountered an error: ${error.message}. Please try again.`
             }]);
         } finally {
             setIsLoading(false);

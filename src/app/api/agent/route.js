@@ -25,25 +25,18 @@ export async function POST(request) {
     let systemContext = `You are VANTAGE AI, an advanced AI portfolio analyst specializing in Web3 and cryptocurrency. You provide insightful, actionable advice based on real wallet data.`;
 
     if (walletData && walletData.analytics) {
-      const { analytics } = walletData;
+      const { analytics, allTokens } = walletData;
       systemContext += `\n\nCurrent User Portfolio Context:
 - Total Value: $${analytics.totalValue?.toFixed(2) || '0'}
-- Active Chains: ${analytics.activeChains || 0}
+- Active Chains: ${analytics.totalChains || 0}
 - Total Tokens: ${analytics.totalTokens || 0}
-- Wallet Age: ${analytics.walletAge || 0} days
-- Trading Type: ${analytics.tradingType || 'Unknown'}
 - Diversification Score: ${analytics.diversificationScore || 0}/100
 - Risk Score: ${analytics.riskScore || 0}/100
-- Total PnL: $${analytics.totalPnL?.toFixed(2) || '0'}
-- Win Rate: ${analytics.winRate || 0}%
 
 Top Holdings:
-${analytics.topHoldings?.slice(0, 3).map(t => `- ${t.symbol}: $${t.valueUSD.toFixed(2)}`).join('\n') || 'None'}
+${allTokens?.slice(0, 5).map(t => `- ${t.symbol}: ${t.balanceFormatted || t.balance.toFixed(4)} ($${t.valueUSD?.toFixed(2) || '0'})`).join('\n') || 'None'}
 
-Chain Distribution:
-${analytics.chainDistribution?.map(c => `- ${c.chain}: $${c.value.toFixed(2)} (${c.percentage}%)`).join('\n') || 'None'}
-
-Use this data to provide personalized, context-aware responses. Be helpful, concise, and data-driven. Focus on actionable insights.`;
+Use this data to provide personalized, context-aware responses. Be helpful, concise, and data-driven.`;
     }
 
     const enhancedMessages = [
@@ -61,15 +54,18 @@ Use this data to provide personalized, context-aware responses. Be helpful, conc
       temperature: 0.7
     });
 
+    const aiMessage = response.choices[0].message.content;
+
     return NextResponse.json({
       success: true,
-      reply: response.choices[0].message.content,
+      message: aiMessage,  // Changed from 'reply' to 'message'
+      reply: aiMessage,    // Keep both for compatibility
       model: model
     });
 
   } catch (error) {
     console.error('AI Agent Error:', error);
-    
+
     // Fallback response
     return NextResponse.json({
       success: false,
