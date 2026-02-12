@@ -15,6 +15,7 @@ import OverviewTab from '@/components/dashboard/OverviewTab';
 import ChainsTab from '@/components/dashboard/ChainsTab';
 import HoldingsTab from '@/components/dashboard/HoldingsTab';
 import AIInsightsTab from '@/components/dashboard/AIInsightsTab';
+import AnalyticsTab from '@/components/dashboard/AnalyticsTab';
 import AIChat from '@/components/dashboard/AIChat';
 
 // Utils
@@ -209,6 +210,7 @@ function AIDashboard() {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: FaChartLine },
+    { id: 'analytics', label: 'Analytics', icon: FaChartLine },
     { id: 'holdings', label: 'Holdings', icon: FaWallet },
     { id: 'chains', label: 'Chains', icon: FaLayerGroup },
     { id: 'insights', label: 'AI Insights', icon: FaBrain }
@@ -316,6 +318,12 @@ function AIDashboard() {
               <OverviewTab
                 chainDistribution={walletData.chainDistribution}
                 topHoldings={walletData.topHoldings}
+                analytics={walletData.analytics}
+              />
+            )}
+            {activeTab === 'analytics' && (
+              <AnalyticsTab
+                walletData={walletData}
                 analytics={walletData.analytics}
               />
             )}
