@@ -21,7 +21,7 @@ import AIChat from '@/components/dashboard/AIChat';
 import { saveWalletData, getWalletData, getCacheAge } from '@/components/dashboard/utils/localStorage';
 import { transformAlchemyData } from '@/components/dashboard/utils/dataTransform';
 import { VANTAGE_THEME } from '@/components/dashboard/utils/theme';
-import { getBatchTokenPrices, CHAIN_TO_PLATFORM } from '@/components/dashboard/utils/coingecko';
+import { getBatchTokenPricesEnhanced, calculatePortfolioValue } from '@/components/dashboard/utils/coingecko';
 
 function AIDashboard() {
   const searchParams = useSearchParams();
@@ -39,7 +39,7 @@ function AIDashboard() {
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [walletData, setWalletData] = useState(null);
-  const [rawApiData, setRawApiData] = useState(null); // For debugging
+  const [rawApiData, setRawApiData] = useState(null);
   const [aiInsights, setAiInsights] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [showChat, setShowChat] = useState(false);
@@ -61,7 +61,7 @@ function AIDashboard() {
       const cached = getWalletData(wallet);
       const age = getCacheAge(wallet);
 
-      if (cached) {
+      if (cached && age < 5) { // Use cache if less than 5 minutes old
         console.log('📦 Using cached data', cached);
         setWalletData(cached);
         setCacheAge(age);
@@ -87,18 +87,37 @@ function AIDashboard() {
 
       const scanData = await response.json();
       console.log('📥 Raw API Response:', scanData);
-      setRawApiData(scanData); // Save for debug modal
+      setRawApiData(scanData);
 
       // Transform data
       const transformed = transformAlchemyData(scanData);
       console.log('✨ Transformed Data:', transformed);
+
+      // Fetch prices and calculate USD values
+      toast.loading('💰 Fetching live prices...', { id: 'prices' });
+
+      try {
+        const prices = await getBatchTokenPricesEnhanced(transformed.allTokens, transformed);
+        const portfolioValue = calculatePortfolioValue(transformed.allTokens, prices);
+
+        // Update analytics with real values
+        transformed.analytics.totalValue = portfolioValue.totalValue;
+        transformed.analytics.totalPnL = portfolioValue.totalChange24h;
+        transformed.analytics.totalChangePercent = portfolioValue.totalChangePercent;
+
+        console.log(`💰 Portfolio Value: $${portfolioValue.totalValue.toFixed(2)}`);
+        toast.success(`✓ Portfolio: $${portfolioValue.totalValue.toFixed(2)}`, { id: 'prices' });
+      } catch (priceError) {
+        console.error('Price fetch error:', priceError);
+        toast.error('Could not fetch prices', { id: 'prices' });
+      }
 
       // Save to localStorage
       saveWalletData(wallet, transformed);
 
       setWalletData(transformed);
       setCacheAge(0);
-      toast.success(`✓ Found ${transformed.allTokens.length} tokens!`, { id: 'scan' });
+      toast.success(`✓ Found ${transformed.allTokens.length} assets!`, { id: 'scan' });
 
       // Fetch AI insights
       loadAIInsights(transformed);
@@ -212,7 +231,7 @@ function AIDashboard() {
 
       {/* Main Content */}
       <main id="dashboard-content" className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        {/* Stats Cards */}
+        {/* Stats Cards - PREMIUM */}
         <DashboardStats analytics={walletData.analytics} />
 
         {/* Action Buttons */}
