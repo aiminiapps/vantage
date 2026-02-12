@@ -252,7 +252,7 @@ function PriceChart() {
           initial={{ pathLength: 0, opacity: 0 }}
           animate={{ pathLength: 1, opacity: 1 }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
-          d="M0 80 C 10 75, 20 85, 30 60 S 50 40, 60 50 S 80 20, 100 30 V 100 H 0 Z" 
+          d="M0 80 C 10 75, 20 85, 30 60 S 50  40, 60 50 S 80 20, 100 30 V 100 H 0 Z" 
           fill="url(#blueGradient)" 
         />
         
