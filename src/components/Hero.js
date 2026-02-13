@@ -13,11 +13,11 @@ export default function Hero() {
   const router = useRouter();
   const [walletAddress, setWalletAddress] = useState('');
   const [selectedNetwork, setSelectedNetwork] = useState({
-    id: 'ethereum',
-    name: 'Ethereum',
-    symbol: 'ETH',
-    icon: FaEthereum,
-    color: '#627EEA'
+    id: 'bsc',
+    name: 'BNB Smart Chain',
+    symbol: 'BSC',
+    icon: SiBinance,
+    color: '#F3BA2F'
   });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
