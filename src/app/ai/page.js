@@ -16,6 +16,8 @@ import ChainsTab from '@/components/dashboard/ChainsTab';
 import HoldingsTab from '@/components/dashboard/HoldingsTab';
 import AIInsightsTab from '@/components/dashboard/AIInsightsTab';
 import AnalyticsTab from '@/components/dashboard/AnalyticsTab';
+import AdvancedChartsTab from '@/components/dashboard/AdvancedChartsTab';
+import MultiWalletTab from '@/components/dashboard/MultiWalletTab';
 import AIChat from '@/components/dashboard/AIChat';
 
 // Utils
@@ -211,8 +213,10 @@ function AIDashboard() {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: FaChartLine },
     { id: 'analytics', label: 'Analytics', icon: FaChartLine },
+    { id: 'advanced', label: 'Advanced Charts', icon: FaLayerGroup },
     { id: 'holdings', label: 'Holdings', icon: FaWallet },
     { id: 'chains', label: 'Chains', icon: FaLayerGroup },
+    { id: 'multiwallet', label: 'Multi-Wallet', icon: FaWallet },
     { id: 'insights', label: 'AI Insights', icon: FaBrain }
   ];
 
@@ -327,6 +331,9 @@ function AIDashboard() {
                 analytics={walletData.analytics}
               />
             )}
+            {activeTab === 'advanced' && (
+              <AdvancedChartsTab walletData={walletData} />
+            )}
             {activeTab === 'holdings' && (
               <HoldingsTab holdings={walletData.topHoldings} />
             )}
@@ -334,6 +341,14 @@ function AIDashboard() {
               <ChainsTab
                 chains={walletData.chains}
                 analytics={walletData.analytics}
+              />
+            )}
+            {activeTab === 'multiwallet' && (
+              <MultiWalletTab
+                currentWallet={wallet}
+                onWalletChange={(newWallet) => {
+                  router.push(`/ai?wallet=${newWallet}&network=${network}`);
+                }}
               />
             )}
             {activeTab === 'insights' && (
