@@ -390,7 +390,7 @@ export default function VANTAGETaskCenter() {
       description: 'Follow @AI_UR_VANTAGE on X for portfolio insights',
       reward: 100,
       icon: FaTwitter,
-      action: 'https://x.com/AI_UR_VANTAGE',
+      action: 'https://x.com/AI_VANT',
       type: 'social',
       difficulty: 'easy'
     },
@@ -400,7 +400,7 @@ export default function VANTAGETaskCenter() {
       description: 'Like our latest post about crypto portfolio analysis',
       reward: 50,
       icon: FaThumbsUp,
-      action: 'https://x.com/AI_UR_VANTAGE',
+      action: 'https://x.com/AI_VANT',
       type: 'social',
       difficulty: 'easy'
     },
@@ -410,7 +410,7 @@ export default function VANTAGETaskCenter() {
       description: 'Share your portfolio analysis experience',
       reward: 75,
       icon: FaComment,
-      action: 'https://x.com/AI_UR_VANTAGE',
+      action: 'https://x.com/AI_VANT',
       type: 'social',
       difficulty: 'medium'
     },
@@ -420,17 +420,7 @@ export default function VANTAGETaskCenter() {
       description: 'Help us spread the word about smart portfolio management',
       reward: 60,
       icon: FaRetweet,
-      action: 'https://x.com/AI_UR_VANTAGE/status/1991318393442734394?s=20',
-      type: 'social',
-      difficulty: 'easy'
-    },
-    joinTelegram: {
-      id: 'joinTelegram',
-      title: 'Join Telegram',
-      description: 'Join our portfolio analysis community on Telegram',
-      reward: 80,
-      icon: FaTelegram,
-      action: 'https://t.me/AI_UR_VANTAGE',
+      action: 'https://x.com/AI_VANT/status/2021953437605466537?s=20',
       type: 'social',
       difficulty: 'easy'
     },
