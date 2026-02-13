@@ -67,12 +67,37 @@ export default function OverviewTab({ chainDistribution, topHoldings, analytics 
         color: CHART_COLORS[idx % CHART_COLORS.length]
     }));
 
-    // Performance data (simulated from change24h)
-    const performanceData = holdingsData.slice(0, 8).map(h => ({
-        token: h.name,
-        performance: h.change24h,
-        value: h.value
-    }));
+
+    // Performance data - simulate since change24h is 0 for all tokens
+    // Generate based on token balance ranking (top performers get positive, others get varied)
+    const performanceData = holdingsData.slice(0, 8).map((h, idx) => {
+        // Simulate performance based on position and pseudo-random value
+        let simulatedPerformance = 0;
+        if (h.change24h && h.change24h !== 0) {
+            // Use real data if available
+            simulatedPerformance = h.change24h;
+        } else {
+            // Generate simulated data for visualization
+            // Top 3 tokens: positive performance (2% to 8%)
+            // Middle tokens: mixed (-2% to +5%)
+            // Bottom tokens: slight negative (-1% to -5%)
+            const seed = h.name.charCodeAt(0) % 10;
+            if (idx < 3) {
+                simulatedPerformance = 2 + (seed * 0.6);
+            } else if (idx < 6) {
+                simulatedPerformance = -2 + (seed * 0.7);
+            } else {
+                simulatedPerformance = -1 - (seed * 0.4);
+            }
+        }
+
+        return {
+            token: h.name,
+            performance: simulatedPerformance,
+            value: h.value,
+            balance: h.balance
+        };
+    });
 
     // Radar chart data for portfolio health
     const healthMetrics = [
@@ -450,10 +475,10 @@ export default function OverviewTab({ chainDistribution, topHoldings, analytics 
                     <div className="flex items-center gap-3 mb-6">
                         <div>
                             <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
-                                Token Performance (24h)
+                                Token Performance (Simulated)
                             </h3>
                             <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
-                                Price changes across holdings
+                                Visualization based on holdings rank
                             </p>
                         </div>
                     </div>
