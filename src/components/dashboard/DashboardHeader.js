@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { VANTAGE_THEME, VANTAGE_INFO } from './utils/theme';
 import { formatAddress, getCacheAge } from './utils/dataTransform';
+import Image from 'next/image';
 
 export default function DashboardHeader({ wallet, network, onToggleChat, cacheAge }) {
     const router = useRouter();
@@ -94,7 +95,7 @@ export default function DashboardHeader({ wallet, network, onToggleChat, cacheAg
                             rel="noopener noreferrer"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="px-4 py-2 rounded-xl text-sm font-medium transition-all"
+                            className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
                             style={{
                                 background: `${VANTAGE_THEME.cardBg}`,
                                 color: VANTAGE_THEME.text,
@@ -103,44 +104,13 @@ export default function DashboardHeader({ wallet, network, onToggleChat, cacheAg
                         >
                             📚 Docs
                         </motion.a>
-
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => toast.success('Coming soon!')}
-                            className="p-3 rounded-xl transition-all"
-                            style={{
-                                background: `${VANTAGE_THEME.cardBg}`,
-                                border: `1px solid ${VANTAGE_THEME.border}`
-                            }}
-                        >
-                            <FaShare style={{ color: VANTAGE_THEME.text }} />
-                        </motion.button>
-
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => toast.success('Coming soon!')}
-                            className="p-3 rounded-xl transition-all"
-                            style={{
-                                background: `${VANTAGE_THEME.cardBg}`,
-                                border: `1px solid ${VANTAGE_THEME.border}`
-                            }}
-                        >
-                            <FaDownload style={{ color: VANTAGE_THEME.text }} />
-                        </motion.button>
-
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={onToggleChat}
-                            className="px-4 py-3 rounded-xl font-medium transition-all flex items-center gap-2"
-                            style={{
-                                background: `linear-gradient(135deg, ${VANTAGE_THEME.primary}, ${VANTAGE_THEME.secondary})`,
-                                color: '#fff'
-                            }}
+                            className="px-4 py-2.5 rounded-xl font-medium transition-all flex items-center gap-2 text-white bg-[#38bdf8]/80"
                         >
-                            <FaRobot />
+                            <Image src="/icon.png" alt="AI" width={24} height={24} />
                             <span className="hidden sm:inline">AI Chat</span>
                         </motion.button>
                     </div>
