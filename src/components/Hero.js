@@ -51,21 +51,21 @@ export default function Hero() {
       
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden opacity-60 pointer-events-none">
-         <PrismaticBurst
-    animationType="rotate3d"
-    intensity={2}
-    speed={0.5}
-    distort={0}
-    paused={false}
-    offset={{ x: 0, y: 0 }}
-    hoverDampness={0.25}
-    rayCount={0}
-    mixBlendMode="lighten"
-    colors={['#ff007a', '#4d3dff', '#ffffff']}
-    color0=""
-    color1=""
-    color2=""
-/>
+      <PrismaticBurst
+          animationType="rotate3d"
+          intensity={2}
+          speed={0.5}
+          distort={0}
+          paused={false}
+          offset={{ x: 0, y: 0 }}
+          hoverDampness={0.25}
+          rayCount={0}
+          mixBlendMode="lighten"
+          colors={['#2471a4', '#38bdf8', '#ffffff']}
+          color0=""
+          color1=""
+          color2=""
+      />
         {/* Subtle Grid overlay for 'Technical/Graphite' feel */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#2A3138_1px,transparent_1px),linear-gradient(to_bottom,#2A3138_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
       </div>
