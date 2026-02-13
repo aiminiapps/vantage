@@ -18,6 +18,7 @@ import AnalyticsTab from '@/components/dashboard/AnalyticsTab';
 import AdvancedChartsTab from '@/components/dashboard/AdvancedChartsTab';
 import MultiWalletTab from '@/components/dashboard/MultiWalletTab';
 import AIChat from '@/components/dashboard/AIChat';
+import DashboardSkeleton from '@/components/dashboard/DashboardSkeleton';
 
 // Utils
 import { saveWalletData, getWalletData, getCacheAge } from '@/components/dashboard/utils/localStorage';
@@ -186,27 +187,9 @@ function AIDashboard() {
     }
   };
 
-  // Loading state
-  if (isLoading || !walletData) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: VANTAGE_THEME.background }}
-      >
-        <div className="text-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-            className="w-16 h-16 border-4 rounded-full mx-auto mb-4"
-            style={{
-              borderColor: `${VANTAGE_THEME.border}`,
-              borderTopColor: VANTAGE_THEME.primary
-            }}
-          />
-          <p style={{ color: VANTAGE_THEME.text }}>Loading premium dashboard...</p>
-        </div>
-      </div>
-    );
+  // Show skeleton loader while loading
+  if (isLoading) {
+    return <DashboardSkeleton />;
   }
 
   const tabs = [
