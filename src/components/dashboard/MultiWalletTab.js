@@ -22,14 +22,6 @@ export default function MultiWalletTab({ currentWallet, onWalletChange }) {
                 className="flex items-center justify-between"
             >
                 <div className="flex items-center gap-4">
-                    <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center"
-                        style={{
-                            background: `linear-gradient(135deg, #ec4899, #f43f5e)`
-                        }}
-                    >
-                        <FaWallet style={{ color: '#fff', fontSize: '2rem' }} />
-                    </div>
                     <div>
                         <h2 className="text-2xl font-bold mb-1" style={{ color: VANTAGE_THEME.textLight }}>
                             Multi-Wallet Management
