@@ -7,7 +7,7 @@ import { SiSolana, SiBinance, SiPolygon } from 'react-icons/si';
 import { TbHexagonLetterA, TbHexagonLetterB } from 'react-icons/tb';
 import { HiSparkles } from 'react-icons/hi';
 import { IoWalletOutline } from "react-icons/io5";
-import LightPillar from './ui/Silk';
+import PrismaticBurst from './ui/PrismaticBurst';
 
 export default function Hero() {
   const router = useRouter();
@@ -51,20 +51,21 @@ export default function Hero() {
       
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden opacity-60 pointer-events-none">
-        <LightPillar
-            topColor="#2471a4" // Deep Ocean Blue
-            bottomColor="#38bdf8" // Sky Blue
-            intensity={0.8}
-            rotationSpeed={0.3}
-            glowAmount={0.002}
-            pillarWidth={3}
-            pillarHeight={0.4}
-            noiseIntensity={0.5}
-            pillarRotation={25}
-            interactive={false}
-            mixBlendMode="screen"
-            quality="high"
-        />
+         <PrismaticBurst
+    animationType="rotate3d"
+    intensity={2}
+    speed={0.5}
+    distort={0}
+    paused={false}
+    offset={{ x: 0, y: 0 }}
+    hoverDampness={0.25}
+    rayCount={0}
+    mixBlendMode="lighten"
+    colors={['#ff007a', '#4d3dff', '#ffffff']}
+    color0=""
+    color1=""
+    color2=""
+/>
         {/* Subtle Grid overlay for 'Technical/Graphite' feel */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#2A3138_1px,transparent_1px),linear-gradient(to_bottom,#2A3138_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
       </div>
