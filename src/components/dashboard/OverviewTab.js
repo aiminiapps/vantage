@@ -37,17 +37,26 @@ export default function OverviewTab({ chainDistribution, topHoldings, analytics 
         '#22c55e', // Light Green
     ];
 
-    // Prepare top holdings data with colors
-    const holdingsData = (topHoldings || []).slice(0, 10).map((holding, idx) => ({
-        name: holding.symbol,
-        value: holding.valueUSD || 0,
-        balance: holding.balanceFormatted || holding.balance,
-        change24h: holding.change24h || 0,
-        percentage: analytics?.totalValue > 0
-            ? ((holding.valueUSD / analytics.totalValue) * 100).toFixed(2)
-            : 0,
-        color: CHART_COLORS[idx % CHART_COLORS.length]
-    }));
+
+    // Calculate total balance (since valueUSD is 0, use balance as proxy)
+    const totalBalance = (topHoldings || [])
+        .reduce((sum, token) => sum + (token.balance || 0), 0);
+
+    // Prepare top holdings data with colors - use balance since valueUSD is 0
+    const holdingsData = (topHoldings || [])
+        .filter(holding => (holding.balance || 0) > 0)
+        .sort((a, b) => (b.balance || 0) - (a.balance || 0))
+        .slice(0, 10)
+        .map((holding, idx) => ({
+            name: holding.symbol,
+            value: holding.balance || 0, // Use balance instead of valueUSD
+            balance: holding.balanceFormatted || holding.balance,
+            change24h: holding.change24h || 0,
+            percentage: totalBalance > 0
+                ? ((holding.balance / totalBalance) * 100)
+                : 0,
+            color: CHART_COLORS[idx % CHART_COLORS.length]
+        }));
 
     // Prepare chain distribution data
     const chainData = (chainDistribution || []).map((chain, idx) => ({
@@ -93,12 +102,12 @@ export default function OverviewTab({ chainDistribution, topHoldings, analytics 
                     </p>
                     {data.value !== undefined && (
                         <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
-                            Value: ${data.value.toFixed(2)}
+                            Balance: {typeof data.value === 'number' ? data.value.toFixed(4) : data.value}
                         </p>
                     )}
                     {data.percentage !== undefined && (
                         <p className="text-sm" style={{ color: data.color }}>
-                            {data.percentage}% of portfolio
+                            {typeof data.percentage === 'number' ? data.percentage.toFixed(2) : data.percentage}% of portfolio
                         </p>
                     )}
                     {data.change24h !== undefined && (
@@ -158,7 +167,7 @@ export default function OverviewTab({ chainDistribution, topHoldings, analytics 
                         {holdingsData[0]?.name || 'N/A'}
                     </p>
                     <p className="text-xs" style={{ color: VANTAGE_THEME.success }}>
-                        ${holdingsData[0]?.value.toFixed(2) || '0.00'}
+                        {holdingsData[0]?.balance || '0'}
                     </p>
                 </motion.div>
 
@@ -596,7 +605,7 @@ export default function OverviewTab({ chainDistribution, topHoldings, analytics 
                                 </div>
                                 <div className="text-right">
                                     <p className="font-bold" style={{ color: VANTAGE_THEME.textLight }}>
-                                        ${holding.value.toFixed(2)}
+                                        {holding.balance}
                                     </p>
                                     <p
                                         className="text-xs flex items-center gap-1 justify-end"
@@ -613,14 +622,14 @@ export default function OverviewTab({ chainDistribution, topHoldings, analytics 
                             <div className="h-1 rounded-full overflow-hidden" style={{ background: `${VANTAGE_THEME.border}40` }}>
                                 <motion.div
                                     initial={{ width: 0 }}
-                                    animate={{ width: `${holding.percentage}%` }}
+                                    animate={{ width: `${typeof holding.percentage === 'number' ? holding.percentage : parseFloat(holding.percentage) || 0}%` }}
                                     transition={{ duration: 1, delay: idx * 0.1 }}
                                     className="h-full rounded-full"
                                     style={{ background: holding.color }}
                                 />
                             </div>
                             <p className="text-xs mt-1" style={{ color: holding.color }}>
-                                {holding.percentage}% of portfolio
+                                {typeof holding.percentage === 'number' ? holding.percentage.toFixed(2) : parseFloat(holding.percentage).toFixed(2)}% of portfolio
                             </p>
                         </motion.div>
                     ))}
