@@ -141,14 +141,7 @@ export default function OverviewTab({ chainDistribution, allTokens, topHoldings,
                 className="flex items-center justify-between"
             >
                 <div className="flex items-center gap-4">
-                    <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center"
-                        style={{
-                            background: `linear-gradient(135deg, ${VANTAGE_THEME.primary}, ${VANTAGE_THEME.secondary})`
-                        }}
-                    >
-                        <FaChartLine style={{ color: '#fff', fontSize: '2rem' }} />
-                    </div>
+
                     <div>
                         <h2 className="text-2xl font-bold mb-1" style={{ color: VANTAGE_THEME.textLight }}>
                             Portfolio Overview

@@ -8,7 +8,6 @@ import { FaWallet, FaChartLine, FaLayerGroup, FaBrain, FaDownload, FaShare, FaBu
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-// Components
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import DashboardStats from '@/components/dashboard/DashboardStats';
 import OverviewTab from '@/components/dashboard/OverviewTab';
@@ -321,7 +320,6 @@ function AIDashboard() {
             {activeTab === 'overview' && (
               <OverviewTab
                 chainDistribution={walletData.chainDistribution}
-                allTokens={walletData.allTokens}
                 topHoldings={walletData.topHoldings}
                 analytics={walletData.analytics}
               />
