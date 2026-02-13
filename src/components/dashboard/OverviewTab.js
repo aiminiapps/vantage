@@ -1,269 +1,674 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FaChartPie, FaChartBar, FaChartLine, FaClock } from 'react-icons/fa';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { useState } from 'react';
+import {
+    FaTrophy, FaChartPie, FaFire, FaArrowUp, FaArrowDown,
+    FaCoins, FaLayerGroup, FaChartLine, FaBolt
+} from 'react-icons/fa';
+import {
+    PieChart, Pie, Cell, BarChart, Bar, LineChart, Line,
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+    ResponsiveContainer, Legend, RadarChart, Radar, PolarGrid,
+    PolarAngleAxis, PolarRadiusAxis
+} from 'recharts';
 import { VANTAGE_THEME } from './utils/theme';
 
-export default function OverviewTab({ chainDistribution, topHoldings, analytics }) {
-    // Prepare data for charts
-    const chainData = chainDistribution || [];
-    const holdingsData = (topHoldings || []).slice(0, 10);
+/**
+ * Advanced Overview Tab - Premium Dashboard Overview
+ * Features: Portfolio distribution, top holdings, performance metrics, chain analysis
+ * Uses Evil Charts styling with colorful gradients and animations
+ */
+export default function OverviewTab({ chainDistribution, allTokens, topHoldings, analytics }) {
+    const [chartType, setChartType] = useState('donut'); // 'donut', 'bar', 'radar'
+    const [performanceView, setPerformanceView] = useState('24h'); // '24h', '7d', '30d'
 
-    // Portfolio Health Data - ALWAYS SHOW SOMETHING
-    const healthData = [
-        {
-            metric: 'Diversification',
-            value: analytics?.diversificationScore || 50,
-            fullMark: 100
-        },
-        {
-            metric: 'Activity',
-            value: analytics?.activityScore || 60,
-            fullMark: 100
-        },
-        {
-            metric: 'Risk',
-            value: analytics?.riskScore || 70,
-            fullMark: 100
-        },
-        {
-            metric: 'Balance',
-            value: analytics?.totalTokens ? Math.min(analytics.totalTokens * 5, 100) : 40,
-            fullMark: 100
-        },
-        {
-            metric: 'Value',
-            value: analytics?.totalValue > 0 ? 80 : 50,
-            fullMark: 100
-        }
+    // Use allTokens if available, fallback to topHoldings
+    const tokens = allTokens || topHoldings || [];
+
+    // Vibrant color palette - Evil Charts style
+    const CHART_COLORS = [
+        '#3b82f6', // Blue
+        '#8b5cf6', // Purple
+        '#10b981', // Green
+        '#f59e0b', // Orange
+        '#ef4444', // Red
+        '#ec4899', // Pink
+        '#14b8a6', // Teal
+        '#6366f1', // Indigo
+        '#f97316', // Deep Orange
+        '#22c55e', // Light Green
     ];
 
-    // Recent Activity - Generate from analytics
-    const recentActivity = [
-        {
-            type: 'Scan',
-            description: `Portfolio scanned - ${analytics?.totalTokens || 0} assets found`,
-            time: 'Just now',
-            icon: '🔍'
-        },
-        {
-            type: 'Assets',
-            description: `Active on ${analytics?.totalChains || 1} chain(s)`,
-            time: '1 min ago',
-            icon: '⛓️'
-        },
-        {
-            type: 'Tokens',
-            description: `Holding ${analytics?.totalTokens || 0} different tokens`,
-            time: '1 min ago',
-            icon: '💎'
-        }
-    ];
 
-    // Add transaction-based activity if available
-    if (analytics?.totalTransactions > 0) {
-        recentActivity.push({
-            type: 'Transactions',
-            description: `${analytics.totalTransactions} transactions found`,
-            time: '1 min ago',
-            icon: '📊'
+    // Calculate total value from all tokens
+    const totalValue = tokens.reduce((sum, token) => sum + (token.valueUSD || token.value || 0), 0);
+
+    // Prepare top holdings data with colors (use balance if no price data)
+    const holdingsData = tokens
+        .filter(token => token.balance > 0)
+        .sort((a, b) => (b.valueUSD || b.value || b.balance) - (a.valueUSD || a.value || a.balance))
+        .slice(0, 10)
+        .map((holding, idx) => {
+            const displayValue = holding.valueUSD || holding.value || 0;
+            const hasPrice = holding.valueUSD > 0;
+
+            return {
+                name: holding.symbol,
+                value: displayValue,
+                balance: holding.balanceFormatted || holding.balance,
+                change24h: holding.change24h || holding.change || 0,
+                percentage: totalValue > 0
+                    ? ((displayValue / totalValue) * 100)
+                    : 0,
+                color: CHART_COLORS[idx % CHART_COLORS.length],
+                hasPrice
+            };
         });
-    }
 
-    // Custom tooltip
+    // Prepare chain distribution data
+    const chainData = (chainDistribution || []).map((chain, idx) => ({
+        name: chain.chain || 'Unknown',
+        value: chain.value || 0,
+        tokens: chain.tokens || 0,
+        percentage: chain.percentage || 0,
+        color: CHART_COLORS[idx % CHART_COLORS.length]
+    }));
+
+    // Performance data (simulated from change24h)
+    const performanceData = holdingsData.slice(0, 8).map(h => ({
+        token: h.name,
+        performance: h.change24h,
+        value: h.value
+    }));
+
+    // Radar chart data for portfolio health
+    const healthMetrics = [
+        { metric: 'Diversification', value: analytics?.diversificationScore || 50, fullMark: 100 },
+        { metric: 'Liquidity', value: analytics?.liquidityScore || 70, fullMark: 100 },
+        { metric: 'Growth', value: Math.min(100, Math.max(0, (analytics?.totalValue || 0) / 100)), fullMark: 100 },
+        { metric: 'Stability', value: 100 - (analytics?.riskScore || 50), fullMark: 100 },
+        { metric: 'Activity', value: analytics?.totalTokens ? Math.min(100, analytics.totalTokens * 10) : 50, fullMark: 100 }
+    ];
+
+    // Custom tooltip component
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload[0]) {
+            const data = payload[0].payload;
             return (
-                <div
-                    className="p-3 rounded-lg shadow-lg"
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="p-4 rounded-xl backdrop-blur-md shadow-2xl"
                     style={{
-                        background: VANTAGE_THEME.cardBg,
-                        border: `1px solid ${VANTAGE_THEME.border}`
+                        background: `${VANTAGE_THEME.cardBg}f0`,
+                        border: `1px solid ${data.color || VANTAGE_THEME.border}`
                     }}
                 >
-                    <p style={{ color: VANTAGE_THEME.textLight }} className="font-semibold">
-                        {payload[0].name}
+                    <p className="font-bold mb-2" style={{ color: VANTAGE_THEME.textLight }}>
+                        {data.name || data.token}
                     </p>
-                    <p style={{ color: VANTAGE_THEME.primary }}>
-                        {payload[0].value} {payload[0].name === 'value' ? '' : '%'}
-                    </p>
-                </div>
+                    {data.value !== undefined && (
+                        <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
+                            Value: ${data.value.toFixed(2)}
+                        </p>
+                    )}
+                    {data.percentage !== undefined && (
+                        <p className="text-sm" style={{ color: data.color }}>
+                            {data.percentage}% of portfolio
+                        </p>
+                    )}
+                    {data.change24h !== undefined && (
+                        <p className="text-sm flex items-center gap-1" style={{
+                            color: data.change24h >= 0 ? VANTAGE_THEME.success : VANTAGE_THEME.error
+                        }}>
+                            {data.change24h >= 0 ? <FaArrowUp /> : <FaArrowDown />}
+                            {Math.abs(data.change24h).toFixed(2)}%
+                        </p>
+                    )}
+                </motion.div>
             );
         }
         return null;
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Chain Distribution */}
+        <div className="space-y-6">
+            {/* Header Section */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-6 rounded-2xl"
-                style={{
-                    background: VANTAGE_THEME.cardBg,
-                    border: `1px solid ${VANTAGE_THEME.border}`
-                }}
+                className="flex items-center justify-between"
             >
-                <div className="flex items-center gap-2 mb-4">
-                    <FaChartPie style={{ color: VANTAGE_THEME.primary }} />
-                    <h3 className="font-bold text-lg" style={{ color: VANTAGE_THEME.textLight }}>
-                        Chain Distribution
-                    </h3>
+                <div className="flex items-center gap-4">
+                    <div
+                        className="w-16 h-16 rounded-2xl flex items-center justify-center"
+                        style={{
+                            background: `linear-gradient(135deg, ${VANTAGE_THEME.primary}, ${VANTAGE_THEME.secondary})`
+                        }}
+                    >
+                        <FaChartLine style={{ color: '#fff', fontSize: '2rem' }} />
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold mb-1" style={{ color: VANTAGE_THEME.textLight }}>
+                            Portfolio Overview
+                        </h2>
+                        <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
+                            Complete analysis of your holdings across all chains
+                        </p>
+                    </div>
                 </div>
+            </motion.div>
 
-                {chainData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={250}>
-                        <PieChart>
-                            <Pie
-                                data={chainData}
-                                cx="50%"
-                                cy="50%"
-                                labelLine={false}
-                                label={(entry) => `${entry.name} (${entry.percentage}%)`}
-                                outerRadius={80}
-                                fill={VANTAGE_THEME.primary}
-                                dataKey="value"
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="p-4 rounded-xl"
+                    style={{
+                        background: `linear-gradient(135deg, ${VANTAGE_THEME.success}20, ${VANTAGE_THEME.success}10)`,
+                        border: `1px solid ${VANTAGE_THEME.success}40`
+                    }}
+                >
+                    <div className="flex items-center gap-2 mb-2">
+                        <FaTrophy style={{ color: VANTAGE_THEME.success, fontSize: '1.5rem' }} />
+                        <p className="text-xs font-semibold" style={{ color: VANTAGE_THEME.text }}>
+                            Top Holding
+                        </p>
+                    </div>
+                    <p className="text-xl font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                        {holdingsData[0]?.name || 'N/A'}
+                    </p>
+                    <p className="text-xs" style={{ color: VANTAGE_THEME.success }}>
+                        ${holdingsData[0]?.value.toFixed(2) || '0.00'}
+                    </p>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="p-4 rounded-xl"
+                    style={{
+                        background: `linear-gradient(135deg, ${VANTAGE_THEME.info}20, ${VANTAGE_THEME.info}10)`,
+                        border: `1px solid ${VANTAGE_THEME.info}40`
+                    }}
+                >
+                    <div className="flex items-center gap-2 mb-2">
+                        <FaLayerGroup style={{ color: VANTAGE_THEME.info, fontSize: '1.5rem' }} />
+                        <p className="text-xs font-semibold" style={{ color: VANTAGE_THEME.text }}>
+                            Active Chains
+                        </p>
+                    </div>
+                    <p className="text-xl font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                        {analytics?.totalChains || 0}
+                    </p>
+                    <p className="text-xs" style={{ color: VANTAGE_THEME.info }}>
+                        Networks
+                    </p>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="p-4 rounded-xl"
+                    style={{
+                        background: `linear-gradient(135deg, ${VANTAGE_THEME.warning}20, ${VANTAGE_THEME.warning}10)`,
+                        border: `1px solid ${VANTAGE_THEME.warning}40`
+                    }}
+                >
+                    <div className="flex items-center gap-2 mb-2">
+                        <FaCoins style={{ color: VANTAGE_THEME.warning, fontSize: '1.5rem' }} />
+                        <p className="text-xs font-semibold" style={{ color: VANTAGE_THEME.text }}>
+                            Total Tokens
+                        </p>
+                    </div>
+                    <p className="text-xl font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                        {analytics?.totalTokens || 0}
+                    </p>
+                    <p className="text-xs" style={{ color: VANTAGE_THEME.warning }}>
+                        Assets
+                    </p>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="p-4 rounded-xl"
+                    style={{
+                        background: `linear-gradient(135deg, ${VANTAGE_THEME.secondary}20, ${VANTAGE_THEME.secondary}10)`,
+                        border: `1px solid ${VANTAGE_THEME.secondary}40`
+                    }}
+                >
+                    <div className="flex items-center gap-2 mb-2">
+                        <FaBolt style={{ color: VANTAGE_THEME.secondary, fontSize: '1.5rem' }} />
+                        <p className="text-xs font-semibold" style={{ color: VANTAGE_THEME.text }}>
+                            Diversity Score
+                        </p>
+                    </div>
+                    <p className="text-xl font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                        {analytics?.diversificationScore || 0}/100
+                    </p>
+                    <p className="text-xs" style={{ color: VANTAGE_THEME.secondary }}>
+                        {analytics?.diversificationScore > 70 ? 'Excellent' : analytics?.diversificationScore > 40 ? 'Good' : 'Improve'}
+                    </p>
+                </motion.div>
+            </div>
+
+            {/* Main Charts Row 1 - Portfolio Distribution */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Holdings Distribution Chart */}
+                <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="rounded-2xl p-6"
+                    style={{
+                        background: VANTAGE_THEME.cardBg,
+                        border: `1px solid ${VANTAGE_THEME.border}`,
+                        boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
+                    }}
+                >
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <div
+                                className="w-12 h-12 rounded-xl flex items-center justify-center"
+                                style={{ background: `linear-gradient(135deg, #8b5cf6, #d946ef)` }}
                             >
-                                {chainData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color || VANTAGE_THEME.primary} />
-                                ))}
-                            </Pie>
-                            <Tooltip content={<CustomTooltip />} />
-                        </PieChart>
-                    </ResponsiveContainer>
-                ) : (
-                    <div className="h-64 flex items-center justify-center" style={{ color: VANTAGE_THEME.text }}>
-                        No chain data available
-                    </div>
-                )}
-            </motion.div>
-
-            {/* Top Holdings */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="p-6 rounded-2xl"
-                style={{
-                    background: VANTAGE_THEME.cardBg,
-                    border: `1px solid ${VANTAGE_THEME.border}`
-                }}
-            >
-                <div className="flex items-center gap-2 mb-4">
-                    <FaChartBar style={{ color: VANTAGE_THEME.secondary }} />
-                    <h3 className="font-bold text-lg" style={{ color: VANTAGE_THEME.textLight }}>
-                        Top Holdings
-                    </h3>
-                </div>
-
-                {holdingsData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={250}>
-                        <BarChart data={holdingsData}>
-                            <XAxis
-                                dataKey="symbol"
-                                stroke={VANTAGE_THEME.text}
-                                angle={-45}
-                                textAnchor="end"
-                                height={80}
-                            />
-                            <YAxis stroke={VANTAGE_THEME.text} />
-                            <Tooltip content={<CustomTooltip />} />
-                            <Bar dataKey="balance" fill={VANTAGE_THEME.secondary} radius={[8, 8, 0, 0]} />
-                        </BarChart>
-                    </ResponsiveContainer>
-                ) : (
-                    <div className="h-64 flex items-center justify-center" style={{ color: VANTAGE_THEME.text }}>
-                        No holdings data available
-                    </div>
-                )}
-            </motion.div>
-
-            {/* Portfolio Health - FIXED */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="p-6 rounded-2xl"
-                style={{
-                    background: VANTAGE_THEME.cardBg,
-                    border: `1px solid ${VANTAGE_THEME.border}`
-                }}
-            >
-                <div className="flex items-center gap-2 mb-4">
-                    <FaChartLine style={{ color: VANTAGE_THEME.info }} />
-                    <h3 className="font-bold text-lg" style={{ color: VANTAGE_THEME.textLight }}>
-                        Portfolio Health
-                    </h3>
-                </div>
-
-                <ResponsiveContainer width="100%" height={250}>
-                    <RadarChart data={healthData}>
-                        <PolarGrid stroke={VANTAGE_THEME.border} />
-                        <PolarAngleAxis
-                            dataKey="metric"
-                            stroke={VANTAGE_THEME.text}
-                            tick={{ fill: VANTAGE_THEME.textLight }}
-                        />
-                        <PolarRadiusAxis
-                            angle={90}
-                            domain={[0, 100]}
-                            stroke={VANTAGE_THEME.border}
-                            tick={{ fill: VANTAGE_THEME.text }}
-                        />
-                        <Radar
-                            name="Health"
-                            dataKey="value"
-                            stroke={VANTAGE_THEME.primary}
-                            fill={VANTAGE_THEME.primary}
-                            fillOpacity={0.6}
-                        />
-                        <Tooltip content={<CustomTooltip />} />
-                    </RadarChart>
-                </ResponsiveContainer>
-            </motion.div>
-
-            {/* Recent Activity - FIXED */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="p-6 rounded-2xl"
-                style={{
-                    background: VANTAGE_THEME.cardBg,
-                    border: `1px solid ${VANTAGE_THEME.border}`
-                }}
-            >
-                <div className="flex items-center gap-2 mb-4">
-                    <FaClock style={{ color: VANTAGE_THEME.warning }} />
-                    <h3 className="font-bold text-lg" style={{ color: VANTAGE_THEME.textLight }}>
-                        Recent Activity
-                    </h3>
-                </div>
-
-                <div className="space-y-3">
-                    {recentActivity.map((activity, idx) => (
-                        <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="flex items-start gap-3 p-3 rounded-xl"
-                            style={{ background: `${VANTAGE_THEME.primary}10` }}
-                        >
-                            <div className="text-2xl">{activity.icon}</div>
-                            <div className="flex-1">
-                                <p className="font-semibold" style={{ color: VANTAGE_THEME.textLight }}>
-                                    {activity.type}
-                                </p>
+                                <FaChartPie style={{ color: '#fff', fontSize: '1.5rem' }} />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                                    Holdings Distribution
+                                </h3>
                                 <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
-                                    {activity.description}
-                                </p>
-                                <p className="text-xs mt-1" style={{ color: VANTAGE_THEME.text }}>
-                                    {activity.time}
+                                    Top {holdingsData.length} tokens by value
                                 </p>
                             </div>
+                        </div>
+
+                        {/* Chart type toggle */}
+                        <div className="flex gap-2">
+                            {['donut', 'bar'].map(type => (
+                                <motion.button
+                                    key={type}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => setChartType(type)}
+                                    className="px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-all"
+                                    style={{
+                                        background: chartType === type
+                                            ? `linear-gradient(135deg, ${VANTAGE_THEME.primary}, ${VANTAGE_THEME.secondary})`
+                                            : `${VANTAGE_THEME.border}40`,
+                                        color: chartType === type ? '#fff' : VANTAGE_THEME.text
+                                    }}
+                                >
+                                    {type}
+                                </motion.button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Chart */}
+                    <div className="h-80">
+                        <ResponsiveContainer width="100%" height="100%">
+                            {chartType === 'donut' ? (
+                                <PieChart>
+                                    <defs>
+                                        {holdingsData.map((holding, idx) => (
+                                            <linearGradient key={idx} id={`gradient-${idx}`} x1="0" y1="0" x2="1" y2="1">
+                                                <stop offset="0%" stopColor={holding.color} stopOpacity={1} />
+                                                <stop offset="100%" stopColor={holding.color} stopOpacity={0.6} />
+                                            </linearGradient>
+                                        ))}
+                                    </defs>
+                                    <Pie
+                                        data={holdingsData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius="60%"
+                                        outerRadius="80%"
+                                        dataKey="value"
+                                        label={({ name, percentage }) => `${name}: ${percentage}%`}
+                                        labelLine={{ stroke: VANTAGE_THEME.text, strokeWidth: 1 }}
+                                    >
+                                        {holdingsData.map((entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={`url(#gradient-${index})`}
+                                                stroke={entry.color}
+                                                strokeWidth={2}
+                                            />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip content={<CustomTooltip />} />
+                                </PieChart>
+                            ) : (
+                                <BarChart data={holdingsData}>
+                                    <defs>
+                                        {holdingsData.map((holding, idx) => (
+                                            <linearGradient key={idx} id={`bar-gradient-${idx}`} x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stopColor={holding.color} stopOpacity={1} />
+                                                <stop offset="100%" stopColor={holding.color} stopOpacity={0.6} />
+                                            </linearGradient>
+                                        ))}
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" stroke={`${VANTAGE_THEME.border}40`} />
+                                    <XAxis
+                                        dataKey="name"
+                                        stroke={VANTAGE_THEME.text}
+                                        angle={-45}
+                                        textAnchor="end"
+                                        height={80}
+                                    />
+                                    <YAxis stroke={VANTAGE_THEME.text} />
+                                    <Tooltip content={<CustomTooltip />} />
+                                    <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                                        {holdingsData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={`url(#bar-gradient-${index})`} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            )}
+                        </ResponsiveContainer>
+                    </div>
+                </motion.div>
+
+                {/* Chain Distribution */}
+                <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="rounded-2xl p-6"
+                    style={{
+                        background: VANTAGE_THEME.cardBg,
+                        border: `1px solid ${VANTAGE_THEME.border}`,
+                        boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
+                    }}
+                >
+                    <div className="flex items-center gap-3 mb-6">
+                        <div
+                            className="w-12 h-12 rounded-xl flex items-center justify-center"
+                            style={{ background: `linear-gradient(135deg, #14b8a6, #06b6d4)` }}
+                        >
+                            <FaLayerGroup style={{ color: '#fff', fontSize: '1.5rem' }} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                                Chain Distribution
+                            </h3>
+                            <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
+                                Assets across networks
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Chain List with Progress Bars */}
+                    <div className="space-y-4">
+                        {chainData.map((chain, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                            >
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <div
+                                            className="w-3 h-3 rounded-full"
+                                            style={{ background: chain.color }}
+                                        />
+                                        <p className="font-semibold" style={{ color: VANTAGE_THEME.textLight }}>
+                                            {chain.name}
+                                        </p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                                            ${chain.value.toFixed(2)}
+                                        </p>
+                                        <p className="text-xs" style={{ color: VANTAGE_THEME.text }}>
+                                            {chain.tokens} token{chain.tokens !== 1 ? 's' : ''}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Animated Progress Bar */}
+                                <div
+                                    className="h-3 rounded-full overflow-hidden"
+                                    style={{ background: `${VANTAGE_THEME.border}40` }}
+                                >
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${chain.percentage}%` }}
+                                        transition={{ duration: 1, delay: idx * 0.1 }}
+                                        className="h-full rounded-full"
+                                        style={{
+                                            background: `linear-gradient(90deg, ${chain.color}, ${chain.color}80)`,
+                                            boxShadow: `0 0 10px ${chain.color}60`
+                                        }}
+                                    />
+                                </div>
+
+                                <p className="text-xs mt-1" style={{ color: chain.color }}>
+                                    {(Number(chain.percentage) || 0).toFixed(1)}% of portfolio
+                                </p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Main Charts Row 2 - Performance & Health */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Token Performance */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-2xl p-6"
+                    style={{
+                        background: VANTAGE_THEME.cardBg,
+                        border: `1px solid ${VANTAGE_THEME.border}`,
+                        boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
+                    }}
+                >
+                    <div className="flex items-center gap-3 mb-6">
+                        <div
+                            className="w-12 h-12 rounded-xl flex items-center justify-center"
+                            style={{ background: `linear-gradient(135deg, #f59e0b, #ef4444)` }}
+                        >
+                            <FaFire style={{ color: '#fff', fontSize: '1.5rem' }} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                                Token Performance (24h)
+                            </h3>
+                            <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
+                                Price changes across holdings
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={performanceData} layout="vertical">
+                                <defs>
+                                    <linearGradient id="positive-gradient" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stopColor="#10b981" stopOpacity={0.4} />
+                                        <stop offset="100%" stopColor="#10b981" stopOpacity={1} />
+                                    </linearGradient>
+                                    <linearGradient id="negative-gradient" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stopColor="#ef4444" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#ef4444" stopOpacity={0.4} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke={`${VANTAGE_THEME.border}40`} />
+                                <XAxis type="number" stroke={VANTAGE_THEME.text} />
+                                <YAxis dataKey="token" type="category" stroke={VANTAGE_THEME.text} width={60} />
+                                <Tooltip content={<CustomTooltip />} />
+                                <Bar dataKey="performance" radius={[0, 8, 8, 0]}>
+                                    {performanceData.map((entry, index) => (
+                                        <Cell
+                                            key={`cell-${index}`}
+                                            fill={entry.performance >= 0 ? 'url(#positive-gradient)' : 'url(#negative-gradient)'}
+                                        />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </motion.div>
+
+                {/* Portfolio Health Radar */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-2xl p-6"
+                    style={{
+                        background: VANTAGE_THEME.cardBg,
+                        border: `1px solid ${VANTAGE_THEME.border}`,
+                        boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
+                    }}
+                >
+                    <div className="flex items-center gap-3 mb-6">
+                        <div
+                            className="w-12 h-12 rounded-xl flex items-center justify-center"
+                            style={{ background: `linear-gradient(135deg, #6366f1, #8b5cf6)` }}
+                        >
+                            <FaBolt style={{ color: '#fff', fontSize: '1.5rem' }} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                                Portfolio Health
+                            </h3>
+                            <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
+                                Key performance indicators
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RadarChart data={healthMetrics}>
+                                <defs>
+                                    <linearGradient id="radar-gradient" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.8} />
+                                        <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                                    </linearGradient>
+                                </defs>
+                                <PolarGrid stroke={`${VANTAGE_THEME.border}60`} />
+                                <PolarAngleAxis
+                                    dataKey="metric"
+                                    stroke={VANTAGE_THEME.textLight}
+                                    style={{ fontSize: '0.875rem' }}
+                                />
+                                <PolarRadiusAxis
+                                    angle={90}
+                                    domain={[0, 100]}
+                                    stroke={VANTAGE_THEME.text}
+                                />
+                                <Radar
+                                    name="Score"
+                                    dataKey="value"
+                                    stroke="#3b82f6"
+                                    strokeWidth={2}
+                                    fill="url(#radar-gradient)"
+                                />
+                                <Tooltip content={<CustomTooltip />} />
+                            </RadarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Top Holdings List */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-2xl p-6"
+                style={{
+                    background: VANTAGE_THEME.cardBg,
+                    border: `1px solid ${VANTAGE_THEME.border}`,
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
+                }}
+            >
+                <div className="flex items-center gap-3 mb-6">
+                    <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center"
+                        style={{ background: `linear-gradient(135deg, #10b981, #22c55e)` }}
+                    >
+                        <FaTrophy style={{ color: '#fff', fontSize: '1.5rem' }} />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                            Top Holdings Breakdown
+                        </h3>
+                        <p className="text-sm" style={{ color: VANTAGE_THEME.text }}>
+                            Detailed view of your best performers
+                        </p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {holdingsData.slice(0, 6).map((holding, idx) => (
+                        <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: idx * 0.05 }}
+                            whileHover={{ scale: 1.02, y: -4 }}
+                            className="p-4 rounded-xl cursor-pointer"
+                            style={{
+                                background: `${holding.color}10`,
+                                border: `1px solid ${holding.color}40`
+                            }}
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                    <div
+                                        className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-white"
+                                        style={{ background: holding.color }}
+                                    >
+                                        {holding.name.substring(0, 2)}
+                                    </div>
+                                    <div>
+                                        <p className="font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                                            {holding.name}
+                                        </p>
+                                        <p className="text-xs" style={{ color: VANTAGE_THEME.text }}>
+                                            {holding.balance}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <p className="font-bold" style={{ color: VANTAGE_THEME.textLight }}>
+                                        ${holding.value.toFixed(2)}
+                                    </p>
+                                    <p
+                                        className="text-xs flex items-center gap-1 justify-end"
+                                        style={{
+                                            color: holding.change24h >= 0 ? VANTAGE_THEME.success : VANTAGE_THEME.error
+                                        }}
+                                    >
+                                        {holding.change24h >= 0 ? <FaArrowUp /> : <FaArrowDown />}
+                                        {Math.abs(holding.change24h).toFixed(2)}%
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="h-1 rounded-full overflow-hidden" style={{ background: `${VANTAGE_THEME.border}40` }}>
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${holding.percentage}%` }}
+                                    transition={{ duration: 1, delay: idx * 0.1 }}
+                                    className="h-full rounded-full"
+                                    style={{ background: holding.color }}
+                                />
+                            </div>
+                            <p className="text-xs mt-1" style={{ color: holding.color }}>
+                                {holding.percentage}% of portfolio
+                            </p>
                         </motion.div>
                     ))}
                 </div>

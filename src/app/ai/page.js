@@ -321,6 +321,7 @@ function AIDashboard() {
             {activeTab === 'overview' && (
               <OverviewTab
                 chainDistribution={walletData.chainDistribution}
+                allTokens={walletData.allTokens}
                 topHoldings={walletData.topHoldings}
                 analytics={walletData.analytics}
               />

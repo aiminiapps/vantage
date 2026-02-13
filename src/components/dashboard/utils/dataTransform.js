@@ -136,19 +136,33 @@ export function transformAlchemyData(alchemyResponse) {
     const allBalances = [...nativeBalance, ...tokensWithBalance];
 
     // Transform chain distribution
-    const chainDistribution = chains?.map((chain, idx) => ({
-        name: chain.chain || chain.chainName || `Chain ${idx + 1}`,
-        value: chain.tokens?.filter(t => hexToDecimal(t.balance, t.decimals || 18) > 0).length || 0,
-        percentage: 100, // Will recalculate below
-        tokenCount: chain.tokens?.length || 0,
-        color: getChainColor(chain.chain || chain.chainName)
-    })) || [];
+    const chainDistribution = chains?.map((chain, idx) => {
+        const chainTokens = chain.tokens?.map(t => {
+            const balance = hexToDecimal(t.balance, t.decimals || 18);
+            return {
+                ...t,
+                balance,
+                value: balance
+            };
+        }).filter(t => t.balance > 0) || [];
+
+        const chainValue = chainTokens.reduce((sum, t) => sum + t.value, 0);
+
+        return {
+            chain: chain.chain || chain.chainName || `Chain ${idx + 1}`,
+            name: chain.chain || chain.chainName || `Chain ${idx + 1}`,
+            value: chainValue,
+            tokens: chainTokens.length,
+            percentage: 0, // Will recalculate below
+            color: getChainColor(chain.chain || chain.chainName)
+        };
+    }) || [];
 
     // Recalculate percentages
-    const totalTokensAcrossChains = chainDistribution.reduce((sum, c) => sum + c.value, 0);
+    const totalValueAcrossChains = chainDistribution.reduce((sum, c) => sum + c.value, 0);
     chainDistribution.forEach(c => {
-        c.percentage = totalTokensAcrossChains > 0
-            ? ((c.value / totalTokensAcrossChains) * 100).toFixed(1)
+        c.percentage = totalValueAcrossChains > 0
+            ? ((c.value / totalValueAcrossChains) * 100)
             : 0;
     });
 
