@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { VANTAGE_THEME } from './utils/theme';
+import Image from 'next/image';
 
 export default function AIChat({ walletData, onClose }) {
     const [messages, setMessages] = useState([
@@ -87,9 +88,8 @@ export default function AIChat({ walletData, onClose }) {
                 <div className="flex items-center gap-3">
                     <div
                         className="w-10 h-10 rounded-xl flex items-center justify-center"
-                        style={{ background: `${VANTAGE_THEME.primary}20` }}
                     >
-                        <FaRobot style={{ color: VANTAGE_THEME.primary }} />
+                        <Image src="/icon.png" alt="AI" width={48} height={48} />
                     </div>
                     <div>
                         <h3 className="font-bold" style={{ color: VANTAGE_THEME.textLight }}>
