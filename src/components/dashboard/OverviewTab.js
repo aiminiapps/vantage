@@ -19,12 +19,9 @@ import { VANTAGE_THEME } from './utils/theme';
  * Features: Portfolio distribution, top holdings, performance metrics, chain analysis
  * Uses Evil Charts styling with colorful gradients and animations
  */
-export default function OverviewTab({ chainDistribution, allTokens, topHoldings, analytics }) {
+export default function OverviewTab({ chainDistribution, topHoldings, analytics }) {
     const [chartType, setChartType] = useState('donut'); // 'donut', 'bar', 'radar'
     const [performanceView, setPerformanceView] = useState('24h'); // '24h', '7d', '30d'
-
-    // Use allTokens if available, fallback to topHoldings
-    const tokens = allTokens || topHoldings || [];
 
     // Vibrant color palette - Evil Charts style
     const CHART_COLORS = [
@@ -40,31 +37,17 @@ export default function OverviewTab({ chainDistribution, allTokens, topHoldings,
         '#22c55e', // Light Green
     ];
 
-
-    // Calculate total value from all tokens
-    const totalValue = tokens.reduce((sum, token) => sum + (token.valueUSD || token.value || 0), 0);
-
-    // Prepare top holdings data with colors (use balance if no price data)
-    const holdingsData = tokens
-        .filter(token => token.balance > 0)
-        .sort((a, b) => (b.valueUSD || b.value || b.balance) - (a.valueUSD || a.value || a.balance))
-        .slice(0, 10)
-        .map((holding, idx) => {
-            const displayValue = holding.valueUSD || holding.value || 0;
-            const hasPrice = holding.valueUSD > 0;
-
-            return {
-                name: holding.symbol,
-                value: displayValue,
-                balance: holding.balanceFormatted || holding.balance,
-                change24h: holding.change24h || holding.change || 0,
-                percentage: totalValue > 0
-                    ? ((displayValue / totalValue) * 100)
-                    : 0,
-                color: CHART_COLORS[idx % CHART_COLORS.length],
-                hasPrice
-            };
-        });
+    // Prepare top holdings data with colors
+    const holdingsData = (topHoldings || []).slice(0, 10).map((holding, idx) => ({
+        name: holding.symbol,
+        value: holding.valueUSD || 0,
+        balance: holding.balanceFormatted || holding.balance,
+        change24h: holding.change24h || 0,
+        percentage: analytics?.totalValue > 0
+            ? ((holding.valueUSD / analytics.totalValue) * 100).toFixed(2)
+            : 0,
+        color: CHART_COLORS[idx % CHART_COLORS.length]
+    }));
 
     // Prepare chain distribution data
     const chainData = (chainDistribution || []).map((chain, idx) => ({
@@ -267,12 +250,7 @@ export default function OverviewTab({ chainDistribution, allTokens, topHoldings,
                 >
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
-                            <div
-                                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                                style={{ background: `linear-gradient(135deg, #8b5cf6, #d946ef)` }}
-                            >
-                                <FaChartPie style={{ color: '#fff', fontSize: '1.5rem' }} />
-                            </div>
+
                             <div>
                                 <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
                                     Holdings Distribution
@@ -382,12 +360,6 @@ export default function OverviewTab({ chainDistribution, allTokens, topHoldings,
                     }}
                 >
                     <div className="flex items-center gap-3 mb-6">
-                        <div
-                            className="w-12 h-12 rounded-xl flex items-center justify-center"
-                            style={{ background: `linear-gradient(135deg, #14b8a6, #06b6d4)` }}
-                        >
-                            <FaLayerGroup style={{ color: '#fff', fontSize: '1.5rem' }} />
-                        </div>
                         <div>
                             <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
                                 Chain Distribution
@@ -445,7 +417,7 @@ export default function OverviewTab({ chainDistribution, allTokens, topHoldings,
                                 </div>
 
                                 <p className="text-xs mt-1" style={{ color: chain.color }}>
-                                    {(Number(chain.percentage) || 0).toFixed(1)}% of portfolio
+                                    {chain.percentage.toFixed(1)}% of portfolio
                                 </p>
                             </motion.div>
                         ))}
@@ -467,12 +439,6 @@ export default function OverviewTab({ chainDistribution, allTokens, topHoldings,
                     }}
                 >
                     <div className="flex items-center gap-3 mb-6">
-                        <div
-                            className="w-12 h-12 rounded-xl flex items-center justify-center"
-                            style={{ background: `linear-gradient(135deg, #f59e0b, #ef4444)` }}
-                        >
-                            <FaFire style={{ color: '#fff', fontSize: '1.5rem' }} />
-                        </div>
                         <div>
                             <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
                                 Token Performance (24h)
@@ -525,12 +491,6 @@ export default function OverviewTab({ chainDistribution, allTokens, topHoldings,
                     }}
                 >
                     <div className="flex items-center gap-3 mb-6">
-                        <div
-                            className="w-12 h-12 rounded-xl flex items-center justify-center"
-                            style={{ background: `linear-gradient(135deg, #6366f1, #8b5cf6)` }}
-                        >
-                            <FaBolt style={{ color: '#fff', fontSize: '1.5rem' }} />
-                        </div>
                         <div>
                             <h3 className="text-lg font-bold" style={{ color: VANTAGE_THEME.textLight }}>
                                 Portfolio Health
