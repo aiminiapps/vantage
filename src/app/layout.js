@@ -19,7 +19,7 @@ const siteConfig = {
   description:
     "VANTAGE is a next-generation crypto intelligence platform delivering strategic market insights, alpha discovery, and real-time execution tools for traders and institutions.",
   url: "https://vantage-ai.xyz",
-  ogImage: "https://vantage-ai.xyz/og.png",
+  ogImage: "https://vantage-ai.xyz/og-image.png",
   keywords: [
     "VANTAGE AI",
     "crypto intelligence platform",
