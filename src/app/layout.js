@@ -19,8 +19,8 @@ const siteConfig = {
   description:
     "VANTAGE is a next-generation crypto intelligence platform delivering strategic market insights, alpha discovery, and real-time execution tools for traders and institutions.",
   url: "https://vantage-ai.xyz",
-  ogImage: "https://vantage-ai.xyz/og-image.jpg",
-  ogImagePng: "https://vantage-ai.xyz/og-image.png",
+  // Use PNG for best cross-platform compatibility (X, Telegram, WhatsApp)
+  ogImage: "https://vantage-ai.xyz/og-image.png",
   keywords: [
     "VANTAGE AI",
     "crypto intelligence platform",
@@ -33,7 +33,7 @@ const siteConfig = {
     "blockchain analytics",
     "AI trading tools",
     "market execution tools",
-    "crypto opportunity detection"
+    "crypto opportunity detection",
   ],
   creator: "VANTAGE Team",
   publisher: "VANTAGE",
@@ -41,7 +41,7 @@ const siteConfig = {
   twitterHandle: "@AI_VANT",
   locale: "en_US",
   twitterUrl: "https://x.com/AI_VANT",
-  docsUrl: "https://vantage-ai.gitbook.io/vantage-ai-docs/"
+  docsUrl: "https://vantage-ai.gitbook.io/vantage-ai-docs/",
 };
 
 export const metadata = {
@@ -98,14 +98,6 @@ export const metadata = {
       {
         url: siteConfig.ogImage,
         secureUrl: siteConfig.ogImage,
-        type: "image/jpeg",
-        width: 1200,
-        height: 630,
-        alt: "VANTAGE — Crypto Intelligence Platform",
-      },
-      {
-        url: siteConfig.ogImagePng,
-        secureUrl: siteConfig.ogImagePng,
         type: "image/png",
         width: 1200,
         height: 630,
@@ -120,14 +112,7 @@ export const metadata = {
     description: siteConfig.description,
     site: siteConfig.twitterHandle,
     creator: siteConfig.twitterHandle,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: "VANTAGE — Crypto Intelligence Platform",
-      },
-    ],
+    images: [siteConfig.ogImage],
   },
 
   appleWebApp: {
@@ -165,17 +150,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Explicit OG meta tags for maximum crawler compatibility */}
-        <meta property="og:image" content={siteConfig.ogImage} />
-        <meta property="og:image:secure_url" content={siteConfig.ogImage} />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="VANTAGE — Crypto Intelligence Platform" />
-
-        {/* Twitter image fallback */}
-        <meta name="twitter:image" content={siteConfig.ogImage} />
-        <meta name="twitter:image:alt" content="VANTAGE — Crypto Intelligence Platform" />
+        {/*
+          ✅ IMPORTANT: Do NOT manually add og:image or twitter:image meta tags here.
+          Next.js `metadata` export above handles them correctly.
+          Duplicating them causes X and Telegram crawlers to pick the wrong tag.
+        */}
 
         <meta
           name="format-detection"
@@ -231,10 +210,7 @@ export default function RootLayout({ children }) {
               name: siteConfig.name,
               url: siteConfig.url,
               logo: `${siteConfig.url}/icon.png`,
-              sameAs: [
-                siteConfig.twitterUrl,
-                siteConfig.docsUrl
-              ],
+              sameAs: [siteConfig.twitterUrl, siteConfig.docsUrl],
             }),
           }}
         />
