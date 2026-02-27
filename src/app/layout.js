@@ -19,7 +19,8 @@ const siteConfig = {
   description:
     "VANTAGE is a next-generation crypto intelligence platform delivering strategic market insights, alpha discovery, and real-time execution tools for traders and institutions.",
   url: "https://vantage-ai.xyz",
-  ogImage: "https://vantage-ai.xyz/og-image.png",
+  ogImage: "https://vantage-ai.xyz/og-image.jpg",
+  ogImagePng: "https://vantage-ai.xyz/og-image.png",
   keywords: [
     "VANTAGE AI",
     "crypto intelligence platform",
@@ -96,6 +97,16 @@ export const metadata = {
     images: [
       {
         url: siteConfig.ogImage,
+        secureUrl: siteConfig.ogImage,
+        type: "image/jpeg",
+        width: 1200,
+        height: 630,
+        alt: "VANTAGE — Crypto Intelligence Platform",
+      },
+      {
+        url: siteConfig.ogImagePng,
+        secureUrl: siteConfig.ogImagePng,
+        type: "image/png",
         width: 1200,
         height: 630,
         alt: "VANTAGE — Crypto Intelligence Platform",
@@ -109,7 +120,14 @@ export const metadata = {
     description: siteConfig.description,
     site: siteConfig.twitterHandle,
     creator: siteConfig.twitterHandle,
-    images: [siteConfig.ogImage],
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 1200,
+        height: 630,
+        alt: "VANTAGE — Crypto Intelligence Platform",
+      },
+    ],
   },
 
   appleWebApp: {
@@ -147,6 +165,18 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Explicit OG meta tags for maximum crawler compatibility */}
+        <meta property="og:image" content={siteConfig.ogImage} />
+        <meta property="og:image:secure_url" content={siteConfig.ogImage} />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="VANTAGE — Crypto Intelligence Platform" />
+
+        {/* Twitter image fallback */}
+        <meta name="twitter:image" content={siteConfig.ogImage} />
+        <meta name="twitter:image:alt" content="VANTAGE — Crypto Intelligence Platform" />
+
         <meta
           name="format-detection"
           content="telephone=no, email=no, address=no"
