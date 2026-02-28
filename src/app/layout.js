@@ -12,36 +12,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// SEO Configuration
+// SEO CONFIG
 const siteConfig = {
   name: "VANTAGE",
   title: "VANTAGE — The Ultimate Intelligence Layer for Crypto Markets",
   description:
-    "VANTAGE is a next-generation crypto intelligence platform delivering strategic market insights, alpha discovery, and real-time execution tools for traders and institutions.",
+    "VANTAGE is a next-generation crypto intelligence platform delivering strategic market insights, alpha discovery, and real-time execution tools.",
   url: "https://vantage-ai.xyz",
-  // Use PNG for best cross-platform compatibility (X, Telegram, WhatsApp)
+
+  // 🔥 MUST BE ABSOLUTE URL
   ogImage: "https://vantage-ai.xyz/og-image.png",
-  keywords: [
-    "VANTAGE AI",
-    "crypto intelligence platform",
-    "AI crypto analytics",
-    "market alpha signals",
-    "Web3 analytics",
-    "crypto trading intelligence",
-    "DeFi insights",
-    "real-time crypto signals",
-    "blockchain analytics",
-    "AI trading tools",
-    "market execution tools",
-    "crypto opportunity detection",
-  ],
-  creator: "VANTAGE Team",
-  publisher: "VANTAGE",
-  category: "Cryptocurrency & Blockchain",
+
   twitterHandle: "@AI_VANT",
   locale: "en_US",
-  twitterUrl: "https://x.com/AI_VANT",
-  docsUrl: "https://vantage-ai.gitbook.io/vantage-ai-docs/",
 };
 
 export const metadata = {
@@ -53,55 +36,24 @@ export const metadata = {
   },
 
   description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  authors: [{ name: siteConfig.creator }],
-  creator: siteConfig.creator,
-  publisher: siteConfig.publisher,
-  category: siteConfig.category,
 
-  alternates: {
-    canonical: siteConfig.url,
-    languages: {
-      "en-US": siteConfig.url,
-      en: siteConfig.url,
-    },
-  },
-
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-
-  icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png",
-    apple: "/icon.png",
-  },
-
-  manifest: "/manifest.json",
-
+  // ✅ IMPORTANT: keep minimal, clean
   openGraph: {
-    type: "website",
-    locale: siteConfig.locale,
-    url: siteConfig.url,
     title: siteConfig.title,
     description: siteConfig.description,
+    url: siteConfig.url,
     siteName: siteConfig.name,
+    locale: siteConfig.locale,
+    type: "website",
+
+    // 🔥 FIX: ADD BOTH STRING + OBJECT
     images: [
+      siteConfig.ogImage, // fallback for crawlers
       {
         url: siteConfig.ogImage,
-        secureUrl: siteConfig.ogImage,
-        type: "image/png",
         width: 1200,
         height: 630,
-        alt: "VANTAGE — Crypto Intelligence Platform",
+        alt: "VANTAGE",
       },
     ],
   },
@@ -110,28 +62,27 @@ export const metadata = {
     card: "summary_large_image",
     title: siteConfig.title,
     description: siteConfig.description,
-    site: siteConfig.twitterHandle,
-    creator: siteConfig.twitterHandle,
+
+    // 🔥 MUST BE ABSOLUTE
     images: [siteConfig.ogImage],
+
+    creator: siteConfig.twitterHandle,
+    site: siteConfig.twitterHandle,
   },
 
-  appleWebApp: {
-    capable: true,
-    title: siteConfig.name,
-    statusBarStyle: "black-translucent",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
 
-  formatDetection: {
-    telephone: false,
-    email: false,
-    address: false,
+  robots: {
+    index: true,
+    follow: true,
   },
 
   other: {
-    "application-name": siteConfig.name,
-    "mobile-web-app-capable": "yes",
     "theme-color": "#1E6FA8",
-    "color-scheme": "dark light",
   },
 };
 
@@ -139,42 +90,22 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  userScalable: true,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#1E6FA8" },
-    { media: "(prefers-color-scheme: dark)", color: "#0B1F2E" },
-  ],
+  themeColor: "#1E6FA8",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/*
-          ✅ IMPORTANT: Do NOT manually add og:image or twitter:image meta tags here.
-          Next.js `metadata` export above handles them correctly.
-          Duplicating them causes X and Telegram crawlers to pick the wrong tag.
-        */}
+        {/* 🔥 CRITICAL FIX: FORCE OG FOR CRAWLERS */}
+        <meta property="og:image" content="https://vantage-ai.xyz/og-image.png" />
+        <meta name="twitter:image" content="https://vantage-ai.xyz/og-image.png" />
 
-        <meta
-          name="format-detection"
-          content="telephone=no, email=no, address=no"
-        />
+        {/* Mobile */}
+        <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
-        />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-
-        {/* WebApplication Schema */}
+        {/* Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -182,35 +113,8 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "WebApplication",
               name: siteConfig.name,
+              url: siteConfig.url,
               description: siteConfig.description,
-              url: siteConfig.url,
-              applicationCategory: "FinanceApplication",
-              operatingSystem: "Any",
-              offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "USD",
-              },
-              author: {
-                "@type": "Organization",
-                name: siteConfig.creator,
-                url: siteConfig.url,
-              },
-            }),
-          }}
-        />
-
-        {/* Organization Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: siteConfig.name,
-              url: siteConfig.url,
-              logo: `${siteConfig.url}/icon.png`,
-              sameAs: [siteConfig.twitterUrl, siteConfig.docsUrl],
             }),
           }}
         />
@@ -218,7 +122,6 @@ export default function RootLayout({ children }) {
 
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning
       >
         {children}
       </body>
