@@ -18,10 +18,10 @@ const siteConfig = {
   title: "VANTAGE — The Ultimate Intelligence Layer for Crypto Markets",
   description:
     "VANTAGE is a next-generation crypto intelligence platform delivering strategic market insights, alpha discovery, and real-time execution tools.",
-  url: "https://vantage-ai.xyz",
+  url: "https://www.vantage-ai.xyz",
 
   // 🔥 MUST BE ABSOLUTE URL
-  ogImage: "https://vantage-ai.xyz/og-image.png",
+  ogImage: "https://www.vantage-ai.xyz/og-image.png",
 
   twitterHandle: "@AI_VANT",
   locale: "en_US",
@@ -98,8 +98,8 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         {/* 🔥 CRITICAL FIX: FORCE OG FOR CRAWLERS */}
-        <meta property="og:image" content="https://vantage-ai.xyz/og-image.png" />
-        <meta name="twitter:image" content="https://vantage-ai.xyz/og-image.png" />
+        <meta property="og:image" content="https://www.vantage-ai.xyz/og-image.png" />
+        <meta name="twitter:image" content="https://www.vantage-ai.xyz/og-image.png" />
 
         {/* Mobile */}
         <meta name="format-detection" content="telephone=no" />
